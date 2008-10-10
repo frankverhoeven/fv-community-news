@@ -4,7 +4,9 @@ Donate link:		http://www.frank-verhoeven.com/
 Tags:			Community, News, Widget, Posts, Comments
 Requires at least:	2.5
 Tested up to:		2.7-hemorrhage
-Stable tag:		1.0
+Stable tag:		1.1
+
+Let Users Submit News To Your Site.
 
 == Description ==
 
