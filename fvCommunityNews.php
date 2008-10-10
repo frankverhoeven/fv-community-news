@@ -3,7 +3,7 @@
  *		Plugin Name:		FV Community News
  *		Plugin URI:			http://www.frank-verhoeven.com/wordpress-plugin-fv-community-news/
  *		Description:		Let visiters of your site post their articles on your site.
- *		Version:			1.0
+ *		Version:			1.1
  *		Author:				Frank Verhoeven
  *		Author URI:			http://www.frank-verhoeven.com/
  *		@copyright			Copyright (c) 2008, Frank Verhoeven
@@ -31,31 +31,41 @@ $fvCommunityNewsFieldValues = array(
 	'fvCommunityNewsName'=>'',
 	'fvCommunityNewsEmail'=>'',
 	'fvCommunityNewsTitle'=>'',
-	'fvCommunityNewsLocation'=>'',
+	'fvCommunityNewsLocation'=>'http://',
 	'fvCommunityNewsDescription'=>''
 	);
 
 /**
  *		@var int $fvCommunityNewsVersion Current version of FV Community News.
  */
-$fvCommunityNewsVersion = 1.0;
+$fvCommunityNewsVersion = '1.1';
 
 /**
  *		Initialize the application
- *		@version 1.0
+ *		@version 1.1
  */
 function fvCommunityNewsInit() {
-	global $wp_registered_widgets;
+	global $wp_registered_widgets, $fvCommunityNewsVersion;
 	
 	if (!headers_sent() && !session_id())
 		session_start();
 	
 	if (!get_option('fvcn_version'))
 		fvCommunityNewsInstall();
+	if ($fvCommunityNewsVersion > get_option('fvcn_version'))
+		fvCommunityNewsUpdate();
 	
-	add_action('wp_head', 'fvCommunityNewsHead');
+	add_action('wp_head', 'fvCommunityNewsHead', 30);
+	add_action('admin_head', 'fvCommunityNewsAdminHead');
 	add_action('admin_menu', 'fvCommunityNewsAddAdmin');
 	
+	// Add RSS Feed if enabled
+	if (get_option('fvcn_rssEnabled')) {
+		$location = (get_option('fvcn_rssLocation')?get_option('fvcn_rssLocation'):'community-news.rss');
+		update_option('fvcn_rssHook', add_feed($location, 'fvCommunityNewsRSSFeed') );
+	}
+	
+	// Add widgets
 	if (function_exists('register_sidebar_widget')) {
 		register_sidebar_widget('Community News Form', 'fvCommunityNewsFormWidget');
 		$wp_registered_widgets[sanitize_title('Community News Form')]['description'] = 'The default submissions form.';
@@ -66,9 +76,16 @@ function fvCommunityNewsInit() {
 		register_widget_control('Community News Submissions', 'fvCommunityNewsGetSubmissionsWidgetControl');
 	}
 	
-	if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['fvCommunityNews']))
+	// If our form is submitted
+	if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['fvCommunityNews'])) {
 		fvCommunityNewsSubmit();
+		
+		// Ajax Requests
+		if (isset($_GET['fvCommunityNewsAjaxRequest']))
+			fvCommunityNewsAjaxResponse();
+	}
 	
+	// If a captcha image is requested
 	if (isset($_GET['fvCommunityNewsCaptcha']))
 		fvCommunityNewsCreateCaptcha();
 }
@@ -82,17 +99,17 @@ function fvCommunityNewsForm() {
 	if (file_exists(dirname(__FILE__) . '/fvCommunityNewsForm.php')) {
 		include dirname(__FILE__) . '/fvCommunityNewsForm.php';
 	} else {
-		echo '<!-- Couldn\'t find the form template. \\-->' . "\n";
+		echo '<!-- Couldn\'t find the form template. //-->' . "\n";
 	}
 }
 
 /**
  *		Check if captcha's are enabled.
  *		@return bool True if enabled, false otherwise.
- *		@version 1.0
+ *		@version 1.1
  */
 function fvCommunityNewsCaptcha() {
-	if (get_option('fvcn_captchaEnabled'))
+	if (get_option('fvcn_captchaEnabled') && !(get_option('fvcn_hideCaptchaLoggedIn') && is_user_logged_in()))
 		return true;
 	return false;
 }
@@ -119,8 +136,13 @@ if(!function_exists('str_split')) {
  *		@version 1.0
  */
 function fvCommunityNewsHexToRgb($hex) {
-	if (!ctype_xdigit($hex) || strlen($hex) != 6)
+	if (!ctype_xdigit($hex) || (6 != strlen($hex) && 3 != strlen($hex)))
 		return false;
+	
+	if (3 == strlen($hex)) {
+		$h = str_split($hex, 1);
+		$hex = $h[0] . $h[0] . $h[1] . $h[1] . $h[2] . $h[2];
+	}
 	
 	foreach (str_split($hex, 2) as $h)
 		$dec[] = hexdec($h);
@@ -167,7 +189,7 @@ function fvCommunityNewsCreateCaptcha() {
 /**
  *		Create and display a captcha image.
  *		@param string $string The string for the captcha.
- *		@version 1.0
+ *		@version 1.0.1
  */
 function fvCommunityNewsDisplayCaptcha($string) {
 	$factor = 27;
@@ -175,7 +197,7 @@ function fvCommunityNewsDisplayCaptcha($string) {
 	$height = 37;
 	$image = imagecreatetruecolor($width, $height);
 	
-	$dir = dirname(__FILE__) . '/';
+	$dir = dirname(__FILE__) . '/fonts/';
 	$fonts = array('comic.ttf', 'verdana.ttf', 'times.ttf');
 	shuffle($fonts);
 	
@@ -234,16 +256,31 @@ function fvCommunityNewsSubmitted() {
 }
 
 /**
- *		Add some credits to the header of your page.
- *		@version 1.0
+ *		Add some stuff to the header.
+ *		@version 1.1
  */
 function fvCommunityNewsHead() {
-	echo '<meta name="Community-News-Creator" content="FV Community News" />' . "\n";
+	global $wp_rewrite;
+	$dir = get_option('home') . '/wp-content/plugins/fv-community-news/javascript/';
+	
+	echo "\n\t\t" . '<script type="text/javascript" src="' . $dir . 'prototype.js"></script>' . "\n";
+	echo "\t\t" . '<script type="text/javascript" src="' . $dir . 'scriptaculous.js"></script>' . "\n";
+	echo "\t\t" . '<script type="text/javascript" src="' . $dir . 'fvCommunityNews.js"></script>' . "\n";
+	if (get_option('fvcn_rssEnabled')) {
+		if ($wp_rewrite->using_permalinks())
+			$location = get_option('home') . '/' . str_replace('%feed%', '', $wp_rewrite->get_feed_permastruct());
+		else
+			$location = get_option('home') . '/?feed=';
+		$location .= get_option('fvcn_rssLocation');
+		
+		echo "\t\t" . '<link rel="alternate" type="application/rss+xml" title="' . get_option('blogname') . ' Community News RSS Feed" href="' . $location . '" />' . "\n";
+	}
+	echo "\t\t" . '<meta name="Community-News-Creator" content="FV Community News" />' . "\n\n";
 }
 
 /**
  *		Install the application.
- *		@version 1.0
+ *		@version 1.1
  */
 function fvCommunityNewsInstall() {
 	global $wpdb, $fvCommunityNewsVersion;
@@ -276,42 +313,70 @@ function fvCommunityNewsInstall() {
 	}
 	
 	
-	add_option('fvcn_captchaEnabled', 0);
-	add_option('fvcn_captchaLength', 6);
+	add_option('fvcn_captchaEnabled', '0');
+	add_option('fvcn_hideCaptchaLoggedIn', '1');
+	add_option('fvcn_captchaLength', '6');
 	add_option('fvcn_captchaBgColor', 'ecf8fe');
 	add_option('fvcn_captchaLColor', 'ecf8fe');
 	add_option('fvcn_captchaTsColor', '686868');
 	add_option('fvcn_captchaTColor', '0b9ac7');
-	add_option('fvcn_alwaysAdmin', 0);
-	add_option('fvcn_previousApproved', 1);
-	add_option('fvcn_mailOnSubmission', 0);
-	add_option('fvcn_mailOnModeration', 1);
-	add_option('fvcn_maxTitleLength', 50);
+	add_option('fvcn_alwaysAdmin', '0');
+	add_option('fvcn_previousApproved', '1');
+	add_option('fvcn_mailOnSubmission', '0');
+	add_option('fvcn_mailOnModeration', '1');
+	add_option('fvcn_maxTitleLength', '50');
 	add_option('fvcn_titleBreaker', '&hellip;');
-	add_option('fvcn_maxDescriptionLength', 200);
+	add_option('fvcn_maxDescriptionLength', '200');
 	add_option('fvcn_descriptionBreaker', '&hellip;');
-	add_option('fvcn_numSubmissions', 0);
-	add_option('fvcn_submissionTemplate', 0);
+	add_option('fvcn_numSubmissions', '');
+	add_option('fvcn_submissionTemplate', '');
 	add_option('fvcn_formTitle', 'Add News');
 	add_option('fvcn_submissionsTitle', 'Community News');
+	add_option('fvcn_rssEnabled', '1');
+	add_option('fvcn_numRSSItems', '10');
+	add_option('fvcn_rssLocation', 'community-news.rss');
+	add_option('fvcn_loggedIn', '0');
+}
+
+/**
+ *		Update the application.
+ *		@since 1.1
+ *		@version 1.0
+ */
+function fvCommunityNewsUpdate() {
+	global $fvCommunityNewsVersion;
+	
+	update_option('fvcn_version', $fvCommunityNewsVersion);
+	
+	// Version 1.1
+	add_option('fvcn_rssEnabled', '1');
+	add_option('fvcn_numRSSItems', '10');
+	add_option('fvcn_rssLocation', 'community-news.rss');
+	add_option('fvcn_loggedIn', '0');
+	add_option('fvcn_hideCaptchaLoggedIn', '1');
 }
 
 /**
  *		A submission is posted and handled here.
  *		@return bool True if the submission is successfull posted, false otherwise.
- *		@version 1.0
+ *		@version 1.1
  */
 function fvCommunityNewsSubmit() {
 	global $fvCommunityNewsSubmited, $fvCommunityNewsSubmitError, $fvCommunityNewsFieldValues, $fvCommunityNewsAwaitingModeration, $wpdb;
 	
-	if (isset($_SESSION['fvCommunityNewsLastPost']) && $_SESSION['fvCommunityNewsLastPost'] > current_time('timestamp')) {
-		$fvCommunityNewsSubmitError = 'You can only post one submission each 2 minutes.';
+	$fvCommunityNewsSubmited = true;
+	
+	if (get_option('fvcn_loggedIn') && !is_user_logged_in()) {
+		$fvCommunityNewsSubmitError = 'You must be logged in to add a submission.';
 		return false;
 	}
 	
-	$fvCommunityNewsSubmited = true;
+	if (isset($_SESSION['fvCommunityNewsLastPost']) && $_SESSION['fvCommunityNewsLastPost'] > current_time('timestamp')) {
+		$fvCommunityNewsSubmitError = 'You can only add one submission each two minutes.';
+		return false;
+	}
 	
-	if (!empty($_POST['fvCommunityNewsPhone'])) {
+	if (!empty($_POST['fvCommunityNewsPhone']) || !check_admin_referer('fvCommunityNews_addSubmission')) {
 		$fvCommunityNewsSubmitError = 'Move you spammer.';
 		return false;
 	}
@@ -325,7 +390,7 @@ function fvCommunityNewsSubmit() {
 		return false;
 	}
 	
-	if (get_option('fvcn_captchaEnabled')) {
+	if (get_option('fvcn_captchaEnabled') && !(get_option('fvcn_hideCaptchaLoggedIn') && is_user_logged_in())) {
 		if (empty($_POST['fvCommunityNewsCaptcha'])) {
 			$fvCommunityNewsSubmitError = 'You didn\'t fill in all required fields.';
 			return false;
@@ -455,20 +520,66 @@ function fvCommunityNewsAwaitingModeration() {
 }
 
 /**
+ *		Create an ajax response.
+ *		@version 1.0
+ *		@since 1.1
+ */
+function fvCommunityNewsAjaxResponse() {
+	if (!headers_sent())
+		header('Content-Type: text/xml; charset=' . get_option('blog_charset'), true);
+	
+	$response = '<fvCommunityNewsAjaxResponse>';
+	
+	if (fvCommunityNewsSubmitError()) {
+		$response .= '<status>error</status>';
+		$response .= '<message>' . fvCommunityNewsSubmitError() . '</message>';
+	} elseif (fvCommunityNewsAwaitingModeration()) {
+		$response .= '<status>moderation</status>';
+		$response .= '<message>Your submission has been added to the moderation queue and will appear soon. Thank you!</message>';
+	} else {
+		$response .= '<status>approved</status>';
+		$response .= '<message>Your submission has been added. Thank you!</message>';
+	}
+	
+	$response .= '</fvCommunityNewsAjaxResponse>';
+	
+	die ($response);
+}
+
+/**
  *		Get the value of a form field.
  *		@return string The current value of a form field.
- *		@version 1.0
+ *		@version 1.1
  */
 function fvCommunityNewsGetValue($fieldName) {
-	global $fvCommunityNewsFieldValues;
+	global $userdata, $fvCommunityNewsFieldValues;
 	
 	if (!array_key_exists($fieldName, $fvCommunityNewsFieldValues))
 		return '';
 	
 	if (isset($_POST[ $fieldName ]))
-		return strip_tags($_POST[ $fieldName ]);
+		return stripslashes( strip_tags($_POST[ $fieldName ]) );
 	
-	return $fvCommunityNewsFieldValues[ $fieldName ];
+	if (is_user_logged_in()) {
+		get_currentuserinfo();
+		
+		switch ($fieldName) {
+			case 'fvCommunityNewsName' :
+				return $userdata->display_name;
+				break;
+			case 'fvCommunityNewsEmail' :
+				return $userdata->user_email;
+				break;
+			case 'fvCommunityNewsLocation' :
+				return $userdata->user_url;
+				break;
+			default :
+				return $fvCommunityNewsFieldValues[ $fieldName ];
+				break;
+		}
+	} else {
+		return $fvCommunityNewsFieldValues[ $fieldName ];
+	}
 }
 
 /**
@@ -481,7 +592,7 @@ function fvCommunityNewsGetValue($fieldName) {
 function fvCommunityNewsGetSubmissions($number=5, $format=false) {
 	global $wpdb;
 	
-	$format = $format?$format:'<li><h3><a href="%submission_url%" title="%submission_title%">%submission_title%</a></h3><small>%submission_date%</small><br /><p>%submission_description%</p></li>';
+	$format = $format?$format:'<li><h3><a href="%submission_url%" title="%submission_title%">%submission_title%</a></h3><small>%submission_date%</small><br />%submission_description%</li>';
 	
 	if (get_option('fvcn_numSubmissions'))
 		$number = get_option('fvcn_numSubmissions');
@@ -527,40 +638,77 @@ function fvCommunityNewsGetSubmissions($number=5, $format=false) {
 
 /**
  *		Create a RSS 2.0 feed from the latest subissions.
- *		@since 1.2
+ *		@since 1.1
  *		@version 1.0
  */
 function fvCommunityNewsRSSFeed() {
+	global $wpdb;
 	
+	$number = get_option('fvcn_numRSSItems');
+	$sql = "SELECT
+				Name,
+				Title,
+				Location,
+				Description,
+				Date
+			FROM
+				" . get_option('fvcn_dbname') . "
+			WHERE
+				Approved = '1'
+			ORDER BY
+				Date DESC
+			LIMIT
+				" . (int)$wpdb->escape($number) . "";
+	
+	$items = $wpdb->get_results($sql);
 	
 	
 	
 	if (!headers_sent())
 		header('Content-Type: text/xml; charset=' . get_option('blog_charset'), true);
 	
-	echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?'.'>';
+	echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>';
 	?>
-	<rss version="2.0">
+	<rss version="2.0"
+		xmlns:content="http://purl.org/rss/1.0/modules/content/"
+		xmlns:dc="http://purl.org/dc/elements/1.1/"
+		xmlns:atom="http://www.w3.org/2005/Atom"
+		xmlns:sy="http://purl.org/rss/1.0/modules/syndication/">
+		
 		<channel>
-			<title><?php bloginfo_rss('name'); wp_title_rss(); ?></title>
-			<link><link><?php bloginfo_rss('url') ?></link></link>
+			<title><?php bloginfo_rss('name'); wp_title_rss(); ?> - Community News</title>
+			<link><?php bloginfo_rss('url') ?></link>
+			<atom:link href="<?php self_link(); ?>" rel="self" type="application/rss+xml" />
 			<description><?php bloginfo_rss("description") ?></description>
 			<language><?php echo get_option('rss_language'); ?></language>
+			<sy:updatePeriod><?php echo apply_filters( 'rss_update_period', 'hourly' ); ?></sy:updatePeriod>
+			<sy:updateFrequency><?php echo apply_filters( 'rss_update_frequency', '1' ); ?></sy:updateFrequency>
+			<generator>Fv Community News</generator>
+			
+			<?php
+			if (empty($items)) {
+				echo '<!-- No submissions found yet. //-->';
+			} else {
+				foreach ($items as $item) :
+			?>
 			
 			<item>
-				<title></title>
-				<link></link>
-				<description></description>
-				<author></author>
-				<pubDate></pubDate>
-				<comments></comments>
+				<title><?php echo stripslashes(apply_filters('comment_author', $item->Title)); ?></title>
+				<link><?php echo stripslashes(apply_filters('comment_author_url', $item->Location)); ?></link>
+				<dc:creator><?php echo stripslashes(apply_filters('comment_author', $item->Name)); ?></dc:creator>
+				<pubDate><?php echo mysql2date('D, d M Y H:i:s +0000', $item->Date); ?></pubDate>
+				<description><?php echo fvCommunityNewsBreaker(stripslashes(apply_filters('comment_text', $item->Description)), get_option('fvcn_maxDescriptionLength'), get_option('fvcn_descriptionBreaker')) ?></description>
+				<content:encoded><![CDATA[<?php echo stripslashes(apply_filters('comment_text', $item->Description)); ?>]]></content:encoded>
 			</item>
+			
+			<?php
+				endforeach;
+			}
+			?>
 			
 		</channel>
 	</rss>
 	<?php
-	
-	exit;
 }
 
 /**
@@ -634,13 +782,51 @@ function fvCommunityNewsGetSubmissionsWidgetControl() {
  *		@version 1.0
  */
 function fvCommunityNewsAddAdmin() {
-	add_menu_page('Manage submissions', 'Community News', 7, __FILE__, 'fvCommunityNewsSubmissions');
-	add_submenu_page(__FILE__, 'Community News Settings', 'Settings', 7, 'fvCommunityNewsSettings', 'fvCommunityNewsSettings');
+	add_menu_page('Manage submissions', 'Community News', 'level_7', __FILE__, 'fvCommunityNewsSubmissions');
+	add_submenu_page(__FILE__, 'Community News Settings', 'Settings', 'level_7', 'fvCommunityNewsSettings', 'fvCommunityNewsSettings');
+}
+
+/**
+ *		Get a list of submissions for the moderation panel.
+ *		@param string $status The current status of the submissions.
+ *		@param int $start The start of submissions.
+ *		@param int $num The number of submissions per page.
+ *		@return array The submissions, Total amount of submissions
+ *		@version 1.0
+ *		@since 1.1
+ */
+function fvCommunityNewsGetSubmissionsList( $status = '', $start, $num ) {
+	global $wpdb;
+
+	$start = abs( (int) $start );
+	$num = (int) $num;
+
+	if ( 'moderation' == $status )
+		$approved = "Approved = '0'";
+	elseif ( 'approved' == $status )
+		$approved = "Approved = '1'";
+	else
+		$approved = "( Approved = '0' OR Approved = '1' )";
+
+	$submissions = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS * FROM " . get_option('fvcn_dbname') . " WHERE $approved ORDER BY Date DESC LIMIT $start, $num");
+
+	$total = $wpdb->get_var( "SELECT FOUND_ROWS()" );
+
+	return array($submissions, $total);
+}
+
+/**
+ *		Add some javascript to the admin header.
+ */
+function fvCommunityNewsAdminHead() {
+	$dir = get_option('home') . '/wp-content/plugins/fv-community-news/javascript/';
+	if (isset($_GET['page']) && strstr($_GET['page'], 'fvCommunityNews'))
+		echo '<script type="text/javascript" src="' . $dir . 'fvCommunityNewsAdmin.js"></script>' . "\n";
 }
 
 /**
  *		Admin page for managing submissions.
- *		@version 1.0
+ *		@version 1.1
  */
 function fvCommunityNewsSubmissions() {
 	global $wpdb;
@@ -649,43 +835,80 @@ function fvCommunityNewsSubmissions() {
 		exit;
 	
 	if (empty($_GET['submission_status']))
-		$submission_status = 'all';
+		$submissionStatus = 'all';
 	else
-		$submission_status = attribute_escape($_GET['submission_status']);
+		$submissionStatus = attribute_escape($_GET['submission_status']);
 	
 	// Form submissions
-	if (!empty($_REQUEST['submissions']) && check_admin_referer('fvCommunityNews_moderateSubmissions')) {
-		if (!is_array($_REQUEST['submissions']))
-			$_REQUEST['submissions'] = array( $_REQUEST['submissions'] );
+	if (!empty($_POST['submissions']) && check_admin_referer('fvCommunityNews_moderateSubmissions')) {
+		if (!is_array($_POST['submissions']))
+			$_POST['submissions'] = array( $_POST['submissions'] );
 			
-			foreach ($_REQUEST['submissions'] as $submission) {
-				if (isset($_REQUEST['submission-approve']))
+			foreach ($_POST['submissions'] as $submission) {
+				if (isset($_POST['submission-approve']))
 					$wpdb->query("UPDATE " . get_option('fvcn_dbname') . " SET Approved = '1' WHERE Id = '" . $wpdb->escape($submission) . "'");
-				if (isset($_REQUEST['submission-unapprove']))
+				if (isset($_POST['submission-unapprove']))
 					$wpdb->query("UPDATE " . get_option('fvcn_dbname') . " SET Approved = '0' WHERE Id = '" . $wpdb->escape($submission) . "'");
-				if (isset($_REQUEST['submission-delete']))
+				if (isset($_POST['submission-delete']))
 					$wpdb->query("DELETE FROM " . get_option('fvcn_dbname') . " WHERE Id = '" . $wpdb->escape($submission) . "'");
 			}
 		
-		echo '<div id="moderated" class="updated fade"><p>' . count($_REQUEST['submissions']) . ' submissions ';
-		if (isset($_REQUEST['submission-approve']) && !(isset($_REQUEST['submission-unapprove']) || isset($_REQUEST['submission-delete'])) )
+		echo '<div id="moderated" class="updated fade"><p>' . count($_POST['submissions']) . ' submissions ';
+		if (isset($_POST['submission-approve']) && !(isset($_POST['submission-unapprove']) || isset($_POST['submission-delete'])) )
 			echo 'approved';
-		if (isset($_REQUEST['submission-unapprove']))
+		if (isset($_POST['submission-unapprove']))
 			echo 'unapproved';
-		if (isset($_REQUEST['submission-delete']))
+		if (isset($_POST['submission-delete']))
 			echo 'deleted';
 		echo '<br /></p></div>' . "\n";
 	}
+	
+	$wpdb->query("SELECT Id FROM " . get_option('fvcn_dbname') . " WHERE Approved = '0'");
+	
+	
 	?>
 <div class="wrap">
-		<h2>Manage Submissions</h2>
+		<!--<h2>Manage Submissions</h2>-->
 		<ul class="subsubsub">
-			<li><a href="<?php echo clean_url(add_query_arg('submission_status', 'all', $_SERVER['REQUEST_URI'])) ?>" <?php if ('all' == $submission_status) echo 'class="current"' ?>>Show All</a> |</li>
-			<li><a href="<?php echo clean_url(add_query_arg('submission_status', 'moderation', $_SERVER['REQUEST_URI'])) ?>" <?php if ('moderation' == $submission_status) echo 'class="current"' ?>>Awaiting Moderation</a> |</li>
-			<li><a href="<?php echo clean_url(add_query_arg('submission_status', 'approved', $_SERVER['REQUEST_URI'])) ?>" <?php if ('approved' == $submission_status) echo 'class="current"' ?>>Approved</a></li>
+			<li><a href="<?php echo clean_url(add_query_arg('submission_status', 'all', $_SERVER['REQUEST_URI'])) ?>" <?php if ('all' == $submissionStatus) echo 'class="current"' ?>>Show All</a> |</li>
+			<li><a href="<?php echo clean_url(add_query_arg('submission_status', 'moderation', $_SERVER['REQUEST_URI'])) ?>" <?php if ('moderation' == $submissionStatus) echo 'class="current"' ?>>Awaiting Moderation <?php echo '(' . $wpdb->num_rows . ')'; ?></a> |</li>
+			<li><a href="<?php echo clean_url(add_query_arg('submission_status', 'approved', $_SERVER['REQUEST_URI'])) ?>" <?php if ('approved' == $submissionStatus) echo 'class="current"' ?>>Approved</a></li>
 		</ul>
+		
+		
+		<?php
+		$submissionPerPage = 10;
+		
+		if (isset($_GET['apage']))
+			$page = abs( (int)$_GET['apage'] );
+		else
+			$page = 1;
+		
+		$start = ($page - 1) * $submissionPerPage;
+		
+		list($_submissions, $total) = fvCommunityNewsGetSubmissionsList( $submissionStatus, $start, $submissionPerPage + 5 ); // Grab a few extra
+		
+		$submissions = array_slice($_submissions, 0, $submissionPerPage);
+		$extra_comments = array_slice($_submissions, $submissionPerPage);
+		
+		$pageLinks = paginate_links( array(
+			'base' => add_query_arg( 'apage', '%#%' ),
+			'format' => '',
+			'total' => ceil($total / $submissionPerPage),
+			'current' => $page
+		));
+		
+
+		
+		?>
+		
+		
 		<form id="comments-form" action="" method="post">
 			<div class="tablenav">
+				<?php
+				if ( $pageLinks )
+					echo '<div class="tablenav-pages">' . $pageLinks . '</div>';
+				?>
 				<div class="alignleft">
 					<input type="submit" name="submission-approve" id="submission-approve" value="Approve" class="button-secondary" />
 					<input type="submit" name="submission-unapprove" id="submission-unapprove" value="Unapprove" class="button-secondary" />
@@ -694,60 +917,70 @@ function fvCommunityNewsSubmissions() {
 				<br class="clear" />
 			</div>
 			<br class="clear" />
-			<?php
-			if ('all' == $submission_status)
-				$where = '';
-			elseif ('moderation' == $submission_status)
-				$where = " WHERE Approved = '0'";
-			elseif ('approved' == $submission_status)
-				$where = " WHERE Approved = '1'";
 			
-			$sql = "SELECT * FROM " . get_option('fvcn_dbname') . $where . " ORDER BY Date DESC";
-			
-			$posts = $wpdb->get_results($sql);
-			
-			?>
 			<table class="widefat">
 				<thead>
 					<tr>
-						<th scope="col" id="cb" class="manage-column column-cb check-column" style=""><!--<input type="checkbox" />--></th>
+						<th scope="col" id="cb" class="manage-column column-cb check-column" style=""><input type="checkbox" onclick="fvCommunityNewsCheckAll();" /></th>
 						<th scope="col" id="comment" class="manage-column column-comment" style="">Submission</th>
-						<th scope="col" id="author" class="manage-column column-author" style="">Author</th>
-						<th scope="col" id="date" class="manage-column column-date" style="">Submitted</th>
+						<th scope="col" id="author" class="manage-column column-author" style="min-width: 210px;">Author</th>
+						<th scope="col" id="date" class="manage-column column-date" style="min-width: 120px;">Submitted</th>
 					</tr>
 				</thead>
 			<tbody id="the-comment-list" class="list:comment">
 			<?php
-			foreach ($posts as $post) {
+			foreach ($submissions as $post) {
 				echo '<tr id="submission-' . $post->Id . '" class="' . ('0' == $post->Approved?'unapproved':'') . '">' . "\n";
-				echo '<th scope="row" class="check-column"><input type="checkbox" name="submissions[]" value=' . $post->Id . ' /></th>';
-				echo '<td class="comment column-comment"><strong>' . stripslashes(apply_filters('get_comment_author', $post->Title)) . '</strong><br />';
-				echo stripslashes(apply_filters('comment_text', $post->Description));
+				echo ' <th scope="row" class="check-column"><input type="checkbox" name="submissions[]" value=' . $post->Id . ' /></th>' . "\n";
+				echo ' <td class="comment column-comment"><strong><a href="' . stripslashes(apply_filters('comment_author_url', $post->Location)) . '">' . stripslashes(apply_filters('get_comment_author', $post->Title)) . '</a></strong><br />';
+				echo trim( stripslashes(apply_filters('comment_text', $post->Description)) );
 				
-				echo '<span class="approve"><a href="';
-				echo clean_url( wp_nonce_url('admin.php?page=fv-community-news/fvCommunityNews.php&submissions=' . $post->Id . '&submission-approve=true', 'fvCommunityNews_moderateSubmissions') );
+				/*echo '<span class="approve"><a href="';
+				echo clean_url( wp_nonce_url('admin.php?page=fv-community-news/fvCommunityNews.php&amp;submissions=' . $post->Id . '&amp;submission-approve=true', 'fvCommunityNews_moderateSubmissions') );
 				echo '" title="Approve this submission">Approve</a> | </span>';
 				
 				echo '<span class="unapprove"><a href="';
-				echo clean_url( wp_nonce_url('admin.php?page=fv-community-news/fvCommunityNews.php&submissions=' . $post->Id . '&submission-unapprove=true', 'fvCommunityNews_moderateSubmissions') );
+				echo clean_url( wp_nonce_url('admin.php?page=fv-community-news/fvCommunityNews.php&amp;submissions=' . $post->Id . '&amp;submission-unapprove=true', 'fvCommunityNews_moderateSubmissions') );
 				echo '" title="Unapprove this submission">Unapprove</a> | </span>';
 				
 				echo '<span class="delete"><a href="';
-				echo clean_url( wp_nonce_url('admin.php?page=fv-community-news/fvCommunityNews.php&submissions=' . $post->Id . '&submission-delete=true', 'fvCommunityNews_moderateSubmissions') );
-				echo '" title="Delete this submission">Delete</a></span>';
+				echo clean_url( wp_nonce_url('admin.php?page=fv-community-news/fvCommunityNews.php&amp;submissions=' . $post->Id . '&amp;submission-delete=true', 'fvCommunityNews_moderateSubmissions') );
+				echo '" title="Delete this submission">Delete</a></span>';*/
 				
-				echo '<td class="author"><p class="column-author><strong>' . get_avatar($post->Email, 32) . ' ' . stripslashes(apply_filters('get_comment_author', $post->Name)) . '</strong><br />';
+				echo '</td>' . "\n";
+				echo ' <td class="author column-author"><strong>' . get_avatar($post->Email, 32) . ' ' . stripslashes(apply_filters('get_comment_author', $post->Name)) . '</strong><br />';
 				echo '<a href="mailto:' . stripslashes(apply_filters('get_comment_author_email', $post->Email)) . '">' . stripslashes(apply_filters('get_comment_author_email', $post->Email)) . '</a><br />';
-				echo $post->Ip . '</p></td>' . "\n";
+				echo $post->Ip . '</td>' . "\n";
 				
-				echo '<td class="date column-date">' . stripslashes(apply_filters('get_comment_date', mysql2date(get_option('date_format'), $post->Date))) . '</td>' . "\n";
-				echo '</tr>' . "\n";
+				echo ' <td class="date column-date">' . stripslashes(apply_filters('get_comment_date', mysql2date(get_option('date_format'), $post->Date))) . '</td>' . "\n";
+				echo '</tr>' . "\n\n";
 			}
 			?>
 			</tbody>
-			</table>
+			<tfoot>
+				<tr>
+					<th scope="col" class="manage-column column-cb check-column" style=""><input type="checkbox" onclick="fvCommunityNewsCheckAll();" /></th>
+					<th scope="col" class="manage-column column-comment" style="">Submission</th>
+					<th scope="col" class="manage-column column-author" style="">Author</th>
+					<th scope="col" class="manage-column column-date" style="">Submitted</th>
+				</tr>
+			</tfoot>
+		</table>
 			<?php wp_nonce_field('fvCommunityNews_moderateSubmissions'); ?>
 			<input type="hidden" name="fvCommunityNewsAdmin" id="fvCommunityNewsAdmin" value="true" />
+		
+			<div class="tablenav">
+				<?php
+				if ( $pageLinks )
+					echo '<div class="tablenav-pages">' . $pageLinks . '</div>';
+				?>
+				<div class="alignleft">
+					<input type="submit" name="submission-approve" value="Approve" class="button-secondary" />
+					<input type="submit" name="submission-unapprove" value="Unapprove" class="button-secondary" />
+					<input type="submit" name="submission-delete" value="Delete" class="button-secondary delete" />
+				</div>
+				<br class="clear" />
+			</div>
 		</form>
 	</div>
 	<?php
@@ -755,34 +988,44 @@ function fvCommunityNewsSubmissions() {
 
 /**
  *		Admin page for settings.
- *		@version 1.0
+ *		@version 1.1
  */
 function fvCommunityNewsSettings() {
 	if (!current_user_can('moderate_comments'))
 		exit;
 	
+	global $wp_rewrite;
+	
 	if ('POST' == $_SERVER['REQUEST_METHOD'] && check_admin_referer('fvCommunityNews_changeSettings')) {
+		remove_action( get_option('fvcn_rssHook'), 'fvCommunityNewsRSSFeed', 10, 1);
 		
-			update_option('fvcn_captchaEnabled', $_POST['fvcn_captchaEnabled']);
-			update_option('fvcn_captchaLength', $_POST['fvcn_captchaLength']);
-			update_option('fvcn_captchaBgColor', $_POST['fvcn_captchaBgColor']);
-			update_option('fvcn_captchaLColor', $_POST['fvcn_captchaLColor']);
-			update_option('fvcn_captchaTsColor', $_POST['fvcn_captchaTsColor']);
-			update_option('fvcn_captchaTColor', $_POST['fvcn_captchaTColor']);
-			update_option('fvcn_alwaysAdmin', $_POST['fvcn_alwaysAdmin']);
-			update_option('fvcn_previousApproved', $_POST['fvcn_previousApproved']);
-			update_option('fvcn_mailOnSubmission', $_POST['fvcn_mailOnSubmission']);
-			update_option('fvcn_mailOnModeration', $_POST['fvcn_mailOnModeration']);
-			update_option('fvcn_maxTitleLength', $_POST['fvcn_maxTitleLength']);
-			update_option('fvcn_titleBreaker', $_POST['fvcn_titleBreaker']);
-			update_option('fvcn_maxDescriptionLength', $_POST['fvcn_maxDescriptionLength']);
-			update_option('fvcn_descriptionBreaker', $_POST['fvcn_descriptionBreaker']);
-			update_option('fvcn_numSubmissions', $_POST['fvcn_numSubmissions']);
-			update_option('fvcn_submissionTemplate', $_POST['fvcn_submissionTemplate']);
+		update_option('fvcn_captchaEnabled', $_POST['fvcn_captchaEnabled']);
+		update_option('fvcn_hideCaptchaLoggedIn', $_POST['fvcn_hideCaptchaLoggedIn']);
+		update_option('fvcn_captchaLength', $_POST['fvcn_captchaLength']);
+		update_option('fvcn_captchaBgColor', $_POST['fvcn_captchaBgColor']);
+		update_option('fvcn_captchaLColor', $_POST['fvcn_captchaLColor']);
+		update_option('fvcn_captchaTsColor', $_POST['fvcn_captchaTsColor']);
+		update_option('fvcn_captchaTColor', $_POST['fvcn_captchaTColor']);
+		update_option('fvcn_alwaysAdmin', $_POST['fvcn_alwaysAdmin']);
+		update_option('fvcn_previousApproved', $_POST['fvcn_previousApproved']);
+		update_option('fvcn_loggedIn', $_POST['fvcn_loggedIn']);
+		update_option('fvcn_mailOnSubmission', $_POST['fvcn_mailOnSubmission']);
+		update_option('fvcn_mailOnModeration', $_POST['fvcn_mailOnModeration']);
+		update_option('fvcn_maxTitleLength', $_POST['fvcn_maxTitleLength']);
+		update_option('fvcn_titleBreaker', $_POST['fvcn_titleBreaker']);
+		update_option('fvcn_maxDescriptionLength', $_POST['fvcn_maxDescriptionLength']);
+		update_option('fvcn_descriptionBreaker', $_POST['fvcn_descriptionBreaker']);
+		update_option('fvcn_numSubmissions', $_POST['fvcn_numSubmissions']);
+		update_option('fvcn_submissionTemplate', $_POST['fvcn_submissionTemplate']);
+		update_option('fvcn_rssEnabled', $_POST['fvcn_rssEnabled']);
+		update_option('fvcn_numRSSItems', $_POST['fvcn_numRSSItems']);
+		update_option('fvcn_rssLocation', $_POST['fvcn_rssLocation']);
+		
+		echo '<div id="message" class="updated fade"><p>Settings updated.</p></div>';
 	}
 	?>
 	<div class="wrap">
-		<h2>Settings</h2>
+		<!--<h2>Settings</h2>-->
 		<form method="post" action="">
 			<?php wp_nonce_field('fvCommunityNews_changeSettings'); ?>
 			<table class="form-table">
@@ -797,6 +1040,10 @@ function fvCommunityNewsSettings() {
 							<label for="fvcn_previousApproved">
 								<input type="checkbox" name="fvcn_previousApproved" id="fvcn_previousApproved" value="1"<?php if (get_option('fvcn_previousApproved')) echo ' checked="checked"'; ?> />
 								Submission author must have a previously approved submission.</label>
+							<br />
+							<label for="fvcn_loggedIn">
+								<input type="checkbox" name="fvcn_loggedIn" id="fvcn_loggedIn" value="1"<?php if (get_option('fvcn_loggedIn')) echo ' checked="checked"'; ?> />
+								Submission author must be logged in.</label>
 						</fieldset></td>
 				</tr>
 				<tr valign="top">
@@ -840,6 +1087,10 @@ function fvCommunityNewsSettings() {
 							<label for="fvcn_captchaEnabled">
 								<input type="checkbox" name="fvcn_captchaEnabled" id="fvcn_captchaEnabled" value="1"<?php if (get_option('fvcn_captchaEnabled')) echo ' checked="checked"'; ?> />
 								Enable or disable the use of a captcha.</label>
+							<br />
+							<label for="fvcn_hideCaptchaLoggedIn">
+								<input type="checkbox" name="fvcn_hideCaptchaLoggedIn" id="fvcn_hideCaptchaLoggedIn" value="1"<?php if (get_option('fvcn_hideCaptchaLoggedIn')) echo ' checked="checked"'; ?> />
+								Remove captcha for users who are already logged in.</label>
 							<br />
 						</fieldset></td>
 				</tr>
@@ -888,6 +1139,34 @@ function fvCommunityNewsSettings() {
 								<textarea name="fvcn_submissionTemplate" id="fvcn_submissionTemplate" cols="60" rows="10" style="width: 98%; font-size: 12px;" class="code"><?php echo stripslashes(get_option('fvcn_submissionTemplate')); ?></textarea>
 						</p>
 						</fieldset></td>
+				</tr>
+			</table>
+			
+			<h3>RSS</h3>
+			<p>Configure your Community News RSS 2.0 feed.</p>
+			<table class="form-table">
+				<tr valign="top">
+					<th scope="row">Enable RSS Feed</th>
+					<td><fieldset>
+							<legend class="hidden">Enable the RSS Feed</legend>
+							<label for="fvcn_rssEnabled">
+								<input type="checkbox" name="fvcn_rssEnabled" id="fvcn_rssEnabled" value="1"<?php if (get_option('fvcn_rssEnabled')) echo ' checked="checked"'; ?> />
+								Enable or disable the RSS 2.0 Feed.</label>
+							<br />
+						</fieldset></td>
+				</tr>
+				<tr valign="top">
+					<th scope="row"><label for="fvcn_numRSSItems">Number of RSS Items</label></th>
+					<td><input type="text" name="fvcn_numRSSItems" id="fvcn_numRSSItems" value="<?php echo get_option('fvcn_numRSSItems'); ?>" size="3" /></td>
+				</tr>
+				<tr valign="top">
+					<th scope="row"><label for="fvcn_rssLocation">RSS Location</label></th>
+					<td><?php
+					if ($wp_rewrite->using_permalinks())
+						echo get_option('home') . '/' . str_replace('%feed%', '', $wp_rewrite->get_feed_permastruct());
+					else
+						echo get_option('home') . '/?feed=';
+					?><input type="text" name="fvcn_rssLocation" id="fvcn_rssLocation" value="<?php echo get_option('fvcn_rssLocation'); ?>" /></td>
 				</tr>
 			</table>
 			<p class="submit">
