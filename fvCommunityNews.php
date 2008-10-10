@@ -531,7 +531,26 @@ function fvCommunityNewsGetSubmissions($number=5, $format=false) {
  *		@version 1.0
  */
 function fvCommunityNewsRSSFeed() {
+	global $wpdb;
 	
+	$number = get_option('fvcn_num_feed_items');
+	$sql = "SELECT
+				Name,
+				Email,
+				Title,
+				Location,
+				Description,
+				Date
+			FROM
+				" . get_option('fvcn_dbname') . "
+			WHERE
+				Approved = '1'
+			ORDER BY
+				Date DESC
+			LIMIT
+				" . (int)$wpdb->escape($number) . "";
+	
+	$posts = $wpdb->get_results($sql);
 	
 	
 	
