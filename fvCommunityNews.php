@@ -3,7 +3,7 @@
  *		Plugin Name:		FV Community News
  *		Plugin URI:			http://www.frank-verhoeven.com/wordpress-plugin-fv-community-news/
  *		Description:		Let visiters of your site post their articles on your site.
- *		Version:			1.1
+ *		Version:			1.1.1
  *		Author:				Frank Verhoeven
  *		Author URI:			http://www.frank-verhoeven.com/
  *		@copyright			Copyright (c) 2008, Frank Verhoeven

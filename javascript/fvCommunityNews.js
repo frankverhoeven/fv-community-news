@@ -74,10 +74,13 @@ function fvCommunityNewsReloadCaptcha() {
 	var oldSource  = $(element).readAttribute('src');
 	var newSource = $(element).readAttribute('src') + '&amp;dummy=true';
 	
+	Effect.Appear('fvCommunityNewsCaptchaLoader', {duration: 0});
+	
 	new Effect.Opacity(element, {from: 1.0, to: 0.0, duration: 0.2,
 		afterFinish: function() {
 			$(element).writeAttribute({ src :  newSource }).writeAttribute({ '_src' :  oldSource });
 			Event.observe(element, 'load', function() {
+				Effect.Fade('fvCommunityNewsCaptchaLoader', {duration: 0});
 				new Effect.Opacity(element, {from: 0.0, to: 1.0, duration: 0.2});
 			});
 		}

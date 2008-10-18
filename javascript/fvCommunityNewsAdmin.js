@@ -33,4 +33,19 @@ jQuery( function($) {
 	$( 'thead :checkbox, tfoot :checkbox' ).click( function() {
 		checkAll( $(this).parents( 'form:first' ) );
 	} );
+	
+	$('.tab').click(function() {
+		$('#tab-interface > .subsubsub > li > a.current').removeClass('current');
+		$(this).addClass('current');
+		
+		$('#tab-interface > #tabContainer > div.currentTab').removeClass('currentTab');
+		$(this.rel).addClass('currentTab');
+		
+		return false;
+	});
+	
 } );
+
+
+
+
