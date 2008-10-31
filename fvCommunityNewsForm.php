@@ -20,46 +20,53 @@
 <?php else : ?>
 
 <!-- No submission has been submited, or errors occured. //-->
-<form action="" method="post" name="fvCommunityNewsForm" id="fvCommunityNewsForm">
-	<fieldset>
-		<label for="fvCommunityNewsName">Name <em title="Required">*</em></label>
-		<input type="text" name="fvCommunityNewsName" id="fvCommunityNewsName" value="<?php echo fvCommunityNewsGetValue('fvCommunityNewsName'); ?>" /><br />
-		
-		<label for="fvCommunityNewsEmail">Email <em title="Required">*</em></label>
-		<input type="text" name="fvCommunityNewsEmail" id="fvCommunityNewsEmail" value="<?php echo fvCommunityNewsGetValue('fvCommunityNewsEmail'); ?>" /><br />
-		
-		<label for="fvCommunityNewsTitle">Post Title <em title="Required">*</em></label>
-		<input type="text" name="fvCommunityNewsTitle" id="fvCommunityNewsTitle" value="<?php echo fvCommunityNewsGetValue('fvCommunityNewsTitle'); ?>" /><br />
-		
-		<label for="fvCommunityNewsLocation">Post URL <em title="Required">*</em></label>
-		<input type="text" name="fvCommunityNewsLocation" id="fvCommunityNewsLocation" value="<?php echo fvCommunityNewsGetValue('fvCommunityNewsLocation'); ?>" /><br />
-		
-		<?php if (fvCommunityNewsCaptcha()) : ?>
-		
-		<label for="fvCommunityNewsCaptcha">Captcha <em title="Required">*</em></label>
-		<img src="<?php echo get_option('home'); ?>/?fvCommunityNewsCaptcha=true" id="fvCommunityNewsCaptchaImage" alt="Captcha" />
-		<script type="text/javascript">
-			document.write('<br /><small><a href="javascript:;" onclick="fvCommunityNewsReloadCaptcha();">Give me an other image</a></small>');
-		</script>
-		<br />To prevent spam, please type the text (all <strong>uppercase</strong>) from this image in the textbox below.<br />
-		<input type="text" name="fvCommunityNewsCaptcha" id="fvCommunityNewsCaptcha" value="" />
-		
-		<?php endif; ?>
-		
-		<label for="fvCommunityNewsDescription">Description <em title="Required">*</em></label>
-		<textarea name="fvCommunityNewsDescription" id="fvCommunityNewsDescription"><?php echo fvCommunityNewsGetValue('fvCommunityNewsDescription'); ?></textarea><br />
-		
-		<input type="hidden" name="fvCommunityNews" id="fvCommunityNews" value="true" />
-		<?php wp_nonce_field('fvCommunityNews_addSubmission'); ?>
-		
-		<div style="display: none;">
-			<label for="fvCommunityNewsPhone">Phone Number <em title="Required">*</em></label>
-			<input type="text" name="fvCommunityNewsPhone" id="fvCommunityNewsPhone" value="" />
-		</div>
-		
-		<span id="fvCommunityNewsErrorResponse"><?php echo fvCommunityNewsSubmitError(); ?></span>
-		<input type="submit" name="fvCommunityNewsSubmit" id="fvCommunityNewsSubmit" value="Post News" />
-	</fieldset>
+<form action="" method="post" name="fvCommunityNewsForm" id="fvCommunityNewsForm" enctype="multipart/form-data">
+	<label for="fvCommunityNewsName">Name <em title="Required for valid form validation.">*</em></label>
+	<input type="text" name="fvCommunityNewsName" id="fvCommunityNewsName" value="<?php echo fvCommunityNewsGetValue('fvCommunityNewsName'); ?>" /><br />
+	
+	<label for="fvCommunityNewsEmail">Email <em title="Required for valid form validation.">*</em></label>
+	<input type="text" name="fvCommunityNewsEmail" id="fvCommunityNewsEmail" value="<?php echo fvCommunityNewsGetValue('fvCommunityNewsEmail'); ?>" /><br />
+	
+	<label for="fvCommunityNewsTitle">Post Title <em title="Required for valid form validation.">*</em></label>
+	<input type="text" name="fvCommunityNewsTitle" id="fvCommunityNewsTitle" value="<?php echo fvCommunityNewsGetValue('fvCommunityNewsTitle'); ?>" /><br />
+	
+	<label for="fvCommunityNewsLocation">Post URL</label>
+	<input type="text" name="fvCommunityNewsLocation" id="fvCommunityNewsLocation" value="<?php echo fvCommunityNewsGetValue('fvCommunityNewsLocation'); ?>" /><br />
+	
+	<?php if (fvCommunityNewsCaptcha()) : ?>
+	
+	<label for="fvCommunityNewsCaptcha">Captcha <em title="Required for valid form validation.">*</em></label>
+	<img src="<?php echo get_option('home'); ?>/?fvCommunityNewsCaptcha=true" id="fvCommunityNewsCaptchaImage" alt="Captcha" />
+	<script type="text/javascript">
+		document.write('<br /><small><a href="javascript:;" onclick="fvCommunityNewsReloadCaptcha();">Give me an other image</a></small><img src="<?php echo get_option('home'); ?>/wp-content/plugins/fv-community-news/images/loading-small.gif" id="fvCommunityNewsCaptchaLoader" style="display:none;margin-left:2px" />');
+	</script>
+	<br />To prevent spam, please type the text (all <strong>uppercase</strong>) from this image in the textbox below.<br />
+	<input type="text" name="fvCommunityNewsCaptcha" id="fvCommunityNewsCaptcha" value="" />
+	
+	<?php
+	endif;
+	if (get_option('fvcn_uploadImage')) :
+	?>
+	
+	<label for="fvCommunityNewsImage">Image</label>
+	<input type="file" name="fvCommunityNewsImage" id="fvCommunityNewsImage" value="" />
+	<input type="hidden" name="max_file_size" id="max_file_size" value="2048000" />
+	
+	<?php endif; ?>
+	
+	<label for="fvCommunityNewsDescription">Description <em title="Required for valid form validation.">*</em></label>
+	<textarea name="fvCommunityNewsDescription" id="fvCommunityNewsDescription"><?php echo fvCommunityNewsGetValue('fvCommunityNewsDescription'); ?></textarea><br />
+	
+	<input type="hidden" name="fvCommunityNews" id="fvCommunityNews" value="<?php echo get_option('home'); ?>/" />
+	<?php wp_nonce_field('fvCommunityNews_addSubmission'); ?>
+	
+	<div style="display: none;">
+		<label for="fvCommunityNewsPhone">Phone Number <em title="Required for valid form validation.">*</em></label>
+		<input type="text" name="fvCommunityNewsPhone" id="fvCommunityNewsPhone" value="" />
+	</div>
+	
+	<span id="fvCommunityNewsErrorResponse"><?php echo fvCommunityNewsSubmitError(); ?></span>
+	<input type="submit" name="fvCommunityNewsSubmit" id="fvCommunityNewsSubmit" value="Post News" />
 </form>
 
 <div id="fvCommunityNewsAjaxResponse" style="display: none;"></div>

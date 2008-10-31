@@ -7,6 +7,11 @@
 
 Event.observe(window, 'load', function() {
 	Event.observe('fvCommunityNewsForm', 'submit', function(submission) {
+		
+		// Disable AJAX for image uploading.
+		if ($('fvCommunityNewsImage') && '' != $F('fvCommunityNewsImage'))
+			return true;
+		
 		Effect.Appear('fvCommunityNewsLoader', {
 			duration: 1.0,
 			afterFinish: function() {
@@ -19,7 +24,7 @@ Event.observe(window, 'load', function() {
 });
 
 function fvCommunityNewsMakeRequest() {
-	url = window.location.href + '?fvCommunityNewsAjaxRequest=true';
+	url = $F('fvCommunityNews') + '?fvCommunityNewsAjaxRequest=true';
 	
 	new Ajax.Request (url, {
 		method: 'post',
@@ -70,15 +75,15 @@ function fvCommunityNewsFetchResults(response) {
 }
 
 function fvCommunityNewsReloadCaptcha() {
-	var element = 'fvCommunityNewsCaptchaImage';
-	var oldSource  = $(element).readAttribute('src');
-	var newSource = $(element).readAttribute('src') + '&amp;dummy=true';
+	var element = $('fvCommunityNewsCaptchaImage');
+	var oldSource  = element.readAttribute('src');
+	var newSource = element.readAttribute('src') + '&amp;dummy=true';
 	
 	Effect.Appear('fvCommunityNewsCaptchaLoader', {duration: 0});
 	
 	new Effect.Opacity(element, {from: 1.0, to: 0.0, duration: 0.2,
 		afterFinish: function() {
-			$(element).writeAttribute({ src :  newSource }).writeAttribute({ '_src' :  oldSource });
+			element.writeAttribute({ src :  newSource }).writeAttribute({ '_src' :  oldSource });
 			Event.observe(element, 'load', function() {
 				Effect.Fade('fvCommunityNewsCaptchaLoader', {duration: 0});
 				new Effect.Opacity(element, {from: 0.0, to: 1.0, duration: 0.2});
@@ -86,8 +91,6 @@ function fvCommunityNewsReloadCaptcha() {
 		}
 		
 	});
-	
-	
 	
 	return false;
 }

@@ -6,6 +6,9 @@
  *		All elements in this file could be found in the file: fvCommunityNewsForm.php.
  */
 
+ul.fvCommunityNewsList {  }									/* The list of submissions */
+
+ul.fvCommunityNewsList li {  }								/* One submission */
 
 form#fvCommunityNewsForm {  }								/* The form */
 
