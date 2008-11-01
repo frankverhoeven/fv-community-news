@@ -3,7 +3,7 @@
  *		Plugin Name:		FV Community News
  *		Plugin URI:			http://www.frank-verhoeven.com/wordpress-plugin-fv-community-news/
  *		Description:		Let visiters of your site post their articles on your site. Like this plugin? Please consider <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=SB62B7H867Y4C&lc=US&item_name=Frank%20Verhoeven&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted">making a small donation</a>.
- *		Version:			1.2
+ *		Version:			1.2.1
  *		Author:				Frank Verhoeven
  *		Author URI:			http://www.frank-verhoeven.com/
  *		@copyright			Copyright (c) 2008, Frank Verhoeven
@@ -272,7 +272,7 @@ function fvCommunityNewsSubmitted() {
  *		@version 1.1.1
  */
 function fvCommunityNewsHead() {
-	global $wp_rewrite;
+	global $wp_rewrite, $fvCommunityNewsVersion;
 	$dir = WP_PLUGIN_URL . '/fv-community-news/javascript/';
 	
 	echo "\n\t\t" . '<script type="text/javascript" src="' . $dir . 'prototype.js"></script>' . "\n";
@@ -287,7 +287,7 @@ function fvCommunityNewsHead() {
 		
 		echo "\t\t" . '<link rel="alternate" type="application/rss+xml" title="' . get_option('blogname') . ' Community News RSS Feed" href="' . $location . '" />' . "\n";
 	}
-	echo "\t\t" . '<meta name="Community-News-Creator" content="FV Community News" />' . "\n\n";
+	echo "\t\t" . '<meta name="Community-News-Creator" content="FV Community News - ' . $fvCommunityNewsVersion . '" />' . "\n\n";
 }
 
 /**
@@ -1008,14 +1008,16 @@ function fvCommunityNewsAddAdmin() {
 
 /**
  *		Remove the submissions count from the sublevel menu.
- *		@version 1.0
+ *		@version 1.1
  *		@since 1.2
  */
 function fvCommunityNewsFixAdminMenu() {
-	global $submenu;
-	
-	foreach ($submenu['fv-community-news'] as $key=>$item) {
-		$submenu['fv-community-news'][ $key ] = preg_replace('/Submissions <span id="awaiting-mod" class="count-\d"><span class="submission-count">\d<\/span><\/span>/', 'Submissions', $item);
+	if (current_user_can('manage_options')) {
+		global $submenu;
+		
+		foreach ($submenu['fv-community-news'] as $key=>$item) {
+			$submenu['fv-community-news'][ $key ] = preg_replace('/Submissions <span id="awaiting-mod" class="count-\d"><span class="submission-count">\d<\/span><\/span>/', 'Submissions', $item);
+		}
 	}
 }
 
