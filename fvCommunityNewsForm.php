@@ -1,4 +1,12 @@
-<?php if (get_option('fvcn_loggedIn') && !is_user_logged_in()) : ?>
+<?php
+/**
+ * @package 	FV Community News
+ * @version 	1.2.2
+ * @author 		Frank Verhoeven
+ * @copyright 	Coyright (c) 2008, Frank Verhoeven
+ */
+
+if (get_option('fvcn_loggedIn') && !is_user_logged_in()) : ?>
 	
 	<!-- Submission author must be logged in. //-->
 	<p>You must be logged in to add a submission.</p>
@@ -38,7 +46,7 @@
 	<label for="fvCommunityNewsCaptcha">Captcha <em title="Required for valid form validation.">*</em></label>
 	<img src="<?php echo get_option('home'); ?>/?fvCommunityNewsCaptcha=true" id="fvCommunityNewsCaptchaImage" alt="Captcha" />
 	<script type="text/javascript">
-		document.write('<br /><small><a href="javascript:;" onclick="fvCommunityNewsReloadCaptcha();">Give me an other image</a></small><img src="<?php echo WP_PLUGIN_URL; ?>/wp-content/plugins/fv-community-news/images/loading-small.gif" id="fvCommunityNewsCaptchaLoader" style="display:none;margin-left:2px" />');
+		document.write('<br /><small><a href="javascript:;" onclick="fvCommunityNewsReloadCaptcha();">Give me an other image</a></small><img src="<?php echo WP_PLUGIN_URL; ?>/fv-community-news/images/loading-small.gif" id="fvCommunityNewsCaptchaLoader" style="display:none;margin-left:2px" />');
 	</script>
 	<br />To prevent spam, please type the text (all <strong>uppercase</strong>) from this image in the textbox below.<br />
 	<input type="text" name="fvCommunityNewsCaptcha" id="fvCommunityNewsCaptcha" value="" />
@@ -72,7 +80,7 @@
 <div id="fvCommunityNewsAjaxResponse" style="display: none;"></div>
 
 <div id="fvCommunityNewsLoader" style="display: none;">
-	<p><img src="<?php echo WP_PLUGIN_URL; ?>/wp-content/plugins/fv-community-news/images/loading.gif" alt="" style="margin-right: 3px;" />Loading...</p>
+	<p><img src="<?php echo WP_PLUGIN_URL; ?>/fv-community-news/images/loading.gif" alt="" style="margin-right: 3px;" />Loading...</p>
 </div>
 
 <?php endif; ?>

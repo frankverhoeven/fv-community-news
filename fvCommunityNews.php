@@ -3,10 +3,13 @@
  *		Plugin Name:		FV Community News
  *		Plugin URI:			http://www.frank-verhoeven.com/wordpress-plugin-fv-community-news/
  *		Description:		Let visiters of your site post their articles on your site. Like this plugin? Please consider <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=SB62B7H867Y4C&lc=US&item_name=Frank%20Verhoeven&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted">making a small donation</a>.
- *		Version:			1.2.1
+ *		Version:			1.2.2
  *		Author:				Frank Verhoeven
  *		Author URI:			http://www.frank-verhoeven.com/
+ *		
  *		@copyright			Copyright (c) 2008, Frank Verhoeven
+ *		@package 			FV Community News
+ *		@author 			Frank Verhoeven
  */
 
 /**
@@ -38,11 +41,11 @@ $fvCommunityNewsFieldValues = array(
 /**
  *		@var int $fvCommunityNewsVersion Current version of FV Community News.
  */
-$fvCommunityNewsVersion = '1.2';
+$fvCommunityNewsVersion = '1.2.2';
 
 /**
  *		Initialize the application
- *		@version 1.2
+ *		@version 1.2.1
  */
 function fvCommunityNewsInit() {
 	global $fvCommunityNewsVersion;
@@ -58,7 +61,7 @@ function fvCommunityNewsInit() {
 	
 	if (!get_option('fvcn_version'))
 		fvCommunityNewsInstall();
-	if ($fvCommunityNewsVersion > get_option('fvcn_version'))
+	if (version_compare(get_option('fvcn_version'), $fvCommunityNewsVersion, '<'))
 		fvCommunityNewsUpdate();
 	
 	add_action('wp_head', 'fvCommunityNewsHead', 30);
@@ -201,7 +204,7 @@ function fvCommunityNewsCreateCaptcha() {
 /**
  *		Create and display a captcha image.
  *		@param string $string The string for the captcha.
- *		@version 1.0.1
+ *		@version 1.0.2
  */
 function fvCommunityNewsDisplayCaptcha($string) {
 	$factor = 27;
@@ -242,6 +245,7 @@ function fvCommunityNewsDisplayCaptcha($string) {
 	
 	$x_end = $width;
 	$number = mt_rand(3, 5);
+	$spread = 0;
 	
 	for ($i = 0; $i<$number; $i++) {
 		$y_start = mt_rand(-$spread, $height + 10);
@@ -1041,15 +1045,17 @@ function fvCommunityNewsAddSettingsLink($links, $file) {
 
 /**
  *		Add a dashboard widget to the dashboard.
+ *		@version 1.0.1
+ *		@since 1.2
  */
 function fvCommunityNewsAddDashboard() {
 	if (current_user_can('moderate_comments') && function_exists('wp_add_dashboard_widget'))
-		wp_add_dashboard_widget('fvCommunityNewsDashboard', 'Submissions', 'fvCommunityNewsDashboard');
+		wp_add_dashboard_widget('fvCommunityNewsDashboard', 'Submissions <a href="admin.php?page=fv-community-news" class="edit-box open-box">View All</a>', 'fvCommunityNewsDashboard');
 }
 
 /**
  *		Add current stats to the Right Now section.
- *		@version 1.0
+ *		@version 1.1
  *		@since 1.2
  */
 function fvCommunityNewsDashboard() {
@@ -1057,22 +1063,20 @@ function fvCommunityNewsDashboard() {
 	list($submissions, $total) = fvCommunityNewsGetSubmissionsList(false, 0, 5);
 	
 	if ($submissions) {
-		
-		echo '<p class="view-all"><a href="admin.php?page=fv-community-news">View All Submissions</a></p>';
-		echo '<br class="clear" /><div id="the-submission-list" class="list:comment">';
+		echo ' <div id="the-submission-list" class="list:comment">';
 		
 		foreach ($submissions as $submission) :
-			echo '<div id="submission-' . $submission->Id . '" class=" even thread-even depth-1 submission-item ' . ($submission->Approved?'approved':'unapproved') . '">';
-				echo get_avatar(stripslashes(apply_filters('get_submission_author_email', $submission->Email)), 32);
-				echo '<span class="submission-meta"><cite>' . stripslashes(apply_filters('get_submission_author', $submission->Name)) . '</cite> ';
-				echo ' linked to <a href="' . stripslashes(apply_filters('submission_author_url', $submission->Location)) . '">' . stripslashes(apply_filters('get_submission_author', $submission->Title)) . '</a>: </span>';
-				echo '<blockquote>' . trim( stripslashes(apply_filters('submission_text', $submission->Description)) ) . '</blockquote>';
+			echo '<div id="submission-' . $submission->Id . '" class="even thread-even depth-1 submission-item ' . ($submission->Approved?'approved':'unapproved') . '">';
+				echo get_avatar(stripslashes(apply_filters('get_submission_author_email', $submission->Email)), 50);
+				echo '<h4 class="submission-meta">From <cite class="submission-author">' . stripslashes(apply_filters('get_submission_author', $submission->Name)) . '</cite> ';
+				echo ' linking to <a href="' . stripslashes(apply_filters('submission_author_url', $submission->Location)) . '">' . stripslashes(apply_filters('get_submission_author', $submission->Title)) . '</a></h4>';
+				echo '<blockquote><p>' . trim( stripslashes(apply_filters('submission_text', $submission->Description)) ) . '</p></blockquote>';
 				echo '<p class="submission-actions">';
 					
 					echo '<span class="approve"><a href="';
 					echo wp_nonce_url('?fvCommunityNewsAdminAction=approvesubmission&amp;s=' . $submission->Id, 'fvCommunityNews_approveSubmission' . $submission->Id);
 					echo '" class="dim:the-submission-list:submission-1:unapproved:e7e7d3:e7e7d3:new=approved vim-a" title="Approve this submission">Approve</a></span>';
-	
+					
 					echo '<span class="unapprove"><a href="';
 					echo wp_nonce_url('?fvCommunityNewsAdminAction=unapprovesubmission&amp;s=' . $submission->Id, 'fvCommunityNews_unapproveSubmission' . $submission->Id);
 					echo '" class="dim:the-submission-list:submission-1:unapproved:e7e7d3:e7e7d3:new=unapproved vim-u" title="Unapprove this submission">Unapprove</a></span>';
@@ -1192,7 +1196,7 @@ function fvCommunityNewsAdminHead() {
 
 /**
  *		Admin page for viewing `My Submissions`
- *		@version 1.0
+ *		@version 1.0.1
  *		@since 1.2
  */
 function fvCommunityNewsMySubmissions() {
@@ -1222,6 +1226,8 @@ function fvCommunityNewsMySubmissions() {
 		'total' => ceil($total / $submissionPerPage),
 		'current' => $page
 	));
+		
+	$noImage = ('default'==get_option('fvcn_defaultImage')?WP_PLUGIN_URL.'/fv-community-news/images/default.png':get_option('home').'/wp-fvcn-images/default.'.get_option('fvcn_defaultImage'));
 	
 	echo '<div class="wrap"><h2>My Submissions</h2><p>The Community News you have added.';
 	
@@ -1241,6 +1247,8 @@ function fvCommunityNewsMySubmissions() {
 				<tr>
 					<th scope="col" id="comment" class="manage-column column-comment" style="">Submission</th>
 					<th scope="col" id="author" class="manage-column column-author" style="min-width: 210px;">Author</th>
+					<?php if (get_option('fvcn_uploadImage'))
+						echo '<th scope="col" id="author" class="manage-column column-image">Image</th>'; ?>
 					<th scope="col" id="date" class="manage-column column-date" style="min-width: 120px;">Submitted</th>
 				</tr>
 			</thead>
@@ -1255,6 +1263,9 @@ function fvCommunityNewsMySubmissions() {
 				echo ' <td class="author column-author"><strong>' . get_avatar($post->Email, 32) . ' ' . stripslashes(apply_filters('get_comment_author', $post->Name)) . '</strong><br />';
 				echo '<a href="mailto:' . stripslashes(apply_filters('get_comment_author_email', $post->Email)) . '">' . stripslashes(apply_filters('get_comment_author_email', $post->Email)) . '</a><br />';
 				
+				if (get_option('fvcn_uploadImage'))
+					echo ' <td class="image column-image"><img src="' . (NULL==$post->Image?$noImage:$post->Image) . '" alt="" /></td>' . "\n";
+				
 				echo ' <td class="date column-date">' . stripslashes(apply_filters('get_comment_date', mysql2date(get_option('date_format'), $post->Date))) . '</td>' . "\n";
 				echo '</tr>' . "\n\n";
 			}
@@ -1264,6 +1275,8 @@ function fvCommunityNewsMySubmissions() {
 				<tr>
 					<th scope="col" class="manage-column column-comment" style="">Submission</th>
 					<th scope="col" class="manage-column column-author" style="">Author</th>
+					<?php if (get_option('fvcn_uploadImage'))
+						echo '<th scope="col" id="author" class="manage-column column-image">Image</th>'; ?>
 					<th scope="col" class="manage-column column-date" style="">Submitted</th>
 				</tr>
 			</tfoot>
@@ -1280,15 +1293,14 @@ function fvCommunityNewsMySubmissions() {
 	
 	<h2>Add News</h2>
 	<p>Add a new submission.</p>
-	<?php fvCommunityNewsForm(); ?>
+	<?php fvCommunityNewsForm();
 		
-</div>
-<?php
+	echo '</div>';
 }
 
 /**
  *		Admin page for managing submissions.
- *		@version 1.2
+ *		@version 1.2.1
  */
 function fvCommunityNewsSubmissions() {
 	global $wpdb;
@@ -1312,6 +1324,8 @@ function fvCommunityNewsSubmissions() {
 						$wpdb->query("UPDATE " . get_option('fvcn_dbname') . " SET Approved = '1' WHERE Id = '" . $wpdb->escape($submission) . "'");
 					if (isset($_POST['submission-unapprove']))
 						$wpdb->query("UPDATE " . get_option('fvcn_dbname') . " SET Approved = '0' WHERE Id = '" . $wpdb->escape($submission) . "'");
+					if (isset($_POST['submission-spam']))
+						$wpdb->query("UPDATE " . get_option('fvcn_dbname') . " SET Approved = 'spam' WHERE Id = '" . $wpdb->escape($submission) . "'");
 					if (isset($_POST['submission-delete']))
 						$wpdb->query("DELETE FROM " . get_option('fvcn_dbname') . " WHERE Id = '" . $wpdb->escape($submission) . "'");
 				}
@@ -1388,7 +1402,9 @@ function fvCommunityNewsSubmissions() {
 			'total' => ceil($total / $submissionPerPage),
 			'current' => $page
 		));
-			
+		
+		$noImage = ('default'==get_option('fvcn_defaultImage')?WP_PLUGIN_URL.'/fv-community-news/images/default.png':get_option('home').'/wp-fvcn-images/default.'.get_option('fvcn_defaultImage'));
+		
 		if (empty($submissions)) :
 			if ('spam' == $submissionStatus)
 				echo '<br class="clear" /><p>No submissions here, must be your lucky day.</p>';
@@ -1405,6 +1421,7 @@ function fvCommunityNewsSubmissions() {
 				<div class="alignleft">
 					<input type="submit" name="submission-approve" id="submission-approve" value="Approve" class="button-secondary" />
 					<input type="submit" name="submission-unapprove" id="submission-unapprove" value="Unapprove" class="button-secondary" />
+					<input type="submit" name="submission-spam" id="submission-spam" value="Spam" class="button-secondary" />
 					<input type="submit" name="submission-delete" id="submission-delete" value="Delete" class="button-secondary delete" />
 				</div>
 				<br class="clear" />
@@ -1412,14 +1429,16 @@ function fvCommunityNewsSubmissions() {
 			<br class="clear" />
 			
 			<table class="widefat">
-				<thead>
-					<tr>
-						<th scope="col" id="cb" class="manage-column column-cb check-column" style=""><input type="checkbox" onclick="fvCommunityNewsCheckAll();" /></th>
-						<th scope="col" id="comment" class="manage-column column-comment" style="">Submission</th>
-						<th scope="col" id="author" class="manage-column column-author" style="min-width: 210px;">Author</th>
-						<th scope="col" id="date" class="manage-column column-date" style="min-width: 120px;">Submitted</th>
-					</tr>
-				</thead>
+			<thead>
+				<tr>
+					<th scope="col" id="cb" class="manage-column column-cb check-column" style=""><input type="checkbox" onclick="fvCommunityNewsCheckAll();" /></th>
+					<th scope="col" id="comment" class="manage-column column-comment" style="">Submission</th>
+					<th scope="col" id="author" class="manage-column column-author" style="min-width: 210px;">Author</th>
+					<?php if (get_option('fvcn_uploadImage'))
+						echo '<th scope="col" id="author" class="manage-column column-image">Image</th>'; ?>
+					<th scope="col" id="date" class="manage-column column-date" style="min-width: 120px;">Submitted</th>
+				</tr>
+			</thead>
 			<tbody id="the-comment-list" class="list:comment">
 			<?php
 			foreach ($submissions as $post) {
@@ -1453,6 +1472,9 @@ function fvCommunityNewsSubmissions() {
 				echo '<a href="mailto:' . stripslashes(apply_filters('get_comment_author_email', $post->Email)) . '">' . stripslashes(apply_filters('get_comment_author_email', $post->Email)) . '</a><br />';
 				echo '<a href="http://ws.arin.net/cgi-bin/whois.pl?queryinput=' . $post->Ip . '">' . $post->Ip . '</a></td>' . "\n";
 				
+				if (get_option('fvcn_uploadImage'))
+					echo ' <td class="image column-image"><img src="' . (NULL==$post->Image?$noImage:$post->Image) . '" alt="" /></td>' . "\n";
+				
 				echo ' <td class="date column-date">' . stripslashes(apply_filters('get_comment_date', mysql2date(get_option('date_format'), $post->Date))) . '</td>' . "\n";
 				echo '</tr>' . "\n\n";
 			}
@@ -1463,10 +1485,12 @@ function fvCommunityNewsSubmissions() {
 					<th scope="col" class="manage-column column-cb check-column" style=""><input type="checkbox" onclick="fvCommunityNewsCheckAll();" /></th>
 					<th scope="col" class="manage-column column-comment" style="">Submission</th>
 					<th scope="col" class="manage-column column-author" style="">Author</th>
+					<?php if (get_option('fvcn_uploadImage'))
+						echo '<th scope="col" id="author" class="manage-column column-image">Image</th>'; ?>
 					<th scope="col" class="manage-column column-date" style="">Submitted</th>
 				</tr>
 			</tfoot>
-		</table>
+			</table>
 			<?php wp_nonce_field('fvCommunityNews_moderateSubmissions'); ?>
 			<input type="hidden" name="fvCommunityNewsAdmin" id="fvCommunityNewsAdmin" value="true" />
 		
@@ -1478,6 +1502,7 @@ function fvCommunityNewsSubmissions() {
 				<div class="alignleft">
 					<input type="submit" name="submission-approve" value="Approve" class="button-secondary" />
 					<input type="submit" name="submission-unapprove" value="Unapprove" class="button-secondary" />
+					<input type="submit" name="submission-spam" id="submission-spam" value="Spam" class="button-secondary" />
 					<input type="submit" name="submission-delete" value="Delete" class="button-secondary delete" />
 				</div>
 				<br class="clear" />
@@ -1596,7 +1621,7 @@ function fvCommunityNewsSubmissions() {
 
 /**
  *		Admin page for settings.
- *		@version 1.2
+ *		@version 1.2.1
  */
 function fvCommunityNewsSettings() {
 	if (!current_user_can('manage_options'))
@@ -1866,7 +1891,7 @@ function fvCommunityNewsSettings() {
 								<legend class="hidden">Enable the RSS Feed</legend>
 								<label for="fvcn_uploadImage">
 									<input type="checkbox" name="fvcn_uploadImage" id="fvcn_uploadImage" value="1"<?php if (get_option('fvcn_uploadImage')) echo ' checked="checked"'; ?> />
-									Allow or disallow people to upload an image.</label>
+									Allow people to upload an image.</label>
 								<br />
 							</fieldset></td>
 					</tr>

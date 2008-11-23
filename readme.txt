@@ -3,8 +3,8 @@ Contributors:		Frank Verhoeven
 Donate link:		https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=SB62B7H867Y4C&lc=US&item_name=Frank%20Verhoeven&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted
 Tags:			Community, News, Widget, Posts, Comments
 Requires at least:	2.5
-Tested up to:		2.7-almost-beta
-Stable tag:		1.2.1
+Tested up to:		2.7-beta3-9841
+Stable tag:		1.2.2
 
 Let Users Submit News To Your Site.
 
@@ -30,7 +30,7 @@ How to use this plugin?
 == Frequently Asked Questions ==
 
 Q: Which Wordpress version support this plugin?
-A: This Wordpress plugin requires WP 2.5 and has been tested up to version 2.7-hemorrhage
+A: This Wordpress plugin requires WP 2.5 and has been tested up to version 2.7-beta3-9841
 
 Q: Is this plugin widget ready?
 A: Yes, this plugin has build-in widgets for both displaying the list of submissions and for the form.
