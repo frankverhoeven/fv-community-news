@@ -3,7 +3,7 @@
  *		Plugin Name:		FV Community News
  *		Plugin URI:			http://www.frank-verhoeven.com/wordpress-plugin-fv-community-news/
  *		Description:		Let visiters of your site post their articles on your site. Like this plugin? Please consider <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=SB62B7H867Y4C&lc=US&item_name=Frank%20Verhoeven&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted">making a small donation</a>.
- *		Version:			1.2.2
+ *		Version:			1.2.3
  *		Author:				Frank Verhoeven
  *		Author URI:			http://www.frank-verhoeven.com/
  *		
@@ -41,7 +41,7 @@ $fvCommunityNewsFieldValues = array(
 /**
  *		@var int $fvCommunityNewsVersion Current version of FV Community News.
  */
-$fvCommunityNewsVersion = '1.2.2';
+$fvCommunityNewsVersion = '1.2.3';
 
 /**
  *		Initialize the application
@@ -434,10 +434,10 @@ function fvCommunityNewsUpdate() {
  *		@param string $dirPath The location of the dir we want to create.
  *		@param int $chomd An octal number witch contains the chmod info.
  *		@return bool Success or failed.
- *		@version 1.0
+ *		@version 1.0.1
  *		@since 1.2
  */
-function fvCommunityNewsMakeDirectory($dirPath, $chmod=0755){
+function fvCommunityNewsMakeDirectory($dirPath, $chmod=0777){
 	if(!is_dir($dirPath)) {
 		if (mkdir($dirPath)) {
 			return chmod($dirPath, $chmod);
@@ -453,16 +453,16 @@ function fvCommunityNewsMakeDirectory($dirPath, $chmod=0755){
  *		Check if the uploaded image is valid.
  *		@param array $file The uploaded file.
  *		@return bool Valid image true, else false.
- *		@version 1.0
+ *		@version 1.0.1
  *		@since 1.2
  */
 function fvCommunityNewsCheckImageUpload($file, $ignoreSize=false) {
 	global $fvCommunityNewsSubmitError;
 	
 	$allowedImageTypes = array(
-		'jpg'=>'image/jpg',
-		'jpeg'=>'image/jpg',
-		'jpe'=>'image/jpg',
+		'jpg'=>'image/jpeg',
+		'jpeg'=>'image/jpeg',
+		'jpe'=>'image/jpeg',
 		'png'=>'image/png',
 		'gif'=>'image/gif',
 		'bmp'=>'image/bmp',
@@ -491,7 +491,7 @@ function fvCommunityNewsCheckImageUpload($file, $ignoreSize=false) {
 /**
  *		A submission is posted and handled here.
  *		@return bool True if the submission is successfull posted, false otherwise.
- *		@version 1.2
+ *		@version 1.2.1
  */
 function fvCommunityNewsSubmit() {
 	global $fvCommunityNewsSubmited, $fvCommunityNewsSubmitError, $fvCommunityNewsFieldValues, $fvCommunityNewsAwaitingModeration, $wpdb;
@@ -540,7 +540,7 @@ function fvCommunityNewsSubmit() {
 		return false;
 	}
 	
-	if (get_option('fvcn_uploadImage') && isset($_FILES['fvCommunityNewsImage']) && !empty($_FILES['fvCommunityNewsImage']['name'])) {
+	if (get_option('fvcn_uploadImage') && isset($_FILES['fvCommunityNewsImage'], $_POST['fvCommunityNewsImageCheck']) && !empty($_FILES['fvCommunityNewsImage']['name'])) {
 		if (!fvCommunityNewsCheckImageUpload($_FILES['fvCommunityNewsImage']))
 			return false;
 	}
@@ -557,16 +557,16 @@ function fvCommunityNewsSubmit() {
 		$fvCommunityNewsAwaitingModeration = true;
 		if (get_option('fvcn_mailOnModeration')) {
 			$modmail = true;
-			$approved = 0;
 		}
+		$approved = '0';
 	} elseif (get_option('fvcn_previousApproved') && !($wpdb->query("SELECT Id FROM " . get_option('fvcn_dbname') . " WHERE Email = '" . $wpdb->escape($email) ."' AND Approved = '1'") > 0)) {
 		$fvCommunityNewsAwaitingModeration = true;
 		if (get_option('fvcn_mailOnModeration')) {
 			$modmail = true;
-			$approved = 0;
 		}
+		$approved = '0';
 	} else {
-		$approved = 1;
+		$approved = '1';
 	}
 	
 	// Die in hell spambitches
@@ -638,7 +638,7 @@ function fvCommunityNewsSubmit() {
 				'" . $wpdb->escape( current_time('mysql', 1) ) . "',
 				'" . $wpdb->escape($ip) . "',
 				'" . $wpdb->escape( @gethostbyaddr($ip) ) . "',
-				'" . $wpdb->escape($approved) . "'
+				'" . (int)$approved . "'
 			)";
 	$result = $wpdb->query($sql);
 	if (!$result) {
@@ -646,7 +646,7 @@ function fvCommunityNewsSubmit() {
 		return false;
 	}
 	
-	if (isset($_FILES['fvCommunityNewsImage'])) {
+	if (get_option('fvcn_uploadImage') && isset($_FILES['fvCommunityNewsImage'], $_POST['fvCommunityNewsImageCheck']) && !empty($_FILES['fvCommunityNewsImage']['name'])) {
 		$ext = explode('.', $_FILES['fvCommunityNewsImage']['name']);
 		$ext = strtolower( $ext[ count($ext)-1 ] );
 		$name = $wpdb->insert_id . '.' . $ext;
@@ -1264,7 +1264,7 @@ function fvCommunityNewsMySubmissions() {
 				echo '<a href="mailto:' . stripslashes(apply_filters('get_comment_author_email', $post->Email)) . '">' . stripslashes(apply_filters('get_comment_author_email', $post->Email)) . '</a><br />';
 				
 				if (get_option('fvcn_uploadImage'))
-					echo ' <td class="image column-image"><img src="' . (NULL==$post->Image?$noImage:$post->Image) . '" alt="" /></td>' . "\n";
+					echo ' <td class="image column-image"><img src="' . (NULL==$post->Image?$noImage:get_option('home').'/wp-fvcn-images/'.$post->Image) . '" alt="" /></td>' . "\n";
 				
 				echo ' <td class="date column-date">' . stripslashes(apply_filters('get_comment_date', mysql2date(get_option('date_format'), $post->Date))) . '</td>' . "\n";
 				echo '</tr>' . "\n\n";
@@ -1473,7 +1473,7 @@ function fvCommunityNewsSubmissions() {
 				echo '<a href="http://ws.arin.net/cgi-bin/whois.pl?queryinput=' . $post->Ip . '">' . $post->Ip . '</a></td>' . "\n";
 				
 				if (get_option('fvcn_uploadImage'))
-					echo ' <td class="image column-image"><img src="' . (NULL==$post->Image?$noImage:$post->Image) . '" alt="" /></td>' . "\n";
+					echo ' <td class="image column-image"><img src="' . (NULL==$post->Image?$noImage:get_option('home').'/wp-fvcn-images/'.$post->Image) . '" alt="" /></td>' . "\n";
 				
 				echo ' <td class="date column-date">' . stripslashes(apply_filters('get_comment_date', mysql2date(get_option('date_format'), $post->Date))) . '</td>' . "\n";
 				echo '</tr>' . "\n\n";
@@ -1621,7 +1621,7 @@ function fvCommunityNewsSubmissions() {
 
 /**
  *		Admin page for settings.
- *		@version 1.2.1
+ *		@version 1.2.2
  */
 function fvCommunityNewsSettings() {
 	if (!current_user_can('manage_options'))
@@ -1630,7 +1630,7 @@ function fvCommunityNewsSettings() {
 	global $wp_rewrite;
 	
 	// Remove image directory error
-	if (@is_dir(ABSPATH . 'wp-fvcn-images') && 0755 == substr(sprintf('%o', fileperms(ABSPATH . 'wp-fvcn-images')), -4) && !(bool)get_option('fvcn_uploadDir'))
+	if (@is_dir(ABSPATH . 'wp-fvcn-images/') && is_writable(ABSPATH . 'wp-fvcn-images/') && !(bool)get_option('fvcn_uploadDir'))
 		update_option('fvcn_uploadDir', true);
 		
 	if ('POST' == $_SERVER['REQUEST_METHOD'] && check_admin_referer('fvCommunityNews_changeSettings')) {

@@ -9,7 +9,7 @@ Event.observe(window, 'load', function() {
 	Event.observe('fvCommunityNewsForm', 'submit', function(submission) {
 		
 		// Disable AJAX for image uploading.
-		if ($('fvCommunityNewsImage') && '' != $F('fvCommunityNewsImage'))
+		if ($('fvCommunityNewsImage') && '' != $F('fvCommunityNewsImage') && $('fvCommunityNewsImageCheck').checked)
 			return true;
 		
 		Effect.Appear('fvCommunityNewsLoader', {

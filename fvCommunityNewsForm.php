@@ -46,7 +46,7 @@ if (get_option('fvcn_loggedIn') && !is_user_logged_in()) : ?>
 	<label for="fvCommunityNewsCaptcha">Captcha <em title="Required for valid form validation.">*</em></label>
 	<img src="<?php echo get_option('home'); ?>/?fvCommunityNewsCaptcha=true" id="fvCommunityNewsCaptchaImage" alt="Captcha" />
 	<script type="text/javascript">
-		document.write('<br /><small><a href="javascript:;" onclick="fvCommunityNewsReloadCaptcha();">Give me an other image</a></small><img src="<?php echo WP_PLUGIN_URL; ?>/fv-community-news/images/loading-small.gif" id="fvCommunityNewsCaptchaLoader" style="display:none;margin-left:2px" />');
+		document.write('<br /><small><a href="#" onclick="fvCommunityNewsReloadCaptcha(); return false;">Give me an other image</a></small><img src="<?php echo WP_PLUGIN_URL; ?>/fv-community-news/images/loading-small.gif" id="fvCommunityNewsCaptchaLoader" style="display:none;margin-left:2px" />');
 	</script>
 	<br />To prevent spam, please type the text (all <strong>uppercase</strong>) from this image in the textbox below.<br />
 	<input type="text" name="fvCommunityNewsCaptcha" id="fvCommunityNewsCaptcha" value="" />
@@ -56,8 +56,9 @@ if (get_option('fvcn_loggedIn') && !is_user_logged_in()) : ?>
 	if (get_option('fvcn_uploadImage')) :
 	?>
 	
-	<label for="fvCommunityNewsImage">Image</label>
-	<input type="file" name="fvCommunityNewsImage" id="fvCommunityNewsImage" value="" />
+	<label for="fvCommunityNewsImageCheck">Image</label>
+	<input type="checkbox" name="fvCommunityNewsImageCheck" id="fvCommunityNewsImageCheck" style="width: auto" />
+	<input type="file" name="fvCommunityNewsImage" id="fvCommunityNewsImage" value="" onchange="document.getElementById('fvCommunityNewsImageCheck').checked='true';" style="width: auto;" />
 	<input type="hidden" name="max_file_size" id="max_file_size" value="2048000" />
 	
 	<?php endif; ?>
