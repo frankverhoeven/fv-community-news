@@ -3,13 +3,14 @@
  *		Plugin Name:		FV Community News
  *		Plugin URI:			http://www.frank-verhoeven.com/wordpress-plugin-fv-community-news/
  *		Description:		Let visiters of your site post their articles on your site. Like this plugin? Please consider <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=SB62B7H867Y4C&lc=US&item_name=Frank%20Verhoeven&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted">making a small donation</a>.
- *		Version:			1.2.3
+ *		Version:			1.3
  *		Author:				Frank Verhoeven
  *		Author URI:			http://www.frank-verhoeven.com/
  *		
- *		@copyright			Copyright (c) 2008, Frank Verhoeven
- *		@package 			FV Community News
- *		@author 			Frank Verhoeven
+ *		@package			FV Community News
+ *		@version			1.3
+ *		@author				Frank Verhoeven
+ *		@copyright			Coyright (c) 2008, Frank Verhoeven
  */
 
 /**
@@ -39,9 +40,14 @@ $fvCommunityNewsFieldValues = array(
 	);
 
 /**
+ *		@var array $fvCommunityNewsErrorFields Fields with invallid validation.
+ */
+$fvCommunityNewsErrorFields = array();
+
+/**
  *		@var int $fvCommunityNewsVersion Current version of FV Community News.
  */
-$fvCommunityNewsVersion = '1.2.3';
+$fvCommunityNewsVersion = '1.3';
 
 /**
  *		Initialize the application
@@ -70,7 +76,10 @@ function fvCommunityNewsInit() {
 	add_action('admin_menu', 'fvCommunityNewsFixAdminMenu', 60);
 	add_filter('plugin_action_links', 'fvCommunityNewsAddSettingsLink', 10, 2);
 	add_action('wp_dashboard_setup', 'fvCommunityNewsAddDashboard');
+	add_filter('the_content', 'fvCommunityNewsPostTags');
 	
+		// Initialization
+	load_plugin_textdomain('fvcn', 'wp-content/plugins/fv-community-news/languages');
 	
 		// Add RSS Feed if enabled
 	if (get_option('fvcn_rssEnabled')) {
@@ -102,7 +111,7 @@ function fvCommunityNewsInit() {
 add_action('init', 'fvCommunityNewsInit');
 
 /**
- *		Include the form for sbimtting news.
+ *		Include the form for submitting news.
  *		@version 1.0
  */
 function fvCommunityNewsForm() {
@@ -291,12 +300,15 @@ function fvCommunityNewsHead() {
 		
 		echo "\t\t" . '<link rel="alternate" type="application/rss+xml" title="' . get_option('blogname') . ' Community News RSS Feed" href="' . $location . '" />' . "\n";
 	}
+	if (get_option('fvcn_incStyle'))
+		echo "\t\t" . '<link rel="stylesheet" type="text/css" href="' . WP_PLUGIN_URL . '/fv-community-news/styles/fvCommunityNewsStyles.css" />' . "\n";
+		
 	echo "\t\t" . '<meta name="Community-News-Creator" content="FV Community News - ' . $fvCommunityNewsVersion . '" />' . "\n\n";
 }
 
 /**
  *		Install the application.
- *		@version 1.2
+ *		@version 1.3
  */
 function fvCommunityNewsInstall() {
 	global $wpdb, $fvCommunityNewsVersion;
@@ -328,17 +340,17 @@ function fvCommunityNewsInstall() {
 	}
 	
 	
-	add_option('fvcn_captchaEnabled', '0');
-	add_option('fvcn_hideCaptchaLoggedIn', '1');
-	add_option('fvcn_captchaLength', '6');
-	add_option('fvcn_captchaBgColor', 'ecf8fe');
-	add_option('fvcn_captchaLColor', 'ecf8fe');
+	add_option('fvcn_captchaEnabled', false);
+	add_option('fvcn_hideCaptchaLoggedIn', true);
+	add_option('fvcn_captchaLength', 6);
+	add_option('fvcn_captchaBgColor', 'ffffff');
+	add_option('fvcn_captchaLColor', 'ffffff');
 	add_option('fvcn_captchaTsColor', '686868');
-	add_option('fvcn_captchaTColor', '0b9ac7');
-	add_option('fvcn_alwaysAdmin', '0');
-	add_option('fvcn_previousApproved', '1');
-	add_option('fvcn_mailOnSubmission', '0');
-	add_option('fvcn_mailOnModeration', '1');
+	add_option('fvcn_captchaTColor', '0066cc');
+	add_option('fvcn_alwaysAdmin', false);
+	add_option('fvcn_previousApproved', true);
+	add_option('fvcn_mailOnSubmission', false);
+	add_option('fvcn_mailOnModeration', true);
 	add_option('fvcn_maxTitleLength', '50');
 	add_option('fvcn_titleBreaker', '&hellip;');
 	add_option('fvcn_maxDescriptionLength', '200');
@@ -347,16 +359,27 @@ function fvCommunityNewsInstall() {
 	add_option('fvcn_submissionTemplate', '');
 	add_option('fvcn_formTitle', 'Add News');
 	add_option('fvcn_submissionsTitle', 'Community News');
-	add_option('fvcn_rssEnabled', '1');
-	add_option('fvcn_numRSSItems', '10');
+	add_option('fvcn_rssEnabled', true);
+	add_option('fvcn_numRSSItems', 10);
 	add_option('fvcn_rssLocation', 'community-news.rss');
-	add_option('fvcn_loggedIn', '0');
-	add_option('fvcn_uploadImage', '0');
-	add_option('fvcn_maxImageW', '45');
-	add_option('fvcn_maxImageH', '45');
-	add_option('fvcn_mySubmissions', '0');
-	add_option('fvcn_akismetEnabled', '0');
+	add_option('fvcn_loggedIn', false);
+	add_option('fvcn_uploadImage', false);
+	add_option('fvcn_maxImageW', 45);
+	add_option('fvcn_maxImageH', 45);
+	add_option('fvcn_mySubmissions', false);
+	add_option('fvcn_akismetEnabled', false);
 	add_option('fvcn_defaultImage', 'default');
+	add_option('fvcn_incStyle', true);
+	add_option('fvcn_responseOversizedImage', 'The image you are trying to upload is too big.');
+	add_option('fvcn_responseInvalidImage', 'The file you are trying to upload isn\'t allowed.');
+	add_option('fvcn_responseInvalidEmail', 'Please enter a valid email address.');
+	add_option('fvcn_responseEmpty', 'You didn\'t fill in all required fields.');
+	add_option('fvcn_responseSuccess', 'Your submission has been added. Thank you!');
+	add_option('fvcn_responseInvalidCaptcha', 'You didn\'t fill in a valid captcha value.');
+	add_option('fvcn_responseBumping', 'You can only add one submission each two minutes.');
+	add_option('fvcn_responseLoggedIn', 'You must be logged in to add a submission.');
+	add_option('fvcn_responseFailure', 'Unable to add your submission, please try again later.');
+	add_option('fvcn_responseModeration', 'Your submission has been added to the moderation queue and will appear soon. Thank you!');
 	
 	$akismetApiKey = '';
 	if (get_option('wordpress_api_key'))
@@ -364,15 +387,15 @@ function fvCommunityNewsInstall() {
 	add_option('fvcn_akismetApiKey', $akismetApiKey);
 	
 	if (fvCommunityNewsMakeDirectory(ABSPATH . 'wp-fvcn-images'))
-		add_option('fvcn_uploadDir', '1');
+		add_option('fvcn_uploadDir', true);
 	else
-		add_option('fvcn_uploadDir', '0');
+		add_option('fvcn_uploadDir', false);
 }
 
 /**
  *		Update the application.
  *		@since 1.1
- *		@version 1.1
+ *		@version 1.2
  */
 function fvCommunityNewsUpdate() {
 	global $fvCommunityNewsVersion;
@@ -380,18 +403,18 @@ function fvCommunityNewsUpdate() {
 	update_option('fvcn_version', $fvCommunityNewsVersion);
 	
 	// Version 1.1
-	add_option('fvcn_rssEnabled', '1');
-	add_option('fvcn_numRSSItems', '10');
+	add_option('fvcn_rssEnabled', true);
+	add_option('fvcn_numRSSItems', 10);
 	add_option('fvcn_rssLocation', 'community-news.rss');
-	add_option('fvcn_loggedIn', '0');
-	add_option('fvcn_hideCaptchaLoggedIn', '1');
+	add_option('fvcn_loggedIn', false);
+	add_option('fvcn_hideCaptchaLoggedIn', true);
 	
 	// Version 1.2
-	add_option('fvcn_mySubmissions', '0');
-	add_option('fvcn_uploadImage', '0');
-	add_option('fvcn_maxImageW', '45');
-	add_option('fvcn_maxImageH', '45');
-	add_option('fvcn_akismetEnabled', '0');
+	add_option('fvcn_mySubmissions', false);
+	add_option('fvcn_uploadImage', false);
+	add_option('fvcn_maxImageW', 45);
+	add_option('fvcn_maxImageH', 45);
+	add_option('fvcn_akismetEnabled', false);
 	add_option('fvcn_defaultImage', 'default');
 	
 	$akismetApiKey = '';
@@ -422,11 +445,22 @@ function fvCommunityNewsUpdate() {
 	}
 	
 	if (fvCommunityNewsMakeDirectory(ABSPATH . 'wp-fvcn-images'))
-		add_option('fvcn_uploadDir', '1');
+		add_option('fvcn_uploadDir', true);
 	else
-		add_option('fvcn_uploadDir', '0');
+		add_option('fvcn_uploadDir', false);
 	
-	
+	// Version 1.3
+	add_option('fvcn_incStyle', false);
+	add_option('fvcn_responseOversizedImage', 'The image you are trying to upload is too big.');
+	add_option('fvcn_responseInvalidImage', 'The file you are trying to upload isn\'t allowed.');
+	add_option('fvcn_responseInvalidEmail', 'Please enter a valid email address.');
+	add_option('fvcn_responseEmpty', 'You didn\'t fill in all required fields.');
+	add_option('fvcn_responseSuccess', 'Your submission has been added. Thank you!');
+	add_option('fvcn_responseInvalidCaptcha', 'You didn\'t fill in a valid captcha value.');
+	add_option('fvcn_responseBumping', 'You can only add one submission each two minutes.');
+	add_option('fvcn_responseLoggedIn', 'You must be logged in to add a submission.');
+	add_option('fvcn_responseFailure', 'Unable to add your submission, please try again later.');
+	add_option('fvcn_responseModeration', 'Your submission has been added to the moderation queue and will appear soon. Thank you!');
 }
 
 /**
@@ -434,18 +468,61 @@ function fvCommunityNewsUpdate() {
  *		@param string $dirPath The location of the dir we want to create.
  *		@param int $chomd An octal number witch contains the chmod info.
  *		@return bool Success or failed.
- *		@version 1.0.1
+ *		@version 1.1
  *		@since 1.2
  */
-function fvCommunityNewsMakeDirectory($dirPath, $chmod=0777){
-	if(!is_dir($dirPath)) {
-		if (mkdir($dirPath)) {
-			return chmod($dirPath, $chmod);
-		} else {
-		   return false;
+function fvCommunityNewsMakeDirectory($dirPath, $chmod=0777) {
+	$dirPath = rtrim(preg_replace(array("/\\\\/", "/\/{2,}/"), "/", $dirPath), "/");
+	$e = explode("/", ltrim($dirPath, "/"));
+	if(substr($dirPath, 0, 1) == "/") {
+		$e[0] = "/".$e[0];
+	}
+	$c = count($e);
+	$cp = $e[0];
+	for($i = 1; $i < $c; $i++) {
+		if(!is_dir($cp) && !@mkdir($cp, $chmod)) {
+			return false;
 		}
-	} else {
-		return chmod($dirPath, $chmod);
+		$cp .= "/".$e[$i];
+	}
+	return @mkdir($dirPath, $chmod);
+}
+
+/**
+ *		Removes a directory.
+ *		@param string $path The location of the dir we want to remove.
+ *		@return bool Success or failed.
+ *		@version 1.0
+ *		@since 1.3
+ */
+function fvCommunityNewsRemoveDirectory($path) {
+	if (is_file($path)) {
+		if (is_writable($path)) {
+			if (@unlink($path)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	if (is_dir($path)) {
+		if (is_writeable($path)) {
+			foreach (new DirectoryIterator($path) as $res) {
+				if ($res->isDot()) {
+					unset($res);
+					continue;
+				}
+				if ($res->isFile()) {
+					fvCommunityNewsRemoveDirectory($res->getPathName());
+				} elseif ($res->isDir()) {
+					fvCommunityNewsRemoveDirectory($res->getRealPath());
+				}
+				unset($res);
+			}
+			if (@rmdir($path)) {
+				return true; 
+			}
+		}
+		return false;
 	}
 }
 
@@ -454,7 +531,7 @@ function fvCommunityNewsMakeDirectory($dirPath, $chmod=0777){
  *		@param array $file The uploaded file.
  *		@return bool Valid image true, else false.
  *		@version 1.0.1
- *		@since 1.2
+ *		@since 1.2.1
  */
 function fvCommunityNewsCheckImageUpload($file, $ignoreSize=false) {
 	global $fvCommunityNewsSubmitError;
@@ -474,14 +551,15 @@ function fvCommunityNewsCheckImageUpload($file, $ignoreSize=false) {
 	
 	$imageInfo = getimagesize($file['tmp_name']);
 	
-	if (!array_key_exists($ext, $allowedImageTypes) || $allowedImageTypes[ $ext ] != $imageInfo['mime'] || !is_uploaded_file($file['tmp_name']) || UPLOAD_ERR_OK != $file['error'] || filesize($file['tmp_name']) > 2048000) {
-		$fvCommunityNewsSubmitError = 'The file you are trying to upload isn\'t allowed.';
+	if (!array_key_exists($ext, $allowedImageTypes) || $allowedImageTypes[ $ext ] != $imageInfo['mime'] || !is_uploaded_file($file['tmp_name']) || UPLOAD_ERR_OK != $file['error']) {
+		$fvCommunityNewsSubmitError = get_option('fvcn_responseInvalidImage');
 		return false;
 	}
 	
 	if ( (('0' != get_option('fvcn_maxImageW') && $imageInfo[0] > (int)get_option('fvcn_maxImageW')) || 
-		 ('0' != get_option('fvcn_maxImageH') && $imageInfo[1] > (int)get_option('fvcn_maxImageH'))) && !$ignoreSize) {
-		$fvCommunityNewsSubmitError = 'The image you are trying to upload is too big. (max ' . ('0'==get_option('fvcn_maxImageW')?'unlimited':get_option('fvcn_maxImageW')) . ' x ' . ('0'==get_option('fvcn_maxImageH')?'unlimited':get_option('fvcn_maxImageH')) . ')';
+		 ('0' != get_option('fvcn_maxImageH') && $imageInfo[1] > (int)get_option('fvcn_maxImageH'))) ||
+		 filesize($file['tmp_name']) > 2048000 && !$ignoreSize) {
+		$fvCommunityNewsSubmitError = get_option('fvcn_responseOversizedImage');
 		return false;
 	}
 	
@@ -491,44 +569,54 @@ function fvCommunityNewsCheckImageUpload($file, $ignoreSize=false) {
 /**
  *		A submission is posted and handled here.
  *		@return bool True if the submission is successfull posted, false otherwise.
- *		@version 1.2.1
+ *		@version 1.3
  */
 function fvCommunityNewsSubmit() {
-	global $fvCommunityNewsSubmited, $fvCommunityNewsSubmitError, $fvCommunityNewsFieldValues, $fvCommunityNewsAwaitingModeration, $wpdb;
+	global	$fvCommunityNewsSubmited,
+			$fvCommunityNewsSubmitError,
+			$fvCommunityNewsFieldValues,
+			$fvCommunityNewsAwaitingModeration,
+			$fvCommunityNewsErrorFields,
+			$wpdb;
 	
 	$fvCommunityNewsSubmited = true;
 	
 	if (get_option('fvcn_loggedIn') && !is_user_logged_in()) {
-		$fvCommunityNewsSubmitError = 'You must be logged in to add a submission.';
+		$fvCommunityNewsSubmitError = get_option('fvcn_responseLoggedIn');
 		return false;
 	}
 	
 	if (isset($_SESSION['fvCommunityNewsLastPost']) && $_SESSION['fvCommunityNewsLastPost'] > current_time('timestamp')) {
-		$fvCommunityNewsSubmitError = 'You can only add one submission each two minutes.';
+		$fvCommunityNewsSubmitError = get_option('fvcn_responseBumping');
 		return false;
 	}
 	
 	if (!empty($_POST['fvCommunityNewsPhone']) || !check_admin_referer('fvCommunityNews_addSubmission')) {
-		$fvCommunityNewsSubmitError = 'Move you spammer.';
+		$fvCommunityNewsSubmitError = 'Spambots are not allowed!';
 		return false;
 	}
 	
-	if (	(empty($_POST['fvCommunityNewsName'])			|| $_POST['fvCommunityNewsName'] == $fvCommunityNewsFieldValues['fvCommunityNewsName']) ||
-			(empty($_POST['fvCommunityNewsEmail'])			|| $_POST['fvCommunityNewsEmail'] == $fvCommunityNewsFieldValues['fvCommunityNewsEmail']) ||
-			(empty($_POST['fvCommunityNewsTitle'])			|| $_POST['fvCommunityNewsTitle'] == $fvCommunityNewsFieldValues['fvCommunityNewsTitle']) ||
-			(empty($_POST['fvCommunityNewsDescription'])	|| $_POST['fvCommunityNewsDescription'] == $fvCommunityNewsFieldValues['fvCommunityNewsDescription'])	) {
-		$fvCommunityNewsSubmitError = 'You didn\'t fill in all required fields.';
-		return false;
+	$fields = array('fvCommunityNewsName',
+					'fvCommunityNewsEmail',
+					'fvCommunityNewsTitle',
+					'fvCommunityNewsDescription');
+	if (get_option('fvcn_captchaEnabled') && !(get_option('fvcn_hideCaptchaLoggedIn') && is_user_logged_in()))
+		$fields[] = 'fvCommunityNewsCaptcha';
+	
+	
+	foreach ($fields as $field) {
+		if (empty($_POST[ $field ]) || $_POST[ $field ] == $fvCommunityNewsFieldValues[ $field ]) {
+			$fvCommunityNewsErrorFields[] = $field;
+			$fvCommunityNewsSubmitError = get_option('fvcn_responseEmpty');
+		}
 	}
+	if (false != $fvCommunityNewsSubmitError)
+		return false;
 	
 	if (get_option('fvcn_captchaEnabled') && !(get_option('fvcn_hideCaptchaLoggedIn') && is_user_logged_in())) {
-		if (empty($_POST['fvCommunityNewsCaptcha'])) {
-			$fvCommunityNewsSubmitError = 'You didn\'t fill in all required fields.';
-			return false;
-		}
-		
 		if (sha1($_POST['fvCommunityNewsCaptcha']) != $_SESSION['fvCommunityNewsCaptcha']) {
-			$fvCommunityNewsSubmitError = 'You didn\'t fill in a valid captcha value.';
+			$fvCommunityNewsSubmitError = get_option('fvcn_responseInvalidCaptcha');
+			$fvCommunityNewsErrorFields[] = 'fvCommunityNewsCaptcha';
 			return false;
 		}
 		
@@ -536,13 +624,16 @@ function fvCommunityNewsSubmit() {
 	}
 	
 	if (!is_email($_POST['fvCommunityNewsEmail'])) {
-		$fvCommunityNewsSubmitError = 'Please enter a valid email address.';
+		$fvCommunityNewsSubmitError = get_option('fvcn_responseInvalidEmail');
+		$fvCommunityNewsErrorFields[] = 'fvCommunityNewsEmail';
 		return false;
 	}
 	
 	if (get_option('fvcn_uploadImage') && isset($_FILES['fvCommunityNewsImage'], $_POST['fvCommunityNewsImageCheck']) && !empty($_FILES['fvCommunityNewsImage']['name'])) {
-		if (!fvCommunityNewsCheckImageUpload($_FILES['fvCommunityNewsImage']))
+		if (!fvCommunityNewsCheckImageUpload($_FILES['fvCommunityNewsImage'])) {
+			$fvCommunityNewsErrorFields[] = 'fvCommunityNewsImage';
 			return false;
+		}
 	}
 	
 	
@@ -574,15 +665,22 @@ function fvCommunityNewsSubmit() {
 		@include_once dirname(__FILE__) . '/fvCommunityNewsAkismet.php';
 		
 		$submission = array(
-		   'author'		=> $_POST['fvCommunityNewsName'],
-		   'email'		=> $_POST['fvCommunityNewsEmail'],
-		   'website'	=> $_POST['fvCommunityNewsLocation'],
-		   'body'		=> $_POST['fvCommunityNewsDescription']
+		   'comment_author'			=> $_POST['fvCommunityNewsName'],
+		   'comment_author_email'	=> $_POST['fvCommunityNewsEmail'],
+		   'comment_content'		=> $_POST['fvCommunityNewsDescription'],
+		   'user_ip'				=> $_SERVER['REMOTE_ADDR'],
+		   'user_agent'				=> $_SERVER['HTTP_USER_AGENT']
 		);
 		
-		$akismet = new Akismet( get_option('home'), get_option('fvcn_akismetApiKey'), $submission);
+		foreach ($_SERVER as $key=>$val) {
+			$submission[ $key ] = $val;
+		}
+		
+		$GLOBALS['akismet_key']		= get_option('fvcn_akismetApiKey');
+		$GLOBALS['akismet_home']	= get_option('home');
+		$GLOBALS['akismet_ua']		= $_SERVER['HTTP_USER_AGENT'];
 	
-		if(!$akismet->errorsExist() && $akismet->isSpam()) {
+		if(akismet_check($submission)) {
 			$approved = 'spam';
 		}
 	}
@@ -642,7 +740,7 @@ function fvCommunityNewsSubmit() {
 			)";
 	$result = $wpdb->query($sql);
 	if (!$result) {
-		$fvNewPosterSubmitError = 'Unable to add your post, please try again later.';
+		$fvNewPosterSubmitError = get_option('fvcn_responseFailure');
 		return false;
 	}
 	
@@ -683,10 +781,12 @@ function fvCommunityNewsAwaitingModeration() {
 
 /**
  *		Create an ajax response.
- *		@version 1.0
- *		@since 1.1
+ *		@version 1.1
+ *		@since 1.2
  */
 function fvCommunityNewsAjaxResponse() {
+	global $fvCommunityNewsErrorFields;
+	
 	if (!headers_sent())
 		header('Content-Type: text/xml; charset=' . get_option('blog_charset'), true);
 	
@@ -695,17 +795,32 @@ function fvCommunityNewsAjaxResponse() {
 	if (fvCommunityNewsSubmitError()) {
 		$response .= '<status>error</status>';
 		$response .= '<message>' . fvCommunityNewsSubmitError() . '</message>';
+		$response .= '<errorfields>';
+		foreach ($fvCommunityNewsErrorFields as $field) {
+			$response .= '<field>' . $field . '</field>';
+		}
+		$response .= '</errorfields>';
 	} elseif (fvCommunityNewsAwaitingModeration()) {
 		$response .= '<status>moderation</status>';
-		$response .= '<message>Your submission has been added to the moderation queue and will appear soon. Thank you!</message>';
+		$response .= '<message>' . get_option('fvcn_responseModeration') . '</message>';
 	} else {
 		$response .= '<status>approved</status>';
-		$response .= '<message>Your submission has been added. Thank you!</message>';
+		$response .= '<message>' . get_option('fvcn_responseSuccess') . '</message>';
 	}
 	
 	$response .= '</fvCommunityNewsAjaxResponse>';
 	
 	die ($response);
+}
+
+/**
+ *		Get the error fields.
+ *		@since 1.3
+ *		@version 1.0
+ */
+function fvCommunityNewsGetErrorFields() {
+	global $fvCommunityNewsErrorFields;
+	return $fvCommunityNewsErrorFields;
 }
 
 /**
@@ -749,7 +864,7 @@ function fvCommunityNewsGetValue($fieldName) {
  *		@param int $number The number of submissions to be displayed.
  *		@param string $format The format of a submission.
  *		@return string The list of submissions.
- *		@version 1.2
+ *		@version 1.2.1
  */
 function fvCommunityNewsGetSubmissions($number=false, $format=false) {
 	global $wpdb;
@@ -765,17 +880,11 @@ function fvCommunityNewsGetSubmissions($number=false, $format=false) {
 		if (get_option('fvcn_submissionTemplate'))
 			$format = stripslashes(get_option('fvcn_submissionTemplate'));
 		else
-			$format = '<li><h3><a href="%submission_url%" title="%submission_title%">%submission_title%</a></h3><small>%submission_date%</small><br />%submission_description%</li>';
+			$format = '<li><strong><a href="%submission_url%" title="%submission_title%">%submission_title%</a></strong><small>%submission_date%</small><br />%submission_description%</li>';
 	}
 	
 	$sql = "SELECT
-				Name,
-				Email,
-				Title,
-				Location,
-				Description,
-				Image,
-				Date
+				*
 			FROM
 				" . get_option('fvcn_dbname') . "
 			WHERE
@@ -783,7 +892,7 @@ function fvCommunityNewsGetSubmissions($number=false, $format=false) {
 			ORDER BY
 				Date DESC
 			LIMIT
-				" . (int)$wpdb->escape($number) . "";
+				0, " . (int)$wpdb->escape($number);
 	
 	$posts = $wpdb->get_results($sql);
 	
@@ -942,11 +1051,11 @@ function fvCommunityNewsFormWidgetControl() {
 	
 	?>
 	<p>
-		<label for="fvcn_formTitle">Title
+		<label for="fvcn_formTitle"><?php _e('Title', 'fvcn'); ?>
 			<input type="text" id="fvcn_formTitle" name="fvcn_formTitle" value="<?php echo get_option('fvcn_formTitle'); ?>" class="widefat" />
 		</label>
 		
-		<label>Description
+		<label><?php _e('Description', 'fvcn'); ?>
 			<textarea name="fvcn_formDescription" id="fvcn_formDescription" rows="5" class="widefat"><?php echo get_option('fvcn_formDescription'); ?></textarea>
 		</label>
 	</p>
@@ -983,11 +1092,11 @@ function fvCommunityNewsGetSubmissionsWidgetControl() {
 	
 	?>
 	<p>
-		<label for="fvcn_submissionsTitle">Title
+		<label for="fvcn_submissionsTitle"><?php _e('Title', 'fvcn'); ?>
 		<input type="text" id="fvcn_submissionsTitle" name="fvcn_submissionsTitle" value="<?php echo get_option('fvcn_submissionsTitle'); ?>" class="widefat" />
 		</label>
 		
-		<label>Description
+		<label><?php _e('Description', 'fvcn'); ?>
 			<textarea name="fvcn_submissionsDescription" id="fvcn_submissionsDescription" rows="5" class="widefat"><?php echo get_option('fvcn_submissionsDescription'); ?></textarea>
 		</label>
 	</p>
@@ -1002,12 +1111,13 @@ function fvCommunityNewsAddAdmin() {
 	
 	list($submissions, $total) = fvCommunityNewsGetSubmissionsList('moderation', 0, 1);
 	
-	add_menu_page('Manage Submissions', 'Submissions ' . ('0' != $total?'<span id="awaiting-mod" class="count-' . $total . '"><span class="submission-count">' . $total . '</span></span>':''), 'moderate_comments', dirname(__FILE__), 'fvCommunityNewsSubmissions');
-	add_submenu_page(dirname(__FILE__), 'Community News Settings', 'Settings', 'manage_options', 'fvCommunityNewsSettings', 'fvCommunityNewsSettings');
+	add_menu_page(__('Manage Submissions', 'fvcn'), __('Submissions', 'fvcn') . ('0' != $total?' <span id="awaiting-mod" class="count-' . $total . '"><span class="submission-count">' . $total . '</span></span>':''), 'moderate_comments', dirname(__FILE__), 'fvCommunityNewsSubmissions');
+	add_submenu_page(dirname(__FILE__), __('Community News Settings', 'fvcn'), __('Settings', 'fvcn'), 'manage_options', 'fvCommunityNewsSettings', 'fvCommunityNewsSettings');
+	add_submenu_page(dirname(__FILE__), __('Community News Uninstall', 'fvcn'), __('Uninstall', 'fvcn'), 'manage_options', 'fvCommunityNewsUninstall', 'fvCommunityNewsUninstall');
 	
 	// My Submissions
 	if (get_option('fvcn_mySubmissions'))
-		add_submenu_page('profile.php', 'My Submissions', 'My Submissions', 'read', 'fvCommunityNewsMySubmissions', 'fvCommunityNewsMySubmissions');
+		add_submenu_page('profile.php', __('My Submissions', 'fvcn'), __('My Submissions', 'fvcn'), 'read', 'fvCommunityNewsMySubmissions', 'fvCommunityNewsMySubmissions');
 }
 
 /**
@@ -1020,7 +1130,7 @@ function fvCommunityNewsFixAdminMenu() {
 		global $submenu;
 		
 		foreach ($submenu['fv-community-news'] as $key=>$item) {
-			$submenu['fv-community-news'][ $key ] = preg_replace('/Submissions <span id="awaiting-mod" class="count-\d"><span class="submission-count">\d<\/span><\/span>/', 'Submissions', $item);
+			$submenu['fv-community-news'][ $key ] = preg_replace('/' . __('Submissions', 'fvcn') . ' <span id="awaiting-mod" class="count-\d"><span class="submission-count">\d<\/span><\/span>/', 'Submissions', $item);
 		}
 	}
 }
@@ -1038,7 +1148,7 @@ function fvCommunityNewsAddSettingsLink($links, $file) {
 	$plugin = plugin_basename(__FILE__);
 	
 	if ($file == $plugin)
-		$links = array_merge(array('<a href="' . attribute_escape('admin.php?page=fvCommunityNewsSettings') . '">Settings</a>'), $links);
+		$links = array_merge(array('<a href="' . attribute_escape('admin.php?page=fvCommunityNewsSettings') . '">' . __('Settings', 'fvcn') . '</a>'), $links);
 	
 	return $links;
 }
@@ -1050,46 +1160,48 @@ function fvCommunityNewsAddSettingsLink($links, $file) {
  */
 function fvCommunityNewsAddDashboard() {
 	if (current_user_can('moderate_comments') && function_exists('wp_add_dashboard_widget'))
-		wp_add_dashboard_widget('fvCommunityNewsDashboard', 'Submissions <a href="admin.php?page=fv-community-news" class="edit-box open-box">View All</a>', 'fvCommunityNewsDashboard');
+		wp_add_dashboard_widget('fvCommunityNewsDashboard', 'Submissions <a href="admin.php?page=fv-community-news" class="edit-box open-box">' . __('View All', 'fvcn') . '</a>', 'fvCommunityNewsDashboard');
 }
 
 /**
  *		Add current stats to the Right Now section.
  *		@version 1.1
- *		@since 1.2
+ *		@since 1.2.2
  */
 function fvCommunityNewsDashboard() {
 	
 	list($submissions, $total) = fvCommunityNewsGetSubmissionsList(false, 0, 5);
 	
 	if ($submissions) {
-		echo ' <div id="the-submission-list" class="list:comment">';
+		echo ' <div id="the-submission-list" class="list:submissions">';
+		$i = 0;
 		
 		foreach ($submissions as $submission) :
-			echo '<div id="submission-' . $submission->Id . '" class="even thread-even depth-1 submission-item ' . ($submission->Approved?'approved':'unapproved') . '">';
+			echo '<div id="submission-' . $submission->Id . '" class="submission-item ' . ($submission->Approved?'approved':'unapproved') . ' ' . ($i&1?'odd alt':'even') . '">';
+				$i++;
 				echo get_avatar(stripslashes(apply_filters('get_submission_author_email', $submission->Email)), 50);
-				echo '<h4 class="submission-meta">From <cite class="submission-author">' . stripslashes(apply_filters('get_submission_author', $submission->Name)) . '</cite> ';
-				echo ' linking to <a href="' . stripslashes(apply_filters('submission_author_url', $submission->Location)) . '">' . stripslashes(apply_filters('get_submission_author', $submission->Title)) . '</a></h4>';
+				echo '<h4 class="submission-meta">' . __('From', 'fvcn') . ' <cite class="submission-author">' . stripslashes(apply_filters('get_submission_author', $submission->Name)) . '</cite> ';
+				echo ' ' . __('linking to', 'fvcn') . ' <a href="' . stripslashes(apply_filters('submission_author_url', $submission->Location)) . '">' . stripslashes(apply_filters('get_submission_author', $submission->Title)) . '</a></h4>';
 				echo '<blockquote><p>' . trim( stripslashes(apply_filters('submission_text', $submission->Description)) ) . '</p></blockquote>';
 				echo '<p class="submission-actions">';
 					
 					echo '<span class="approve"><a href="';
 					echo wp_nonce_url('?fvCommunityNewsAdminAction=approvesubmission&amp;s=' . $submission->Id, 'fvCommunityNews_approveSubmission' . $submission->Id);
-					echo '" class="dim:the-submission-list:submission-1:unapproved:e7e7d3:e7e7d3:new=approved vim-a" title="Approve this submission">Approve</a></span>';
+					echo '" title="' . __('Approve this submission', 'fvcn') . '">' . __('Approve', 'fvcn') . '</a></span>';
 					
 					echo '<span class="unapprove"><a href="';
 					echo wp_nonce_url('?fvCommunityNewsAdminAction=unapprovesubmission&amp;s=' . $submission->Id, 'fvCommunityNews_unapproveSubmission' . $submission->Id);
-					echo '" class="dim:the-submission-list:submission-1:unapproved:e7e7d3:e7e7d3:new=unapproved vim-u" title="Unapprove this submission">Unapprove</a></span>';
+					echo '" title="' . __('Unapprove this submission', 'fvcn') . '">' . __('Unapprove', 'fvcn') . '</a></span>';
 					
 					echo '<span class="edit"> | <a href="admin.php?page=fv-community-news&amp;mode=edit-submission&amp;submission=' . $submission->Id . '" title="Edit submission">Edit</a></span>';
 					
 					echo '<span class="spam"> | <a href="';
 					echo wp_nonce_url('?fvCommunityNewsAdminAction=spamsubmission&amp;s=' . $submission->Id, 'fvCommunityNews_spamSubmission' . $submission->Id);
-					echo '" class="delete:the-submission-list:submission-1::spam=1 vim-s vim-destructive" title="Mark this submission as spam">Spam</a> | </span>';
+					echo '" title="' . __('Mark this submission as spam', 'fvcn') . '">' . __('Spam', 'fvcn') . '</a> | </span>';
 					
 					echo '<span class="delete"><a href="';
 					echo wp_nonce_url('?fvCommunityNewsAdminAction=deletesubmission&amp;s=' . $submission->Id, 'fvCommunityNews_deleteSubmission' . $submission->Id);
-					echo '" onclick="if ( confirm(\'' . js_escape(__("You are about to delete this submission. \n  'Cancel' to stop, 'OK' to delete.")) . '\') ) { return true;}return false;" class="delete:the-submission-list:submission-' . $submission->Id . ' delete vim-d vim-destructive">Delete</a></span>';
+					echo '" title="' . __('Delete this submission', 'fvcn') . '">' . __('Delete', 'fvcn') . '</a></span>';
 					
 				echo '</p>';
 			echo '</div>' . "\n";
@@ -1099,10 +1211,34 @@ function fvCommunityNewsDashboard() {
 		echo '</div>' . "\n\n";
 		
 	} else {
-		echo '<p>No submissions yet.</p>';
+		echo '<p>' . __('No submissions yet.', 'fvcn') . '</p>';
 	}
 	
 }
+
+/**
+ *		Create tags to use in posts/pages.
+ *		@param string $content The Post/Page Content.
+ *		@return string The Post/Page Content.
+ *		@version 1.0
+ *		@since 1.3
+ */
+function fvCommunityNewsPostTags($content) {
+	
+	if (strstr($content, '<!--fvCommunityNews:Form-->')) {
+		ob_start();
+		fvCommunityNewsForm();
+		$form = ob_get_contents();
+		ob_end_clean();
+		$content = str_replace('<!--fvCommunityNews:Form-->', $form, $content);
+	}
+	if (strstr($content, '<!--fvCommunityNews:Submissions-->')) {
+		$content = str_replace('<!--fvCommunityNews:Submissions-->', fvCommunityNewsGetSubmissions(), $content);
+	}
+	
+	return $content;
+}
+
 
 /**
  *		Process a request called from the admin panel.
@@ -1187,16 +1323,14 @@ function fvCommunityNewsGetSubmissionsList($status=false, $start, $num, $extra='
  */
 function fvCommunityNewsAdminHead() {
 	$dir = WP_PLUGIN_URL . '/fv-community-news/';
-	if (isset($_GET['page']) && (strstr($_GET['page'], 'fv-community-news') || strstr($_GET['page'], 'fvCommunityNews')) ) {
-		
-		echo '<script type="text/javascript" src="' . $dir . 'javascript/fvCommunityNewsAdmin.js"></script>' . "\n";
-	}
+	
+	echo '<script type="text/javascript" src="' . $dir . 'javascript/fvCommunityNewsAdmin.js"></script>' . "\n";
 	echo '<link rel="stylesheet" href="' . $dir . 'styles/fvCommunityNewsAdmin.css" />' . "\n";
 }
 
 /**
  *		Admin page for viewing `My Submissions`
- *		@version 1.0.1
+ *		@version 1.0.2
  *		@since 1.2
  */
 function fvCommunityNewsMySubmissions() {
@@ -1229,27 +1363,33 @@ function fvCommunityNewsMySubmissions() {
 		
 	$noImage = ('default'==get_option('fvcn_defaultImage')?WP_PLUGIN_URL.'/fv-community-news/images/default.png':get_option('home').'/wp-fvcn-images/default.'.get_option('fvcn_defaultImage'));
 	
-	echo '<div class="wrap"><h2>My Submissions</h2><p>The Community News you have added.';
+	echo '<div class="wrap"><h2>' . __('My Submissions', 'fvcn') . '</h2><p>' . __('The Community News you have added.', 'fvcn') . '';
 	
 	if (empty($submissions)) :
-		echo '<p>No submissions here, yet.</p>';
+		echo '<p>' . __('No submissions here, yet.', 'fvcn') . '</p>';
 	else : ?>
 	
 		<?php if ( $pageLinks ) : ?>
 		<div class="tablenav">
-			<div class="tablenav-pages"><?php echo $pageLinks; ?></div>
+			<?php
+			echo '<div class="tablenav-pages">' .  sprintf( '<span class="displaying-num">' . __('Displaying %s&#8211;%s of %s', 'fvcn') . '</span>%s',
+				number_format_i18n( $start + 1 ),
+				number_format_i18n( min( $page * $submissionPerPage, $total ) ),
+				number_format_i18n( $total ),
+				$pageLinks) . '</div>';
+			?>
 			<br class="clear" />
 		</div>
 		<?php endif; ?>
 		
-		<table class="widefat">
+		<table class="widefat fixed" cellpadding="0" cellspacing="0">
 			<thead>
 				<tr>
-					<th scope="col" id="comment" class="manage-column column-comment" style="">Submission</th>
-					<th scope="col" id="author" class="manage-column column-author" style="min-width: 210px;">Author</th>
+					<th scope="col" id="comment" class="manage-column column-comment" style=""><?php _e('Submission', 'fvcn'); ?></th>
+					<th scope="col" id="author" class="manage-column column-author" style="min-width: 210px;"><?php _e('Author', 'fvcn'); ?></th>
 					<?php if (get_option('fvcn_uploadImage'))
-						echo '<th scope="col" id="author" class="manage-column column-image">Image</th>'; ?>
-					<th scope="col" id="date" class="manage-column column-date" style="min-width: 120px;">Submitted</th>
+						echo '<th scope="col" id="author" class="manage-column column-image">' . __('Image', 'fvcn') . '</th>'; ?>
+					<th scope="col" id="date" class="manage-column column-date" style="min-width: 120px;"><?php _e('Submitted', 'fvcn'); ?></th>
 				</tr>
 			</thead>
 			<tbody id="the-comment-list" class="list:comment">
@@ -1273,11 +1413,11 @@ function fvCommunityNewsMySubmissions() {
 			</tbody>
 			<tfoot>
 				<tr>
-					<th scope="col" class="manage-column column-comment" style="">Submission</th>
-					<th scope="col" class="manage-column column-author" style="">Author</th>
+					<th scope="col" class="manage-column column-comment" style=""><?php _e('Submission', 'fvcn'); ?></th>
+					<th scope="col" class="manage-column column-author" style=""><?php _e('Author', 'fvcn'); ?></th>
 					<?php if (get_option('fvcn_uploadImage'))
-						echo '<th scope="col" id="author" class="manage-column column-image">Image</th>'; ?>
-					<th scope="col" class="manage-column column-date" style="">Submitted</th>
+						echo '<th scope="col" id="author" class="manage-column column-image">' . __('Image', 'fvcn') . '</th>'; ?>
+					<th scope="col" class="manage-column column-date" style=""><?php _e('Submitted', 'fvcn'); ?></th>
 				</tr>
 			</tfoot>
 		</table>
@@ -1285,14 +1425,20 @@ function fvCommunityNewsMySubmissions() {
 		
 	<?php if ( $pageLinks ) : ?>
 	<div class="tablenav">
-		<div class="tablenav-pages"><?php echo $pageLinks; ?></div>
+		<?php
+		echo '<div class="tablenav-pages">' .  sprintf( '<span class="displaying-num">' . __('Displaying %s&#8211;%s of %s', 'fvcn') . '</span>%s',
+			number_format_i18n( $start + 1 ),
+			number_format_i18n( min( $page * $submissionPerPage, $total ) ),
+			number_format_i18n( $total ),
+			$pageLinks) . '</div>';
+		?>
 		<br class="clear" />
 	</div>
 	<?php endif; ?>
 	<br />
 	
-	<h2>Add News</h2>
-	<p>Add a new submission.</p>
+	<h2><?php _e('Add News', 'fvcn'); ?></h2>
+	<p><?php _e('Add a new submission.', 'fvcn'); ?></p>
 	<?php fvCommunityNewsForm();
 		
 	echo '</div>';
@@ -1300,7 +1446,7 @@ function fvCommunityNewsMySubmissions() {
 
 /**
  *		Admin page for managing submissions.
- *		@version 1.2.1
+ *		@version 1.3
  */
 function fvCommunityNewsSubmissions() {
 	global $wpdb;
@@ -1330,13 +1476,13 @@ function fvCommunityNewsSubmissions() {
 						$wpdb->query("DELETE FROM " . get_option('fvcn_dbname') . " WHERE Id = '" . $wpdb->escape($submission) . "'");
 				}
 			
-			echo '<div id="moderated" class="updated fade"><p>' . count($_POST['submissions']) . ' submissions ';
+			echo '<div id="moderated" class="updated fade"><p>' . count($_POST['submissions']) . ' ' . __('submissions', 'fvcn') . ' ';
 			if (isset($_POST['submission-approve']) && !(isset($_POST['submission-unapprove']) || isset($_POST['submission-delete'])) )
-				echo 'approved';
+				_e('approved', 'fvcn');
 			if (isset($_POST['submission-unapprove']))
-				echo 'unapproved';
+				_e('unapproved', 'fvcn');
 			if (isset($_POST['submission-delete']))
-				echo 'deleted';
+				_e('deleted', 'fvcn');
 			echo '<br /></p></div>' . "\n";
 		}
 		
@@ -1358,23 +1504,23 @@ function fvCommunityNewsSubmissions() {
 						Id = '" . $wpdb->escape($_POST['submissionId']) . "'
 					");
 			
-			echo '<div id="moderated" class="updated fade"><p>Submission Updated.</p></div>';
+			echo '<div id="moderated" class="updated fade"><p>' . __('Submission Updated.', 'fvcn') . '</p></div>';
 			
 		}
 	}
 	
 	if ('0' == get_option('fvcn_uploadDir') && '1' == get_option('fvcn_uploadImage'))
-			echo '<div class="error"><ul><li><strong>ERROR: </strong>Failed to create image dir, please create it manualy.</li></ul></div>';
+			echo '<div class="error"><ul><li><strong>' . __('ERROR:', 'fvcn') . ' </strong>' . __('Failed to create image dir, please create it manualy.', 'fvcn') . '</li></ul></div>';
 	?>
 <div class="wrap">
 		<?php if (!isset($_GET['mode'], $_GET['submission']) || $_GET['mode'] != 'edit-submission') : ?>
 		
-		<h2>Manage Submissions</h2>
+		<h2><?php _e('Manage Submissions', 'fvcn'); ?></h2>
 		<ul class="subsubsub">
-			<li><a href="<?php echo clean_url(add_query_arg('submission_status', 'all', $_SERVER['REQUEST_URI'])) ?>" <?php if ('all' == $submissionStatus) echo 'class="current"' ?>>Show All</a> |</li>
-			<li><a href="<?php echo clean_url(add_query_arg('submission_status', 'moderation', $_SERVER['REQUEST_URI'])) ?>" <?php if ('moderation' == $submissionStatus) echo 'class="current"' ?>>Awaiting Moderation <?php echo '(' . $numAwaitingMod . ')'; ?></a> |</li>
-			<li><a href="<?php echo clean_url(add_query_arg('submission_status', 'approved', $_SERVER['REQUEST_URI'])) ?>" <?php if ('approved' == $submissionStatus) echo 'class="current"' ?>>Approved</a> |</li>
-			<li><a href="<?php echo clean_url(add_query_arg('submission_status', 'spam', $_SERVER['REQUEST_URI'])) ?>" <?php if ('spam' == $submissionStatus) echo 'class="current"' ?>>Spam <?php echo '(' . $numSpam . ')'; ?></a></li>
+			<li><a href="<?php echo clean_url(add_query_arg('submission_status', 'all', $_SERVER['REQUEST_URI'])) ?>" <?php if ('all' == $submissionStatus) echo 'class="current"' ?>><?php _e('Show All', 'fvcn'); ?></a> |</li>
+			<li><a href="<?php echo clean_url(add_query_arg('submission_status', 'moderation', $_SERVER['REQUEST_URI'])) ?>" <?php if ('moderation' == $submissionStatus) echo 'class="current"' ?>><?php _e('Awaiting Moderation', 'fvcn'); ?> <span class="count"><?php echo '(' . $numAwaitingMod . ')'; ?></span></a> |</li>
+			<li><a href="<?php echo clean_url(add_query_arg('submission_status', 'approved', $_SERVER['REQUEST_URI'])) ?>" <?php if ('approved' == $submissionStatus) echo 'class="current"' ?>><?php _e('Approved', 'fvcn'); ?></a> |</li>
+			<li><a href="<?php echo clean_url(add_query_arg('submission_status', 'spam', $_SERVER['REQUEST_URI'])) ?>" <?php if ('spam' == $submissionStatus) echo 'class="current"' ?>><?php _e('Spam', 'fvcn'); ?> <span class="count"><?php echo '(' . $numSpam . ')'; ?></span></a></li>
 		</ul>
 		
 		
@@ -1407,36 +1553,40 @@ function fvCommunityNewsSubmissions() {
 		
 		if (empty($submissions)) :
 			if ('spam' == $submissionStatus)
-				echo '<br class="clear" /><p>No submissions here, must be your lucky day.</p>';
+				echo '<br class="clear" /><p>' . __('No submissions here, must be your lucky day.', 'fvcn') . '</p>';
 			else
-				echo '<br class="clear" /><p>No submissions here, yet.</p>';
+				echo '<br class="clear" /><p>' . __('No submissions here, yet.', 'fvcn') . '</p>';
 		else : ?>
 		
 		<form id="comments-form" action="" method="post">
 			<div class="tablenav">
 				<?php
 				if ( $pageLinks )
-					echo '<div class="tablenav-pages">' . $pageLinks . '</div>';
+					echo '<div class="tablenav-pages">' .  sprintf( '<span class="displaying-num">' . __('Displaying %s&#8211;%s of %s', 'fvcn') . '</span>%s',
+						number_format_i18n( $start + 1 ),
+						number_format_i18n( min( $page * $submissionPerPage, $total ) ),
+						number_format_i18n( $total ),
+						$pageLinks) . '</div>';
 				?>
 				<div class="alignleft">
-					<input type="submit" name="submission-approve" id="submission-approve" value="Approve" class="button-secondary" />
-					<input type="submit" name="submission-unapprove" id="submission-unapprove" value="Unapprove" class="button-secondary" />
-					<input type="submit" name="submission-spam" id="submission-spam" value="Spam" class="button-secondary" />
-					<input type="submit" name="submission-delete" id="submission-delete" value="Delete" class="button-secondary delete" />
+					<input type="submit" name="submission-approve" id="submission-approve" value="<?php _e('Approve' , 'fvcn'); ?>" class="button-secondary" />
+					<input type="submit" name="submission-unapprove" id="submission-unapprove" value="<?php _e('Unapprove' , 'fvcn'); ?>" class="button-secondary" />
+					<input type="submit" name="submission-spam" id="submission-spam" value="<?php _e('Spam' , 'fvcn'); ?>" class="button-secondary" />
+					<input type="submit" name="submission-delete" id="submission-delete" value="<?php _e('Delete' , 'fvcn'); ?>" class="button-secondary delete" />
 				</div>
 				<br class="clear" />
 			</div>
 			<br class="clear" />
 			
-			<table class="widefat">
+			<table class="widefat fixed" cellpadding="0" cellspacing="0">
 			<thead>
 				<tr>
 					<th scope="col" id="cb" class="manage-column column-cb check-column" style=""><input type="checkbox" onclick="fvCommunityNewsCheckAll();" /></th>
-					<th scope="col" id="comment" class="manage-column column-comment" style="">Submission</th>
-					<th scope="col" id="author" class="manage-column column-author" style="min-width: 210px;">Author</th>
+					<th scope="col" id="comment" class="manage-column column-comment" style=""><?php _e('Submission' , 'fvcn'); ?></th>
+					<th scope="col" id="author" class="manage-column column-author" style="min-width: 210px;"><?php _e('Author' , 'fvcn'); ?></th>
 					<?php if (get_option('fvcn_uploadImage'))
-						echo '<th scope="col" id="author" class="manage-column column-image">Image</th>'; ?>
-					<th scope="col" id="date" class="manage-column column-date" style="min-width: 120px;">Submitted</th>
+						echo '<th scope="col" id="author" class="manage-column column-image">' . __('Image', 'fvcn') . '</th>'; ?>
+					<th scope="col" id="date" class="manage-column column-date" style="min-width: 120px;"><?php _e('Submitted' , 'fvcn'); ?></th>
 				</tr>
 			</thead>
 			<tbody id="the-comment-list" class="list:comment">
@@ -1449,23 +1599,23 @@ function fvCommunityNewsSubmissions() {
 				
 				echo '<span class="approve"><a href="';
 				echo wp_nonce_url('?fvCommunityNewsAdminAction=approvesubmission&amp;s=' . $post->Id, 'fvCommunityNews_approveSubmission' . $post->Id);
-				echo '" class="dim:the-submission-list:submission-1:unapproved:e7e7d3:e7e7d3:new=approved vim-a" title="Approve this submission">Approve</a></span>';
+				echo '" title="' . __('Approve this submission' , 'fvcn') . '">' . __('Approve' , 'fvcn') . '</a></span>';
 
 				echo '<span class="unapprove"><a href="';
 				echo wp_nonce_url('?fvCommunityNewsAdminAction=unapprovesubmission&amp;s=' . $post->Id, 'fvCommunityNews_unapproveSubmission' . $post->Id);
-				echo '" class="dim:the-submission-list:submission-1:unapproved:e7e7d3:e7e7d3:new=unapproved vim-u" title="Unapprove this submission">Unapprove</a></span>';
+				echo '" title="' . __('Unapprove this submission' , 'fvcn') . '">' . __('Unapprove' , 'fvcn') . '</a></span>';
 				
-				echo '<span class="edit"> | <a href="admin.php?page=fv-community-news&amp;mode=edit-submission&amp;submission=' . $post->Id . '" title="Edit submission">Edit</a></span>';
+				echo '<span class="edit"> | <a href="admin.php?page=fv-community-news&amp;mode=edit-submission&amp;submission=' . $post->Id . '" title="' . __('Edit submission' , 'fvcn') . '">' . __('Edit' , 'fvcn') . '</a></span>';
 				
 				if ('spam' != $post->Approved) {
 					echo '<span class="spam"> | <a href="';
 					echo wp_nonce_url('?fvCommunityNewsAdminAction=spamsubmission&amp;s=' . $post->Id, 'fvCommunityNews_spamSubmission' . $post->Id);
-					echo '" class="delete:the-submission-list:submission-1::spam=1 vim-s vim-destructive" title="Mark this submission as spam">Spam</a></span>';
+					echo '" title="' . __('Mark this submission as spam' , 'fvcn') . '">' . __('Spam' , 'fvcn') . '</a></span>';
 				}
 				
 				echo '<span class="delete"> | <a href="';
 				echo wp_nonce_url('?fvCommunityNewsAdminAction=deletesubmission&amp;s=' . $post->Id, 'fvCommunityNews_deleteSubmission' . $post->Id);
-				echo '"onclick="if ( confirm(\'' . js_escape(__("You are about to delete this submission. \n  'Cancel' to stop, 'OK' to delete.")) . '\') ) { return true;}return false;" class="delete:the-submission-list:submission-' . $post->Id . ' delete vim-d vim-destructive">Delete</a></span>';
+				echo '" title="' . __('Delete this submission' , 'fvcn') . '">' . __('Delete' , 'fvcn') . '</a></span>';
 				
 				echo '</td>' . "\n";
 				echo ' <td class="author column-author"><strong>' . get_avatar($post->Email, 32) . ' ' . stripslashes(apply_filters('get_comment_author', $post->Name)) . '</strong><br />';
@@ -1483,11 +1633,11 @@ function fvCommunityNewsSubmissions() {
 			<tfoot>
 				<tr>
 					<th scope="col" class="manage-column column-cb check-column" style=""><input type="checkbox" onclick="fvCommunityNewsCheckAll();" /></th>
-					<th scope="col" class="manage-column column-comment" style="">Submission</th>
-					<th scope="col" class="manage-column column-author" style="">Author</th>
+					<th scope="col" class="manage-column column-comment" style=""><?php _e('Submission' , 'fvcn'); ?></th>
+					<th scope="col" class="manage-column column-author" style=""><?php _e('Author' , 'fvcn'); ?></th>
 					<?php if (get_option('fvcn_uploadImage'))
-						echo '<th scope="col" id="author" class="manage-column column-image">Image</th>'; ?>
-					<th scope="col" class="manage-column column-date" style="">Submitted</th>
+						echo '<th scope="col" id="author" class="manage-column column-image">' . __('Image' , 'fvcn') . '</th>'; ?>
+					<th scope="col" class="manage-column column-date" style=""><?php _e('Submitted' , 'fvcn'); ?></th>
 				</tr>
 			</tfoot>
 			</table>
@@ -1497,13 +1647,17 @@ function fvCommunityNewsSubmissions() {
 			<div class="tablenav">
 				<?php
 				if ( $pageLinks )
-					echo '<div class="tablenav-pages">' . $pageLinks . '</div>';
+					echo '<div class="tablenav-pages">' .  sprintf( '<span class="displaying-num">' . __('Displaying %s&#8211;%s of %s', 'fvcn') . '</span>%s',
+						number_format_i18n( $start + 1 ),
+						number_format_i18n( min( $page * $submissionPerPage, $total ) ),
+						number_format_i18n( $total ),
+						$pageLinks) . '</div>';
 				?>
 				<div class="alignleft">
-					<input type="submit" name="submission-approve" value="Approve" class="button-secondary" />
-					<input type="submit" name="submission-unapprove" value="Unapprove" class="button-secondary" />
-					<input type="submit" name="submission-spam" id="submission-spam" value="Spam" class="button-secondary" />
-					<input type="submit" name="submission-delete" value="Delete" class="button-secondary delete" />
+					<input type="submit" name="submission-approve" value="<?php _e('Approve' , 'fvcn'); ?>" class="button-secondary" />
+					<input type="submit" name="submission-unapprove" value="<?php _e('Unapprove' , 'fvcn'); ?>" class="button-secondary" />
+					<input type="submit" name="submission-spam" id="submission-spam" value="<?php _e('Spam' , 'fvcn'); ?>" class="button-secondary" />
+					<input type="submit" name="submission-delete" value="<?php _e('Delete' , 'fvcn'); ?>" class="button-secondary delete" />
 				</div>
 				<br class="clear" />
 			</div>
@@ -1514,106 +1668,135 @@ function fvCommunityNewsSubmissions() {
 		$submission = $wpdb->get_results("SELECT * FROM " . get_option('fvcn_dbname') . " WHERE Id = '" . $wpdb->escape($_GET['submission']) . "'");
 		$submission =  $submission[0];
 		?>
-		<!--<h2>Edit Submission</h2>-->
+		<h2><?php _e('Edit Submission', 'fvcn'); ?></h2>
 		<form name="post" action="" method="post" id="post">
 			<?php wp_nonce_field('updateSubmission_' . $submission->Id); ?>
 			<input type="hidden" name="submissionId" id="submissionId" value="<?php echo $submission->Id; ?>" />
 			<div id="poststuff" class="metabox-holder">
-		<?php
-		$email = stripslashes(attribute_escape( $submission->Email ));
-		$url = stripslashes(attribute_escape( $submission->Location ));
-		// add_meta_box('submitdiv', __('Save'), 'comment_submit_meta_box', 'comment', 'side', 'core');
-		?>
-				<div id="side-info-column" class="inner-sidebar submitbox">
+				<?php
+				$email = stripslashes(attribute_escape( $submission->Email ));
+				$url = stripslashes(attribute_escape( $submission->Location ));
+				?>
+				<div id="side-info-column" class="inner-sidebar">
 					<div id="submitdiv" class="stuffbox" >
-						<h3><span class='hndle'>Save</span></h3>
-						<div class="submitbox" id="submitcomment">
-							<div class="inside-submitbox">
-								<div class="insidebox">
-									<div id='comment-status-radio'>
-										<p><strong>This submission is</strong></p>
-										<label>
-											<input type="radio"<?php checked( $submission->Approved, '1' ); ?> name="Approved" value="1" />
-											Approved
-										</label>
-										<br />
-										<label>
-											<input type="radio"<?php checked( $submission->Approved, '0' ); ?> name="Approved" value="0" />
-											Awaiting Moderation
-										</label>
-										<br />
-										<label>
-											<input type="radio"<?php checked( $submission->Approved, 'spam' ); ?> name="Approved" value="spam" />
-											Spam
-										</label>
+						<h3><span class='hndle'><?php _e('Status', 'fvcn') ?></span></h3>
+						<div class="inside">
+							<div class="submitbox" id="submitcomment">
+								<div id="minor-publishing">
+									<div id="minor-publishing-actions">
+										<div id="preview=action"> <a class="preview button" href="<?php echo clean_url('admin.php?page=fv-community-news'); ?>">Back</a> </div>
+										<div class="clear"></div>
 									</div>
+									<div id="misc-publishing-actions">
+										<div class="misc-pub-section" id="comment-status-radio">
+											<label class="approved">
+												<input type="radio"<?php checked( $submission->Approved, '1' ); ?> name="Approved" value="1" />
+												<?php _e('Approved', 'fvcn'); ?></label>
+											<br />
+											<label class="waiting">
+												<input type="radio"<?php checked( $submission->Approved, '0' ); ?> name="Approved" value="0" />
+												<?php _e('Pending', 'fvcn'); ?></label>
+											<br />
+											<label class="spam">
+												<input type="radio"<?php checked( $submission->Approved, 'spam' ); ?> name="Approved" value="spam" />
+												<?php _e('Spam', 'fvcn'); ?></label>
+										</div>
+										<div class="misc-pub-section curtime misc-pub-section-last">
+											<?php
+											$datef = __( 'M j, Y @ G:i', 'fvcn');
+											$stamp = __('Submitted on: <b>%1$s</b>', 'fvcn');
+											$date = date_i18n( $datef, strtotime( $submission->Date ) );
+											?>
+											<span id="timestamp"><?php printf($stamp, $date); ?></span>
+										</div>
+									</div>
+									<!-- misc actions -->
+									<div class="clear"></div>
 								</div>
-								<div class="insidebox" id="deletebutton">
-									<?php echo "<a class='submitdelete' href='" . wp_nonce_url('?fvCommunityNewsAdminAction=deletesubmission&amp;s=' . $_GET['submission'], 'fvCommunityNews_deleteSubmission' . $_GET['submission']) . "' onclick=\"if ( confirm('" . js_escape(__("You are about to delete this submission. \n  'Cancel' to stop, 'OK' to delete.")) . "') ) { return true;}return false;\">Delete Submission</a>"; ?>
+								<div id="major-publishing-actions">
+									<div id="delete-action"><?php echo "<a class='submitdelete deletion' href='" . wp_nonce_url('?fvCommunityNewsAdminAction=deletesubmission&amp;s=' . $_GET['submission'], 'fvCommunityNews_deleteSubmission' . $_GET['submission']) . "'>" . __('Delete', 'fvcn') . "</a>"; ?></div>
+									<div id="publishing-action">
+										<input type="submit" name="save" value="<?php _e('Save', 'fvcn'); ?>" tabindex="6" class="button-primary" />
+									</div>
+									<div class="clear"></div>
 								</div>
-								<?php
-								$stamp = __('%1$s at %2$s');
-								$date = mysql2date(get_option('date_format'), $submission->Date);
-								$time = mysql2date(get_option('time_format'), $submission->Date);
-								?>
-								<div class="insidebox curtime"><span id="timestamp"><?php printf($stamp, $date, $time); ?></span></div>
 							</div>
-							<p class="submit">
-								<input type="submit" name="save" value="<?php _e('Save'); ?>" tabindex="6" class="button button-highlighted" />
-								<a class="button preview" href="<?php echo clean_url('admin.php?page=fv-community-news'); ?>" style="padding:7px;">Back</a>
-							</p>
 						</div>
 					</div>
+					
+					<?php if (get_option('fvcn_uploadImage')) : ?>
+					<div id="imagediv" class="stuffbox" >
+						<h3><span class="hndle"><?php _e('Image', 'fvcn') ?></span></h3>
+						<div class="inside" style="text-align: center; overflow: auto">
+							<?php echo ' <td class="image column-image"><img src="' . (NULL==$submission->Image?('default'==get_option('fvcn_defaultImage')?WP_PLUGIN_URL.'/fv-community-news/images/default.png':get_option('home').'/wp-fvcn-images/default.'.get_option('fvcn_defaultImage')):get_option('home').'/wp-fvcn-images/'.$submission->Image) . '" alt="" /></td>' . "\n"; ?>
+						</div>
+					</div>
+					<?php endif; ?>
+					
 				</div>
 				<div id="post-body" class="has-sidebar">
 					<div id="post-body-content" class="has-sidebar-content">
-						<div id="titlediv" class="stuffbox">
-							<h3><label for="Title">Title</label></h3>
+						<div id="namediv" class="stuffbox">
+							<h3>
+								<label for="name"><?php _e('Author', 'fvcn') ?></label>
+							</h3>
 							<div class="inside">
-								<input type="text" name="Title" size="30" value="<?php echo stripslashes(attribute_escape( $submission->Title )); ?>" tabindex="1" id="Title" />
+								<table class="form-table">
+									<tbody>
+										<tr valign="top">
+											<td class="first"><?php _e('Name', 'fvcn'); ?>:</td>
+											<td><input type="text" name="Name" size="30" value="<?php echo stripslashes(attribute_escape( $submission->Name )); ?>" tabindex="1" id="Name" /></td>
+										</tr>
+										<tr valign="top">
+											<td class="first">
+												<?php
+												if ( $email ) {
+													printf( __('E-mail (%s):', 'fvcn'), '<a href="mailto:' . stripslashes(apply_filters('get_comment_author_email', $email)) . '">Send Email</a>' );
+												} else {
+													_e('E-mail:', 'fvcn');
+												}
+												?>
+											</td>
+											<td><input type="text" id="Email" name="Email" size="30" value="<?php echo $email; ?>" tabindex="2" id="email" /></td>
+										</tr>
+										<tr valign="top">
+											<td class="first">
+												<?php
+												if ( ! empty( $url ) && 'http://' != $url ) {
+													$link = "<a href='$url' rel='external nofollow' target='_blank'>" . __('visit site') . "</a>";
+													printf( __('URL (%s):', 'fvcn'), apply_filters('get_comment_author_link', $link ) ); 
+												} else {
+													_e('URL:', 'fvcn');
+												} ?>
+											</td>
+											<td><input type="text" id="Location" name="Location" size="30" value="<?php echo $url; ?>" tabindex="3" /></td>
+										</tr>
+										<tr valign="top">
+											<td class="first"><?php _e('Post Title:', 'fvcn'); ?></td>
+											<td><input type="text" id="Title" name="Title" size="30" value="<?php echo stripslashes(attribute_escape( $submission->Title )); ?>" tabindex="4" id="name" /></td>
+										</tr>
+									</tbody>
+								</table>
+								<br />
 							</div>
 						</div>
 						<div id="postdiv" class="postarea">
-							<h3>Submission</h3>
 							<?php
 							add_filter('user_can_richedit', create_function ('$a', 'return false;') , 50);	// Disable visual editor
-							the_editor(stripslashes($submission->Description), 'content', 'newcomment_author_url', false, 4);
+							the_editor(stripslashes($submission->Description), 'content', 'newcomment_author_url', false, 5);
 							add_filter('user_can_richedit', create_function ('$a', 'return true;') , 50);	// Enable visual editor
 							?>
-						</div>
-						<div id="namediv" class="stuffbox">
-							<h3><label for="Name">Name</label></h3>
-							<div class="inside">
-								<input type="text" name="Name" size="30" value="<?php echo stripslashes(attribute_escape( $submission->Name )); ?>" tabindex="3" id="Name" />
-							</div>
-						</div>
-						<div id="emaildiv" class="stuffbox">
-							<h3><label for="Email">E-mail</label></h3>
-							<div class="inside">
-								<input type="text" name="Email" size="30" value="<?php echo $email; ?>" tabindex="4" id="Email" />
-								<?php if ( $email )
-									echo '<p><a href="mailto:' . stripslashes(apply_filters('get_comment_author_email', $email)) . '">Send Email</a>'; ?>
-							</div>
-						</div>
-						<div id="uridiv" class="stuffbox">
-							<h3><label for="Location">URL</label></h3>
-							<div class="inside">
-								<input type="text" id="Location" name="Location" size="30" value="<?php echo $url; ?>" tabindex="5" />
-								<?php
-								if ( ! empty( $url ) && 'http://' != $url ) {
-									$link = '<a href="' . $url . '" rel="external nofollow" target="_blank">Visit Site</a>';
-									echo '<p>' . stripslashes(apply_filters('get_comment_author_link', $link)) . '</p>'; 
-									}
-								?>
-							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</form>
-		<script type="text/javascript">
-		try{document.post.Title.focus();}catch(e){}
-		</script>
+		</div>
+	</form>
+	<script type="text/javascript">
+	try {
+		document.post.Name.focus();
+	} catch(e) {}
+	</script>
 		<?php endif; ?>
 	</div>
 	<?php
@@ -1621,7 +1804,7 @@ function fvCommunityNewsSubmissions() {
 
 /**
  *		Admin page for settings.
- *		@version 1.2.2
+ *		@version 1.3
  */
 function fvCommunityNewsSettings() {
 	if (!current_user_can('manage_options'))
@@ -1640,12 +1823,12 @@ function fvCommunityNewsSettings() {
 		
 		if (!empty($_POST['fvcn_akismetEnabled']) && empty($_POST['fvcn_akismetApiKey'])) {
 			$_POST['fvcn_akismetEnabled'] = false;
-			$error[] = 'An API Key is required to use Akismet.';
+			$error[] = __('An API Key is required to use Akismet.', 'fvcn');
 		}
 		
 		if (isset($_FILES['fvcn_defaultImage']) && !empty($_FILES['fvcn_defaultImage']) && !empty($_FILES['fvcn_defaultImage']['name'])) {
 			if (!fvCommunityNewsCheckImageUpload($_FILES['fvcn_defaultImage'], true)) {
-				$error[] = 'The image you are trying to upload is invalid.';
+				$error[] = __('The image you are trying to upload is invalid.', 'fvcn');
 			} else {
 				$ext = explode('.', $_FILES['fvcn_defaultImage']['name']);
 				$ext = strtolower( $ext[ count($ext)-1 ] );
@@ -1656,33 +1839,44 @@ function fvCommunityNewsSettings() {
 		}
 		
 		$settings = array(
-			'fvcn_captchaEnabled'		=> 'bool',
-			'fvcn_hideCaptchaLoggedIn'	=> 'bool',
-			'fvcn_alwaysAdmin'			=> 'bool',
-			'fvcn_previousApproved'		=> 'bool',
-			'fvcn_loggedIn'				=> 'bool',
-			'fvcn_mySubmissions'		=> 'bool',
-			'fvcn_mailOnSubmission'		=> 'bool',
-			'fvcn_mailOnModeration'		=> 'bool',
-			'fvcn_akismetEnabled'		=> 'bool',
-			'fvcn_rssEnabled'			=> 'bool',
-			'fvcn_uploadImage'			=> 'bool',
-			'fvcn_captchaLength'		=> 'int',
-			'fvcn_maxImageW'			=> 'int',
-			'fvcn_maxImageH'			=> 'int',
-			'fvcn_numRSSItems'			=> 'int',
-			'fvcn_numSubmissions'		=> 'int',
-			'fvcn_maxDescriptionLength'	=> 'int',
-			'fvcn_maxTitleLength'		=> 'int',
-			'fvcn_captchaBgColor'		=> 'string',
-			'fvcn_captchaLColor'		=> 'string',
-			'fvcn_captchaTsColor'		=> 'string',
-			'fvcn_captchaTColor'		=> 'string',
-			'fvcn_titleBreaker'			=> 'string',
-			'fvcn_descriptionBreaker'	=> 'string',
-			'fvcn_submissionTemplate'	=> 'string',
-			'fvcn_rssLocation'			=> 'string',
-			'fvcn_akismetApiKey'		=> 'string'
+			'fvcn_captchaLength'			=> 'int',
+			'fvcn_maxImageW'				=> 'int',
+			'fvcn_maxImageH'				=> 'int',
+			'fvcn_numRSSItems'				=> 'int',
+			'fvcn_numSubmissions'			=> 'int',
+			'fvcn_maxDescriptionLength'		=> 'int',
+			'fvcn_maxTitleLength'			=> 'int',
+			'fvcn_captchaEnabled'			=> 'bool',
+			'fvcn_hideCaptchaLoggedIn'		=> 'bool',
+			'fvcn_alwaysAdmin'				=> 'bool',
+			'fvcn_previousApproved'			=> 'bool',
+			'fvcn_loggedIn'					=> 'bool',
+			'fvcn_mySubmissions'			=> 'bool',
+			'fvcn_mailOnSubmission'			=> 'bool',
+			'fvcn_mailOnModeration'			=> 'bool',
+			'fvcn_akismetEnabled'			=> 'bool',
+			'fvcn_rssEnabled'				=> 'bool',
+			'fvcn_uploadImage'				=> 'bool',
+			'fvcn_incStyle'					=> 'bool',
+			'fvcn_captchaBgColor'			=> 'string',
+			'fvcn_captchaLColor'			=> 'string',
+			'fvcn_captchaTsColor'			=> 'string',
+			'fvcn_captchaTColor'			=> 'string',
+			'fvcn_titleBreaker'				=> 'string',
+			'fvcn_descriptionBreaker'		=> 'string',
+			'fvcn_submissionTemplate'		=> 'string',
+			'fvcn_rssLocation'				=> 'string',
+			'fvcn_akismetApiKey'			=> 'string',
+			'fvcn_responseOversizedImage'	=> 'string',
+			'fvcn_responseInvalidImage'		=> 'string',
+			'fvcn_responseInvalidEmail'		=> 'string',
+			'fvcn_responseEmpty'			=> 'string',
+			'fvcn_responseSuccess'			=> 'string',
+			'fvcn_responseInvalidCaptcha'	=> 'string',
+			'fvcn_responseBumping'			=> 'string',
+			'fvcn_responseLoggedIn'			=> 'string',
+			'fvcn_responseFailure'			=> 'string',
+			'fvcn_responseModeration'		=> 'string'
 			);
 		
 		foreach ($settings as $setting=>$type) {
@@ -1701,29 +1895,30 @@ function fvCommunityNewsSettings() {
 				default :
 					if (empty($_POST[ $setting ]))
 						$_POST[ $setting ] = '';
-					update_option($setting, (string)$_POST[ $setting ]);
+					update_option($setting, stripslashes( (string)$_POST[ $setting ]) );
 					break;
 			}
 		}
 		
 		
 		if (!$error)
-			echo '<div id="message" class="updated fade"><p>Settings updated.</p></div>';
+			echo '<div id="message" class="updated fade"><p>' . __('Settings updated.', 'fvcn') . '</p></div>';
 		else
-			echo '<div class="error"><ul><li><strong>ERROR: </strong>' . implode('</li><li><strong>ERROR: </strong>', $error) . '</li></ul></div>';
+			echo '<div class="error"><ul><li><strong>ERROR: </strong>' . implode('</li><li><strong>' . __('ERROR:', 'fvcn') . ' </strong>', $error) . '</li></ul></div>';
 	}
 		
 	if ('0' == get_option('fvcn_uploadDir') && '1' == get_option('fvcn_uploadImage'))
-		echo '<div class="error"><ul><li><strong>ERROR: </strong>Failed to create image dir, please create it manualy.</li></ul></div>';
+		echo '<div class="error"><ul><li><strong>' . __('ERROR:', 'fvcn') . ' </strong>' . __('Failed to create image dir, please create it manualy.', 'fvcn') . '</li></ul></div>';
 	?>
 	<div id="tab-interface" class="wrap">
-		<h2>Community News Settings</h2>
+		<h2><?php _e('Community News Settings', 'fvcn'); ?></h2>
 		<ul class="subsubsub">
-			<li><a href="#general" rel="#general" class="tab current">General</a> |</li>
-			<li><a href="#antispam" rel="#antispam" class="tab">Spam Protection</a> |</li>
-			<li><a href="#template" rel="#template" class="tab">Template</a> |</li>
-			<li><a href="#images" rel="#images" class="tab">Image Uploading</a> |</li>
-			<li><a href="#rss" rel="#rss" class="tab">RSS</a></li>
+			<li><a href="#general" rel="#general" class="tab current"><?php _e('General', 'fvcn'); ?></a> |</li>
+			<li><a href="#antispam" rel="#antispam" class="tab"><?php _e('Spam Protection', 'fvcn'); ?></a> |</li>
+			<li><a href="#template" rel="#template" class="tab"><?php _e('Template', 'fvcn'); ?></a> |</li>
+			<li><a href="#images" rel="#images" class="tab"><?php _e('Image Uploading', 'fvcn'); ?></a> |</li>
+			<li><a href="#rss" rel="#rss" class="tab"><?php _e('RSS', 'fvcn'); ?></a> |</li>
+			<li><a href="#appearance" rel="#appearance" class="tab"><?php _e('Appearance', 'fvcn'); ?></a></li>
 		</ul>
 		<br class="clear" />
 		
@@ -1731,147 +1926,142 @@ function fvCommunityNewsSettings() {
 			<?php wp_nonce_field('fvCommunityNews_changeSettings'); ?>
 			
 			<div id="general" class="tabdiv currentTab">
-				<h3>General Settings</h3>
-				<p>General Settings</p>
+				<h3><?php _e('General Settings', 'fvcn'); ?></h3>
+				<p><?php _e('General Settings', 'fvcn'); ?></p>
 				<table class="form-table">
 					<tr valign="top">
-						<th scope="row">Before a submission appears</th>
+						<th scope="row"><?php _e('Before a submission appears', 'fvcn'); ?></th>
 						<td><fieldset>
-								<legend class="hidden">Before a submission appears</legend>
+								<legend class="hidden"><?php _e('Before a submission appears', 'fvcn'); ?></legend>
 								<label for="fvcn_alwaysAdmin">
 									<input type="checkbox" name="fvcn_alwaysAdmin" id="fvcn_alwaysAdmin" value="1"<?php if (get_option('fvcn_alwaysAdmin')) echo ' checked="checked"'; ?> />
-									An administrator must always approve the submission.</label>
+									<span class="setting-description"><?php _e('An administrator must always approve the submission.', 'fvcn'); ?></span></label>
 								<br />
 								<label for="fvcn_previousApproved">
 									<input type="checkbox" name="fvcn_previousApproved" id="fvcn_previousApproved" value="1"<?php if (get_option('fvcn_previousApproved')) echo ' checked="checked"'; ?> />
-									Submission author must have a previously approved submission.</label>
+									<span class="setting-description"><?php _e('Submission author must have a previously approved submission.', 'fvcn'); ?></span></</label>
 							</fieldset></td>
 					</tr>
 					<tr valign="top">
-						<th scope="row">E-mail me whenever</th>
+						<th scope="row"><?php _e('E-mail me whenever', 'fvcn'); ?></th>
 						<td><fieldset>
-								<legend class="hidden">E-mail me whenever</legend>
+								<legend class="hidden"><?php _e('E-mail me whenever', 'fvcn'); ?></legend>
 								<label for="fvcn_mailOnSubmission">
 									<input type="checkbox" name="fvcn_mailOnSubmission" id="fvcn_mailOnSubmission" value="1"<?php if (get_option('fvcn_mailOnSubmission')) echo ' checked="checked"'; ?> />
-									Anyone posts a submission.</label>
+									<span class="setting-description"><?php _e('Anyone posts a submission.', 'fvcn'); ?></span></label>
 								<br />
 								<label for="fvcn_mailOnModeration">
 									<input type="checkbox" name="fvcn_mailOnModeration" id="fvcn_mailOnModeration" value="1"<?php if (get_option('fvcn_mailOnModeration')) echo ' checked="checked"'; ?> />
-									A submission is held for moderation.</label>
+									<span class="setting-description"><?php _e('A submission is held for moderation.', 'fvcn'); ?></span></label>
 							</fieldset></td>
 					</tr>
 					<tr valign="top">
-						<th scope="row"><label for="fvcn_maxTitleLength">Maximum Title Length</label></th>
-						<td><input type="text" name="fvcn_maxTitleLength" id="fvcn_maxTitleLength" value="<?php echo get_option('fvcn_maxTitleLength'); ?>" size="4" /> Chars</td>
+						<th scope="row"><label for="fvcn_maxTitleLength"><?php _e('Maximum Title Length', 'fvcn'); ?></label></th>
+						<td><input type="text" name="fvcn_maxTitleLength" id="fvcn_maxTitleLength" value="<?php echo get_option('fvcn_maxTitleLength'); ?>" size="4" /> <span class="setting-description"><?php _e('Chars', 'fvcn'); ?></span></td>
 					</tr>
 					<tr valign="top">
-						<th scope="row"><label for="fvcn_titleBreaker">Break Title With</label></th>
+						<th scope="row"><label for="fvcn_titleBreaker"><?php _e('Break Title With', 'fvcn'); ?></label></th>
 						<td><input type="text" name="fvcn_titleBreaker" id="fvcn_titleBreaker" value="<?php echo get_option('fvcn_titleBreaker'); ?>" size="6" /></td>
 					</tr>
 					<tr valign="top">
-						<th scope="row"><label for="fvcn_maxDescriptionLength">Maximum Description Length</label></th>
-						<td><input type="text" name="fvcn_maxDescriptionLength" id="fvcn_maxDescriptionLength" value="<?php echo get_option('fvcn_maxDescriptionLength'); ?>" size="4" /> Chars</td>
+						<th scope="row"><label for="fvcn_maxDescriptionLength"><?php _e('Maximum Description Length', 'fvcn'); ?></label></th>
+						<td><input type="text" name="fvcn_maxDescriptionLength" id="fvcn_maxDescriptionLength" value="<?php echo get_option('fvcn_maxDescriptionLength'); ?>" size="4" /> <span class="setting-description"><?php _e('Chars', 'fvcn'); ?></span></td>
 					</tr>
 					<tr valign="top">
-						<th scope="row"><label for="fvcn_descriptionBreaker">Break Description With</label></th>
+						<th scope="row"><label for="fvcn_descriptionBreaker"><?php _e('Break Description With', 'fvcn'); ?></label></th>
 						<td><input type="text" name="fvcn_descriptionBreaker" id="fvcn_descriptionBreaker" value="<?php echo get_option('fvcn_descriptionBreaker'); ?>" size="6" /></td>
 					</tr>
 					<tr valign="top">
-						<th scope="row">My Submissions</th>
+						<th scope="row"><?php _e('My Submissions', 'fvcn'); ?></th>
 						<td><fieldset>
-								<legend class="hidden">My Submissions</legend>
+								<legend class="hidden"><?php _e('My Submissions', 'fvcn'); ?></legend>
 								<label for="fvcn_mySubmissions">
 									<input type="checkbox" name="fvcn_mySubmissions" id="fvcn_mySubmissions" value="1"<?php if (get_option('fvcn_mySubmissions')) echo ' checked="checked"'; ?> />
-									Add a `My Submissions` page where registered users could view and add their submissions.</label>
+									<span class="setting-description"><?php _e('Add a `My Submissions` page where registered users could view and add their submissions.', 'fvcn'); ?></span></label>
 							</fieldset></td>
 					</tr>
 				</table>
 			</div>
 			
 			<div id="antispam" class="tabdiv">
-				<h3>Spam Protection</h3>
-				<p>Get rid of those damm spambots. (Some default protection is already build-in)</p>
+				<h3><?php _e('Spam Protection', 'fvcn'); ?></h3>
+				<p><?php _e('Get rid of those damn spambots. (Some default protection is already build-in)', 'fvcn'); ?></p>
 				<table class="form-table">
 					<tr valign="top">
-						<th scope="row">Akismet</th>
+						<th scope="row"><?php _e('Akismet', 'fvcn'); ?></th>
 						<td><fieldset>
-								<legend class="hidden">Akismet</legend>
+								<legend class="hidden"><?php _e('Akismet', 'fvcn'); ?></legend>
 								<label for="fvcn_akismetEnabled">
 									<input type="checkbox" name="fvcn_akismetEnabled" id="fvcn_akismetEnabled" value="1"<?php if (get_option('fvcn_akismetEnabled')) echo ' checked="checked"'; ?> />
-									Enable Akismet spam protection.</label>
+									<span class="setting-description"><?php _e('Enable Akismet spam protection.', 'fvcn'); ?></span></label>
 								<br />
 							</fieldset></td>
 					</tr>
 					<tr valign="top">
-						<th scope="row"><label for="fvcn_akismetApiKey">WordPress.com API Key</label></th>
-						<td><input type="text" name="fvcn_akismetApiKey" id="fvcn_akismetApiKey" value="<?php echo get_option('fvcn_akismetApiKey'); ?>" /> <a href="http://wordpress.com/api-keys/" target="_blank">Get a key</a> (<a href="http://faq.wordpress.com/2005/10/19/api-key/" target="_blank">What is this?</a>)</td>
+						<th scope="row"><label for="fvcn_akismetApiKey"><?php _e('WordPress.com API Key', 'fvcn'); ?></label></th>
+						<td><input type="text" name="fvcn_akismetApiKey" id="fvcn_akismetApiKey" value="<?php echo get_option('fvcn_akismetApiKey'); ?>" class="code" /> <span class="setting-description"><a href="http://wordpress.com/api-keys/" target="_blank"><?php _e('Get a key', 'fvcn'); ?></a> (<a href="http://faq.wordpress.com/2005/10/19/api-key/" target="_blank"><?php _e('What is this?', 'fvcn'); ?></a>)</span></td>
 					</tr>
 					<tr valign="top">
-						<th scope="row">Authentication</th>
+						<th scope="row"><?php _e('Authentication', 'fvcn'); ?></th>
 						<td><fieldset>
-								<legend class="hidden">Authentication</legend>
+								<legend class="hidden"><?php _e('Authentication', 'fvcn'); ?></legend>
 								<label for="fvcn_loggedIn">
 									<input type="checkbox" name="fvcn_loggedIn" id="fvcn_loggedIn" value="1"<?php if (get_option('fvcn_loggedIn')) echo ' checked="checked"'; ?> />
-									Submission author must be logged in.</label>
+									<span class="setting-description"><?php _e('Submission author must be logged in.', 'fvcn'); ?></span></label>
 								<br />
 							</fieldset></td>
 					</tr>
 					<tr valign="top">
-						<th scope="row">Enable Captcha</th>
+						<th scope="row"><?php _e('Enable Captcha', 'fvcn'); ?></th>
 						<td><fieldset>
-								<legend class="hidden">Enable a Captcha Image</legend>
+								<legend class="hidden"><?php _e('Enable a Captcha Image', 'fvcn'); ?></legend>
 								<label for="fvcn_captchaEnabled">
 									<input type="checkbox" name="fvcn_captchaEnabled" id="fvcn_captchaEnabled" value="1"<?php if (get_option('fvcn_captchaEnabled')) echo ' checked="checked"'; ?> />
-									Enable or disable the use of a captcha.</label>
+									<span class="setting-description"><?php _e('Enable or disable the use of a captcha.', 'fvcn'); ?></span></label>
 								<br />
 								<label for="fvcn_hideCaptchaLoggedIn">
 									<input type="checkbox" name="fvcn_hideCaptchaLoggedIn" id="fvcn_hideCaptchaLoggedIn" value="1"<?php if (get_option('fvcn_hideCaptchaLoggedIn')) echo ' checked="checked"'; ?> />
-									Remove captcha for users who are already logged in.</label>
+									<span class="setting-description"><?php _e('Remove captcha for users who are already logged in.', 'fvcn'); ?></span></label>
 								<br />
 							</fieldset></td>
 					</tr>
 					<tr valign="top">
-						<th scope="row"><label for="fvcn_captchaLength">Captcha length</label></th>
-						<td><input type="text" name="fvcn_captchaLength" id="fvcn_captchaLength" value="<?php echo get_option('fvcn_captchaLength'); ?>" size="2" /> Chars</td>
+						<th scope="row"><label for="fvcn_captchaLength"><?php _e('Captcha length', 'fvcn'); ?></label></th>
+						<td><input type="text" name="fvcn_captchaLength" id="fvcn_captchaLength" value="<?php echo get_option('fvcn_captchaLength'); ?>" size="2" /> <span class="setting-description"><?php _e('Chars', 'fvcn'); ?></span></td>
 					</tr>
 					<tr valign="top">
-						<th scope="row"><label for="fvcn_captchaBgColor">Background Color</label></th>
-						<td>#
-						<input type="text" name="fvcn_captchaBgColor" id="fvcn_captchaBgColor" value="<?php echo get_option('fvcn_captchaBgColor'); ?>" size="6" /></td>
+						<th scope="row"><label for="fvcn_captchaBgColor"><?php _e('Background Color', 'fvcn'); ?></label></th>
+						<td>#<input type="text" name="fvcn_captchaBgColor" id="fvcn_captchaBgColor" value="<?php echo get_option('fvcn_captchaBgColor'); ?>" size="6" class="code" /></td>
 					</tr>
 					<tr valign="top">
-						<th scope="row"><label for="fvcn_captchaTColor">Text Color</label></th>
-						<td>#
-						<input type="text" name="fvcn_captchaTColor" id="fvcn_captchaTColor" value="<?php echo get_option('fvcn_captchaTColor'); ?>" size="6" /></td>
+						<th scope="row"><label for="fvcn_captchaTColor"><?php _e('Text Color', 'fvcn'); ?></label></th>
+						<td>#<input type="text" name="fvcn_captchaTColor" id="fvcn_captchaTColor" value="<?php echo get_option('fvcn_captchaTColor'); ?>" size="6" class="code" /></td>
 					</tr>
 					<tr valign="top">
-						<th scope="row"><label for="fvcn_captchaTsColor">Textshadow Color</label></th>
-						<td>#
-						<input type="text" name="fvcn_captchaTsColor" id="fvcn_captchaTsColor" value="<?php echo get_option('fvcn_captchaTsColor'); ?>" size="6" /></td>
+						<th scope="row"><label for="fvcn_captchaTsColor"><?php _e('Textshadow Color', 'fvcn'); ?></label></th>
+						<td>#<input type="text" name="fvcn_captchaTsColor" id="fvcn_captchaTsColor" value="<?php echo get_option('fvcn_captchaTsColor'); ?>" size="6" class="code" /></td>
 					</tr>
 					<tr valign="top">
-						<th scope="row"><label for="fvcn_captchaLColor">Line Color</label></th>
-						<td>#
-						<input type="text" name="fvcn_captchaLColor" id="fvcn_captchaLColor" value="<?php echo get_option('fvcn_captchaLColor'); ?>" size="6" /></td>
+						<th scope="row"><label for="fvcn_captchaLColor"><?php _e('Line Color', 'fvcn'); ?></label></th>
+						<td>#<input type="text" name="fvcn_captchaLColor" id="fvcn_captchaLColor" value="<?php echo get_option('fvcn_captchaLColor'); ?>" size="6" class="code" /></td>
 					</tr>
 				</table>
 			</div>
 			
 			<div id="template" class="tabdiv">
-				<h3>Template</h3>
-				<p>These settings could be overwritten with values in your template tags.</p>
+				<h3><?php _e('Template', 'fvcn'); ?></h3>
+				<p><?php _e('These settings could be overwritten with values in your template tags.', 'fvcn'); ?></p>
 				<table class="form-table">
 					<tr valign="top">
-						<th scope="row"><label for="fvcn_numSubmissions">Number of Submissions</label></th>
+						<th scope="row"><label for="fvcn_numSubmissions"><?php _e('Number of Submissions', 'fvcn'); ?></label></th>
 						<td><input type="text" name="fvcn_numSubmissions" id="fvcn_numSubmissions" value="<?php echo get_option('fvcn_numSubmissions'); ?>" size="2" /></td>
 					</tr>
 					<tr valign="top">
-						<th scope="row">Submission Template</th>
+						<th scope="row"><?php _e('Submission Template', 'fvcn'); ?></th>
 						<td><fieldset>
-								<legend class="hidden">Comment Blacklist</legend>
+								<legend class="hidden"><?php _e('Submission Template', 'fvcn'); ?></legend>
 								<p>
-									<label for="fvcn_submissionTemplate">The template for a single submission.<br />
-									You can use the following tags: <strong>%submission_author%</strong>, <strong>%submission_author_email%</strong>, <strong>%submission_title%</strong>, <strong>%submission_url%</strong>, <strong>%submission_description%</strong>, <strong>%submission_date%</strong>.</label>
+									<label for="fvcn_submissionTemplate"><span class="setting-description"><?php _e('The template for a single submission.<br />You can use the following tags: <strong>%submission_author%</strong>, <strong>%submission_author_email%</strong>, <strong>%submission_title%</strong>, <strong>%submission_url%</strong>, <strong>%submission_description%</strong>, <strong>%submission_date%</strong>, <strong>%submission_image%</strong>.', 'fvcn'); ?></span></label>
 								</p>
 								<p>
 									<textarea name="fvcn_submissionTemplate" id="fvcn_submissionTemplate" cols="60" rows="10" style="width: 98%; font-size: 12px;" class="code"><?php echo stripslashes(get_option('fvcn_submissionTemplate')); ?></textarea>
@@ -1882,57 +2072,57 @@ function fvCommunityNewsSettings() {
 			</div>
 			
 			<div id="images" class="tabdiv">
-				<h3>Images</h3>
-				<p>It is possible to allow people to upload an image together with their submission.</p>
+				<h3><?php _e('Images', 'fvcn'); ?></h3>
+				<p><?php _e('It is possible to allow people to upload an image together with their submission.', 'fvcn'); ?></p>
 				<table class="form-table">
 					<tr valign="top">
-						<th scope="row">Enable Image Uploading</th>
+						<th scope="row"><?php _e('Enable Image Uploading', 'fvcn'); ?></th>
 						<td><fieldset>
-								<legend class="hidden">Enable the RSS Feed</legend>
+								<legend class="hidden"><?php _e('Enable Image Uploading', 'fvcn'); ?></legend>
 								<label for="fvcn_uploadImage">
 									<input type="checkbox" name="fvcn_uploadImage" id="fvcn_uploadImage" value="1"<?php if (get_option('fvcn_uploadImage')) echo ' checked="checked"'; ?> />
-									Allow people to upload an image.</label>
+									<span class="setting-description"><?php _e('Allow people to upload an image.', 'fvcn'); ?></span></label>
 								<br />
 							</fieldset></td>
 					</tr>
 					<tr valign="top">
-						<th scope="row"><label for="fvcn_defaultImage">Default Image</label></th>
+						<th scope="row"><label for="fvcn_defaultImage"><?php _e('Default Image', 'fvcn'); ?></label></th>
 						<td>
-							<input type="file" name="fvcn_defaultImage" id="fvcn_defaultImage" value="" /> The image that will be used if no image is uploaded.<br /><br />
+							<input type="file" name="fvcn_defaultImage" id="fvcn_defaultImage" value="" /> <span class="setting-description"><?php _e('The image that will be used if no image is uploaded.', 'fvcn'); ?></span><br /><br />
 							<?php $image = ('default'==get_option('fvcn_defaultImage')?WP_PLUGIN_URL.'/fv-community-news/images/default.png':get_option('home').'/wp-fvcn-images/default.'.get_option('fvcn_defaultImage')); ?>
-							<img src="<?php echo $image; ?>" alt="" /><br /><small>Current default image.</small>
+							<img src="<?php echo $image; ?>" alt="" /><br /><small><?php _e('Current default image.', 'fvcn'); ?></small>
 						</td>
 					</tr>
 					<tr valign="top">
-						<th scope="row">Max Image Size</th>
+						<th scope="row"><?php _e('Max Image Size', 'fvcn'); ?></th>
 						<td>
-							<span style="float:left;width:45px;padding:4px 0">Width:</span><input type="text" name="fvcn_maxImageW" id="fvcn_maxImageW" value="<?php echo get_option('fvcn_maxImageW'); ?>" size="5" /> pixels<br class="clear" />
-							<span style="float:left;width:45px;padding:4px 0">Height:</span><input type="text" name="fvcn_maxImageH" id="fvcn_maxImageH" value="<?php echo get_option('fvcn_maxImageH'); ?>" size="5" /> pixels<br class="clear" />&nbsp; &nbsp;(0 = Unlimited)
+							<span style="float:left;width:45px;padding:4px 0"><?php _e('Width:', 'fvcn'); ?></span><input type="text" name="fvcn_maxImageW" id="fvcn_maxImageW" value="<?php echo get_option('fvcn_maxImageW'); ?>" size="5" /> <span class="setting-description"><?php _e('pixels', 'fvcn'); ?></span><br class="clear" />
+							<span style="float:left;width:45px;padding:4px 0"><?php _e('Height:', 'fvcn'); ?></span><input type="text" name="fvcn_maxImageH" id="fvcn_maxImageH" value="<?php echo get_option('fvcn_maxImageH'); ?>" size="5" /> <span class="setting-description"><?php _e('pixels', 'fvcn'); ?></span><br class="clear" />&nbsp; &nbsp;<span class="setting-description"><?php _e('(0 = Unlimited)', 'fvcn'); ?></span>
 						</td>
 					</tr>
 				</table>
 			</div>
 			
 			<div id="rss" class="tabdiv">
-				<h3>RSS</h3>
-				<p>Configure your Community News RSS 2.0 feed.</p>
+				<h3><?php _e('RSS', 'fvcn'); ?></h3>
+				<p><?php _e('Configure your Community News RSS 2.0 feed.', 'fvcn'); ?></p>
 				<table class="form-table">
 					<tr valign="top">
-						<th scope="row">Enable RSS Feed</th>
+						<th scope="row"><?php _e('Enable RSS Feed', 'fvcn'); ?></th>
 						<td><fieldset>
-								<legend class="hidden">Enable the RSS Feed</legend>
+								<legend class="hidden"><?php _e('Enable the RSS Feed', 'fvcn'); ?></legend>
 								<label for="fvcn_rssEnabled">
 									<input type="checkbox" name="fvcn_rssEnabled" id="fvcn_rssEnabled" value="1"<?php if (get_option('fvcn_rssEnabled')) echo ' checked="checked"'; ?> />
-									Enable or disable the RSS 2.0 Feed.</label>
+									<span class="setting-description"><?php _e('Enable or disable the RSS 2.0 Feed.', 'fvcn'); ?></span></label>
 								<br />
 							</fieldset></td>
 					</tr>
 					<tr valign="top">
-						<th scope="row"><label for="fvcn_numRSSItems">Number of RSS Items</label></th>
+						<th scope="row"><label for="fvcn_numRSSItems"><?php _e('Number of RSS Items', 'fvcn'); ?></label></th>
 						<td><input type="text" name="fvcn_numRSSItems" id="fvcn_numRSSItems" value="<?php echo get_option('fvcn_numRSSItems'); ?>" size="3" /></td>
 					</tr>
 					<tr valign="top">
-						<th scope="row"><label for="fvcn_rssLocation">RSS Location</label></th>
+						<th scope="row"><label for="fvcn_rssLocation"><?php _e('RSS Location', 'fvcn'); ?></label></th>
 						<td><?php
 						if ($wp_rewrite->using_permalinks())
 							echo get_option('home') . '/' . str_replace('feed/%feed%', '', $wp_rewrite->get_feed_permastruct());
@@ -1943,8 +2133,187 @@ function fvCommunityNewsSettings() {
 				</table>
 			</div>
 			
+			<div id="appearance" class="tabdiv">
+				<h3><?php _e('Appearance', 'fvcn'); ?></h3>
+				<p><?php _e('Change the look/responses of this plugin.', 'fvcn'); ?></p>
+				<table class="form-table">
+					<tr valign="top">
+						<th scope="row"><?php _e('Include StyleSheet', 'fvcn'); ?></th>
+						<td><fieldset>
+								<legend class="hidden"><?php _e('Include StyleSheet', 'fvcn'); ?></legend>
+								<label for="fvcn_incStyle">
+									<input type="checkbox" name="fvcn_incStyle" id="fvcn_incStyle" value="1"<?php if (get_option('fvcn_incStyle')) echo ' checked="checked"'; ?> />
+									<span class="setting-description"><?php _e('Include a simple stylesheet to change the look of this plugin.', 'fvcn'); ?></span></label>
+								<br />
+							</fieldset></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label for="fvcn_responseSuccess"><?php _e('Successful Posted', 'fvcn'); ?></label></th>
+						<td><input type="text" name="fvcn_responseSuccess" id="fvcn_responseSuccess" value="<?php echo get_option('fvcn_responseSuccess'); ?>" style="width:98%" /> <br /><span class="setting-description"><?php _e('The message displayed when a submission is added successfull.', 'fvcn'); ?></span></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label for="fvcn_responseEmpty"><?php _e('Empty Fields', 'fvcn'); ?></label></th>
+						<td><input type="text" name="fvcn_responseEmpty" id="fvcn_responseEmpty" value="<?php echo get_option('fvcn_responseEmpty'); ?>" style="width:98%" /> <br /><span class="setting-description"><?php _e('The message displayed when not all required fields are filled in.', 'fvcn'); ?></span></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label for="fvcn_responseInvalidEmail"><?php _e('Invalid Email', 'fvcn'); ?></label></th>
+						<td><input type="text" name="fvcn_responseInvalidEmail" id="fvcn_responseInvalidEmail" value="<?php echo get_option('fvcn_responseInvalidEmail'); ?>" style="width:98%" /> <br /><span class="setting-description"><?php _e('The message displayed when an invalid email is filled in.', 'fvcn'); ?></span></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label for="fvcn_responseInvalidImage"><?php _e('Invalid Image', 'fvcn'); ?></label></th>
+						<td><input type="text" name="fvcn_responseInvalidImage" id="fvcn_responseInvalidImage" value="<?php echo get_option('fvcn_responseInvalidImage'); ?>" style="width:98%" /> <br /><span class="setting-description"><?php _e('The message displayed when an invalid (malicious) image file is uploaded.', 'fvcn'); ?></span></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label for="fvcn_responseOversizedImage"><?php _e('Oversized Image', 'fvcn'); ?></label></th>
+						<td><input type="text" name="fvcn_responseOversizedImage" id="fvcn_responseOversizedImage" value="<?php echo get_option('fvcn_responseOversizedImage'); ?>" style="width:98%" /> <br /><span class="setting-description"><?php _e('The message displayed when an image is uploaded witch is too big.', 'fvcn'); ?></span></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label for="fvcn_responseInvalidCaptcha"><?php _e('Invalid Captcha', 'fvcn'); ?></label></th>
+						<td><input type="text" name="fvcn_responseInvalidCaptcha" id="fvcn_responseInvalidCaptcha" value="<?php echo get_option('fvcn_responseInvalidCaptcha'); ?>" style="width:98%" /> <br /><span class="setting-description"><?php _e('The message displayed when an invalid captcha value is entered.', 'fvcn'); ?></span></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label for="fvcn_responseBumping"><?php _e('Bumping', 'fvcn'); ?></label></th>
+						<td><input type="text" name="fvcn_responseBumping" id="fvcn_responseBumping" value="<?php echo get_option('fvcn_responseBumping'); ?>" style="width:98%" /> <br /><span class="setting-description"><?php _e('The message displayed when more then one submission is added within 2 minutes.', 'fvcn'); ?></span></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label for="fvcn_responseLoggedIn"><?php _e('Required Login', 'fvcn'); ?></label></th>
+						<td><input type="text" name="fvcn_responseLoggedIn" id="fvcn_responseLoggedIn" value="<?php echo get_option('fvcn_responseLoggedIn'); ?>" style="width:98%" /> <br /><span class="setting-description"><?php _e('The message displayed when an user is required to log in.', 'fvcn'); ?></span></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label for="fvcn_responseFailure"><?php _e('Posting Failure', 'fvcn'); ?></label></th>
+						<td><input type="text" name="fvcn_responseFailure" id="fvcn_responseFailure" value="<?php echo get_option('fvcn_responseFailure'); ?>" style="width:98%" /> <br /><span class="setting-description"><?php _e('The message displayed when an error occured while adding a submission.', 'fvcn'); ?></span></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label for="fvcn_responseModeration"><?php _e('Awaiting Moderation', 'fvcn'); ?></label></th>
+						<td><input type="text" name="fvcn_responseModeration" id="fvcn_responseModeration" value="<?php echo get_option('fvcn_responseModeration'); ?>" style="width:98%" /> <br /><span class="setting-description"><?php _e('The message displayed when a submission is awaiting moderation.', 'fvcn'); ?></span></td>
+					</tr>
+				</table>
+			</div>
 			<p class="submit">
-				<input type="submit" class="button-primary" name="Submit" value="Save Changes" />
+				<input type="submit" class="button-primary" name="Submit" value="<?php _e('Save Changes', 'fvcn'); ?>" />
+			</p>
+		</form>
+	</div>
+	<?php
+}
+
+/**
+ *		Uninstall the FV Community News Plugin
+ *		@since 1.3
+ *		@version 1.0
+ */
+function fvCommunityNewsUninstall() {
+	if (!current_user_can('manage_options'))
+		exit;
+	
+	global $wpdb;
+	
+	if ('POST' == $_SERVER['REQUEST_METHOD'] && check_admin_referer('fvCommunityNews_uninstallPlugin')) {
+		if ($_POST['fvcn_confirmUninstall'] != $_POST['fvcn_confirmCode']) {
+			echo '<div class="error"><ul><li><strong>' . __('ERROR:', 'fvcn') . ' </strong>' . __('Wrong confirm code, please try again.', 'fvcn') . '</li></ul></div>';
+		} else {
+			if (!empty($_POST['fvcn_removeData'])) {
+				// Remove DB Table
+				$wpdb->query("DROP TABLE " . get_option('fvcn_dbname'));
+				// Remove Images+Directory
+				fvCommunityNewsRemoveDirectory(ABSPATH . 'wp-fvcn-images');
+			}
+			if (!empty($_POST['fvcn_removeSettings'])) {
+				// Remove all settings used by this plugin
+				delete_option('fvcn_version');
+				delete_option('fvcn_dbname');
+				delete_option('fvcn_dbversion');
+				delete_option('fvcn_captchaEnabled');
+				delete_option('fvcn_hideCaptchaLoggedIn');
+				delete_option('fvcn_captchaLength');
+				delete_option('fvcn_captchaBgColor');
+				delete_option('fvcn_captchaLColor');
+				delete_option('fvcn_captchaTsColor');
+				delete_option('fvcn_captchaTColor');
+				delete_option('fvcn_alwaysAdmin');
+				delete_option('fvcn_previousApproved');
+				delete_option('fvcn_mailOnSubmission');
+				delete_option('fvcn_mailOnModeration');
+				delete_option('fvcn_maxTitleLength');
+				delete_option('fvcn_titleBreaker');
+				delete_option('fvcn_maxDescriptionLength');
+				delete_option('fvcn_descriptionBreaker');
+				delete_option('fvcn_numSubmissions');
+				delete_option('fvcn_submissionTemplate');
+				delete_option('fvcn_formTitle');
+				delete_option('fvcn_submissionsTitle');
+				delete_option('fvcn_rssEnabled');
+				delete_option('fvcn_numRSSItems');
+				delete_option('fvcn_rssLocation');
+				delete_option('fvcn_loggedIn');
+				delete_option('fvcn_uploadImage');
+				delete_option('fvcn_maxImageW');
+				delete_option('fvcn_maxImageH');
+				delete_option('fvcn_mySubmissions');
+				delete_option('fvcn_akismetEnabled');
+				delete_option('fvcn_defaultImage');
+				delete_option('fvcn_incStyle');
+				delete_option('fvcn_responseOversizedImage');
+				delete_option('fvcn_responseInvalidImage');
+				delete_option('fvcn_responseInvalidEmail');
+				delete_option('fvcn_responseEmpty');
+				delete_option('fvcn_responseSuccess');
+				delete_option('fvcn_responseInvalidCaptcha');
+				delete_option('fvcn_responseBumping');
+				delete_option('fvcn_responseLoggedIn');
+				delete_option('fvcn_responseFailure');
+				delete_option('fvcn_responseModeration');
+				delete_option('fvcn_akismetApiKey');
+				delete_option('fvcn_uplodeleteir');
+			}
+			$plugin = 'fv-community-news/fvCommunityNews.php';
+			deactivate_plugins($plugin);
+			update_option('recently_activated', array($plugin => time()) + (array)get_option('recently_activated'));
+			die('<meta http-equiv="refresh" content="0;URL=plugins.php?deactivate=true" />');
+		}
+	}
+	
+	if ('0' == get_option('fvcn_uploadDir') && '1' == get_option('fvcn_uploadImage'))
+			echo '<div class="error"><ul><li><strong>' . __('ERROR:', 'fvcn') . ' </strong>' . __('Failed to create image dir, please create it manualy.', 'fvcn') . '</li></ul></div>';
+	
+	?>
+	<div class="wrap">
+		<h2><?php _e('Community News Uninstall', 'fvcn'); ?></h2>
+		<form method="post" action="admin.php?page=fvCommunityNewsUninstall">
+			<?php wp_nonce_field('fvCommunityNews_uninstallPlugin'); ?>
+			<p><?php _e('After the uninstall, you should manually remove the plugin files.', 'fvcn'); ?></p>
+			<table class="form-table">
+				<tr valign="top">
+					<th scope="row"><?php _e('Remove Settings', 'fvcn'); ?></th>
+					<td><fieldset>
+							<legend class="hidden"><?php _e('Remove Settings', 'fvcn'); ?></legend>
+							<label for="fvcn_removeSettings">
+								<input type="checkbox" name="fvcn_removeSettings" id="fvcn_removeSettings" value="1" checked="checked" />
+								<span class="setting-description"><?php _e('Remove the plugin settings.', 'fvcn'); ?></span></label>
+							<br />
+						</fieldset></td>
+				</tr>
+				<tr valign="top">
+					<th scope="row"><?php _e('Remove Data', 'fvcn'); ?></th>
+					<td><fieldset>
+							<legend class="hidden"><?php _e('Remove Data', 'fvcn'); ?></legend>
+							<label for="fvcn_removeData">
+								<input type="checkbox" name="fvcn_removeData" id="fvcn_removeData" value="1" />
+								<span class="setting-description"><?php _e('Remove the plugin data (Submissions + Pictures).', 'fvcn'); ?></span></label>
+							<br />
+						</fieldset></td>
+				</tr>
+				<tr valign="top">
+					<th scope="row"><label for="fvcn_confirmUninstall"><?php _e('Confirm', 'fvcn'); ?></label></th>
+					<td><input type="text" name="fvcn_confirmUninstall" id="fvcn_confirmUninstall" value="" />
+					<?php $code = mt_rand(111, 999); ?>
+					<span class="setting-description"><strong><?php _e('Code:', 'fvcn'); echo ' ' . $code; ?></strong>
+					<?php _e('Please type the code to confirm your uninstall.', 'fvcn'); ?></span>
+					<input type="hidden" name="fvcn_confirmCode" value="<?php echo $code; ?>" /></td>
+				</tr>
+			</table>
+			<p class="submit">
+				<input type="submit" class="button-primary" name="Submit" value="<?php _e('Uninstall', 'fvcn'); ?>" />
 			</p>
 		</form>
 	</div>

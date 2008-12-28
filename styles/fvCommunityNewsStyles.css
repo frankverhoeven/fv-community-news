@@ -1,45 +1,61 @@
 @charset "utf-8";
-
 /**
  *		Add the CSS in your style.css!
- *		This file is for reference only!
- *		All elements in this file could be found in the file: fvCommunityNewsForm.php.
+ *		Note that this file will be overwritten while updating.
  */
 
-ul.fvCommunityNewsList {  }									/* The list of submissions */
+.fvCommunityNewsList {
+	padding: 0 !important;
+	margin-left: 5px !important;
+}
+.fvCommunityNewsList li, .fvCommunityNewsList li:before {
+	list-style: none !important;
+	content: "" !important;
+	color: #333 !important;
+}
+.fvCommunityNewsList li strong {
+	display: block;
+}
+.fvCommunityNewsList li small {
+	font-size: .8em;
+	font-style: normal;
+	letter-spacing: 1px;
+	margin-left: 3px;
+}
 
-ul.fvCommunityNewsList li {  }								/* One submission */
-
-form#fvCommunityNewsForm {  }								/* The form */
-
-form#fvCommunityNewsForm fieldset {  }						/* The fieldset */
-
-form#fvCommunityNewsForm label {  }							/* Labels */
-
-form#fvCommunityNewsForm label em {  }						/* The stars (*) */
-
-form#fvCommunityNewsForm input {  }							/* All input fields */
-
-input#fvCommunityNewsName {  }								/* Name input field */
-
-input#fvCommunityNewsEmail {  }								/* Email input field */
-
-input#fvCommunityNewsTitle {  }								/* Title input field */
-
-form#fvCommunityNewsForm img {  }							/* The captcha */
-
-input#fvCommunityNewsCaptcha {  }							/* Captcha input field */
-
-form#fvCommunityNewsForm small a {  }						/* The refresh captcha link */
-
-textarea#fvCommunityNewsDescription {  }					/* Description textarea */
-
-span#fvCommunityNewsErrorResponse {  }						/* Errors appear in here */
-
-input#fvCommunityNewsSubmit {  }							/* Submit button */
-
-div#fvCommunityNewsAjaxResponse { display: none; }			/* If the form is submitted sucessful using ajax, here comes the message */
-
-div#fvCommunityNewsLoader { display: none; }				/* The placeholder for the rotating loader image + Loading... text */
-
-div#fvCommunityNewsLoader p { }								/* The rotating loader image + Loading... text */
+#fvCommunityNewsForm label {
+	display: block;
+	color: #000;
+	font: 11px Verdana, Geneva, sans-serif;
+	font-weight: bold;
+	padding: 4px 0 1px 3px;
+}
+#fvCommunityNewsForm label em {
+	color: #e00;
+	font: 12px Arial, Helvetica, sans-serif;
+	font-style: normal;
+	font-weight: normal;
+}
+#fvCommunityNewsForm input, #fvCommunityNewsForm textarea {
+	width: 170px;
+	font: 11px Verdana, Geneva, sans-serif;
+	padding: 3px 2px;
+	color: #333;
+	background: #fff;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #d4d4d4 #ebebeb #ebebeb #d4d4d4;
+}
+#fvCommunityNewsForm input:focus, #fvCommunityNewsForm textarea:focus { border-color: #b4b4b4 #cbcbcb #cbcbcb #b4b4b4; }
+#fvCommunityNewsForm input.error, #fvCommunityNewsForm textarea.error { border-color: #e40000 #fb0000 #fb0000 #e40000; }
+#fvCommunityNewsForm input.error:focus, #fvCommunityNewsForm textarea.error:focus { border-color: #c40000 #db0000 #db0000 #c40000; }
+#fvCommunityNewsForm textarea { height: 50px; }
+#fvCommunityNewsSubmit {
+	width: auto !important;
+	display: block;
+	margin-top: 4px;
+}
+#fvCommunityNewsForm small a {
+	outline: none !important;
+}
+#fvCommunityNewsErrorResponse { color: #e40000; }
