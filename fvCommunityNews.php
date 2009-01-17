@@ -3,12 +3,12 @@
  *		Plugin Name:		FV Community News
  *		Plugin URI:			http://www.frank-verhoeven.com/wordpress-plugin-fv-community-news/
  *		Description:		Let visiters of your site post their articles on your site. Like this plugin? Please consider <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=SB62B7H867Y4C&lc=US&item_name=Frank%20Verhoeven&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted">making a small donation</a>.
- *		Version:			1.3
+ *		Version:			1.3.1
  *		Author:				Frank Verhoeven
  *		Author URI:			http://www.frank-verhoeven.com/
  *		
  *		@package			FV Community News
- *		@version			1.3
+ *		@version			1.3.1
  *		@author				Frank Verhoeven
  *		@copyright			Coyright (c) 2008, Frank Verhoeven
  */
@@ -47,7 +47,7 @@ $fvCommunityNewsErrorFields = array();
 /**
  *		@var int $fvCommunityNewsVersion Current version of FV Community News.
  */
-$fvCommunityNewsVersion = '1.3';
+$fvCommunityNewsVersion = '1.3.1';
 
 /**
  *		Initialize the application
@@ -282,14 +282,13 @@ function fvCommunityNewsSubmitted() {
 
 /**
  *		Add some stuff to the header.
- *		@version 1.1.1
+ *		@version 1.2
  */
 function fvCommunityNewsHead() {
 	global $wp_rewrite, $fvCommunityNewsVersion;
 	$dir = WP_PLUGIN_URL . '/fv-community-news/javascript/';
 	
-	echo "\n\t\t" . '<script type="text/javascript" src="' . $dir . 'prototype.js"></script>' . "\n";
-	echo "\t\t" . '<script type="text/javascript" src="' . $dir . 'scriptaculous.js"></script>' . "\n";
+	echo "\n\t\t" . '<script type="text/javascript" src="' . get_option('home') . '/wp-includes/js/jquery/jquery.js?ver=1.2.6"></script>' . "\n";
 	echo "\t\t" . '<script type="text/javascript" src="' . $dir . 'fvCommunityNews.js"></script>' . "\n";
 	if (get_option('fvcn_rssEnabled')) {
 		if ($wp_rewrite->using_permalinks())

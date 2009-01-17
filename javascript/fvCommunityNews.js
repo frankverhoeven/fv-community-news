@@ -1,109 +1,78 @@
 /**
  * @package 	FV Community News
- * @version 	1.3
+ * @version 	2.0
  * @author 		Frank Verhoeven
  * @copyright 	Coyright (c) 2008, Frank Verhoeven
  */
 
-Event.observe(window, 'load', function() {
-	Event.observe('fvCommunityNewsForm', 'submit', function(submission) {
+jQuery(document).ready( function($) {
+	$('#fvCommunityNewsForm').submit(function() {
 		
 		// Disable AJAX for image uploading.
-		if ($('fvCommunityNewsImage') && '' != $F('fvCommunityNewsImage') && $('fvCommunityNewsImageCheck').checked)
+		if ('' != $('#fvCommunityNewsImage').val() && $('#fvCommunityNewsImageCheck').val())
 			return true;
 		
-		Effect.Appear('fvCommunityNewsLoader', {
-			duration: 1.0,
-			afterFinish: function() {
-				fvCommunityNewsMakeRequest();
-			}
-		});
+		$('#fvCommunityNewsLoader').fadeIn('slow');
 		
-		Event.stop(submission);
-	});
-});
-
-function fvCommunityNewsMakeRequest() {
-	url = $F('fvCommunityNews') + '?fvCommunityNewsAjaxRequest=true';
-	
-	new Ajax.Request (url, {
-		method: 'post',
+		var url = $('#fvCommunityNews').val() + '?fvCommunityNewsAjaxRequest=true';
+		var data = $('#fvCommunityNewsForm').serialize();
 		
-		parameters: $('fvCommunityNewsForm').serialize(true),
-		
-		onSuccess: function(response) {
-			Effect.Fade('fvCommunityNewsLoader', {
-				duration: 0.5,
-				afterFinish: function() {
-					fvCommunityNewsFetchResults(response);
-				}
-			});
-			
-		},
-		
-		onFailure: function() {
-			Effect.Fade('fvCommunityNewsLoader', {
-				afterFinish: function() {
-					Effect.SwitchOff('fvCommunityNewsForm', {
-						afterFinish: function() {
-							$('fvCommunityNewsAjaxResponse').innerHTML = '<p>Unable to add your submission, please try again later.</p>';
-							Effect.Appear('fvCommunityNewsAjaxResponse');
-						}
+		$.ajax({
+			type: 'POST',
+			url: url,
+			data: data,
+			success: function(response) {
+				$('#fvCommunityNewsLoader').hide();
+				
+				$('fvCommunityNewsAjaxResponse', response).each(function(){
+					var message = $('message', this).text();
+					
+					$('#fvCommunityNewsForm > .error').each(function() {
+						$(this).removeClass('error');
 					});
-				}
-			});
-		}
-		
-	 });
-}
-
-function fvCommunityNewsFetchResults(response) {
-	var xml = response.responseXML;
-	var status = xml.getElementsByTagName('status')[0].childNodes[0].nodeValue;
-	var message = xml.getElementsByTagName('message')[0].childNodes[0].nodeValue;
-	
-	
-	if ('error' == status) {
-		$('fvCommunityNewsErrorResponse').innerHTML =  message;
-		
-		var errors = $A(xml.getElementsByTagName('field'));
-		
-		$$('#fvCommunityNewsForm .error').each(function(item) {
-			if (-1 == errors.indexOf( item )) {
-				item.removeClassName('error');
+					
+					
+					if ('error' == $('status', this).text()) {
+						$('errorfields > field', this).each(function() {
+							$('#' + $(this).text()).addClass('error');
+						});
+						
+						$('#fvCommunityNewsErrorResponse').html( message );
+					} else {
+						$('#fvCommunityNewsErrorResponse').hide();
+						
+						$('#fvCommunityNewsForm').slideUp('slow');
+						$('#fvCommunityNewsAjaxResponse').html('<p>' + message + '</p>');
+						$('#fvCommunityNewsAjaxResponse').fadeIn('slow');
+					}
+					
+				});
+			},
+			error: function() {
+				$('#fvCommunityNewsAjaxResponse').html('<p>Unable to add your submission, please try again later.</p>');
+				$('#fvCommunityNewsLoader').fadeOut('slow');
 			}
 		});
-		errors.each(function(item) {
-			var field = item.childNodes[0].nodeValue;
-			$(field).addClassName('error');
-		});
-	} else {
-		Effect.SwitchOff('fvCommunityNewsForm', {
-			afterFinish: function() {
-				$('fvCommunityNewsAjaxResponse').innerHTML = '<p>' + message + '</p>';
-				Effect.Appear('fvCommunityNewsAjaxResponse', {duration: 2.0});
-			}
-		});
-	}
-}
-
-function fvCommunityNewsReloadCaptcha() {
-	var element = $('fvCommunityNewsCaptchaImage');
-	var oldSource  = element.readAttribute('src');
-	var newSource = element.readAttribute('src') + '&amp;dummy=true';
-	
-	Effect.Appear('fvCommunityNewsCaptchaLoader', {duration: 0});
-	
-	new Effect.Opacity(element, {from: 1.0, to: 0.0, duration: 0.2,
-		afterFinish: function() {
-			element.writeAttribute({ src :  newSource }).writeAttribute({ '_src' :  oldSource });
-			Event.observe(element, 'load', function() {
-				Effect.Fade('fvCommunityNewsCaptchaLoader', {duration: 0});
-				new Effect.Opacity(element, {from: 0.0, to: 1.0, duration: 0.2});
-			});
-		}
 		
+		return false;
 	});
 	
-	return false;
-}
+	$('#fvCommunityNewsCaptchaReloadLink').click(function() {
+		var element = $('#fvCommunityNewsCaptchaImage');
+		var newSource = element.attr('src') + '&amp;dummy=true';
+		
+		$('#fvCommunityNewsCaptchaLoader').show();
+		
+		element.fadeOut();
+		element.attr('src', function() {
+			return newSource;
+		});
+		element.load(function() {
+			element.fadeIn('slow');
+			$('#fvCommunityNewsCaptchaLoader').hide();
+		});
+		
+		return false;
+	});
+	
+});

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package 	FV Community News
- * @version 	1.3
+ * @version 	1.3.1
  * @author 		Frank Verhoeven
  * @copyright 	Coyright (c) 2008, Frank Verhoeven
  */
@@ -48,7 +48,7 @@ if (get_option('fvcn_loggedIn') && !is_user_logged_in()) : ?>
 	<label for="fvCommunityNewsCaptcha"><?php _e('Captcha', 'fvcn') ?> <em title="<?php _e('Required for valid form validation.', 'fvcn') ?>">*</em></label>
 	<img src="<?php echo get_option('home') ?>/?fvCommunityNewsCaptcha=true" id="fvCommunityNewsCaptchaImage" alt="Captcha" />
 	<script type="text/javascript">
-		document.write('<br /><small><a href="#" onclick="fvCommunityNewsReloadCaptcha(); return false;"><?php _e('Give me an other image', 'fvcn') ?></a></small><img src="<?php echo WP_PLUGIN_URL ?>/fv-community-news/images/loading-small.gif" id="fvCommunityNewsCaptchaLoader" style="display:none;margin-left:2px" />');
+		document.write('<br /><small><a href="#" id="fvCommunityNewsCaptchaReloadLink"><?php _e('Give me an other image', 'fvcn') ?></a></small><img src="<?php echo WP_PLUGIN_URL ?>/fv-community-news/images/loading-small.gif" id="fvCommunityNewsCaptchaLoader" style="display:none;margin-left:2px" />');
 	</script>
 	<br /><?php _e('To prevent spam, please type the text (all <strong>uppercase</strong>) from this image in the textbox below.', 'fvcn') ?><br />
 	<input type="text" name="fvCommunityNewsCaptcha" id="fvCommunityNewsCaptcha" value="" class="<?php if (in_array('fvCommunityNewsCaptcha', $errorFields)) echo 'error' ?>" />
