@@ -2,8 +2,8 @@
 Contributors:		Frank Verhoeven
 Donate link:			https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=SB62B7H867Y4C&lc=US&item_name=Frank%20Verhoeven&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted
 Tags:				Community, News, Widget, Posts, Comments, Anonymous, Posting, Users, Post, Form, Admin, Submit, Submissions, Unregistered Users, Uploads, Captcha, Custom Posting, Plugin, Custom, Widget, Akismet, Ajax
-Requires at least:	2.5
-Tested up to:		2.7
+Requires at least:	3.0
+Tested up to:		3.0
 Stable tag:		1.3.1
 
 Let Users Submit News To Your Site.
