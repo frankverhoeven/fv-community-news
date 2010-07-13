@@ -1,0 +1,649 @@
+# LANGUAGE (LOCALE) translation for FV Community News
+# Copyright (C) 2008 Frank Verhoeven.
+# This file is distributed under the same license as the WordPress package.
+# Frank Verhoeven <info@frank-verhoeven.com>, 2008.
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: fvCommunityNews\n"
+"Report-#
+msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-12-27 10:32+0800\n"
+"PO-Revision-Date: 2008-12-27 10:33+0800\n"
+"Last-Translator: Frank Verhoeven\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _e;__\n"
+"X-Poedit-Basepath: .\n"
+
+
+#
+msgid "(0 = Unlimited)"
+msgstr ""
+
+#
+msgid "A submission is held for moderation."
+msgstr ""
+
+#
+msgid "Add News"
+msgstr ""
+
+#
+msgid "Add a `My Submissions` page where registered users could view and add their submissions."
+msgstr ""
+
+#
+msgid "Add a new submission."
+msgstr ""
+
+#
+msgid "After the uninstall, you should manually remove the plugin files."
+msgstr ""
+
+#
+msgid "Akismet"
+msgstr ""
+
+#
+msgid "Allow people to upload an image."
+msgstr ""
+
+#
+msgid "An API Key is required to use Akismet."
+msgstr ""
+
+#
+msgid "An administrator must always approve the submission."
+msgstr ""
+
+#
+msgid "Anyone posts a submission."
+msgstr ""
+
+#
+msgid "Appearance"
+msgstr ""
+
+#
+msgid "Approve"
+msgstr ""
+
+#
+msgid "Approve this submission"
+msgstr ""
+
+#
+msgid "Approved"
+msgstr ""
+
+#
+msgid "approved"
+msgstr ""
+
+#
+msgid "Authentication"
+msgstr ""
+
+#
+msgid "Author"
+msgstr ""
+
+#
+msgid "Awaiting Moderation"
+msgstr ""
+
+#
+msgid "Background Color"
+msgstr ""
+
+#
+msgid "Before a submission appears"
+msgstr ""
+
+#
+msgid "Break Description With"
+msgstr ""
+
+#
+msgid "Break Title With"
+msgstr ""
+
+#
+msgid "Bumping"
+msgstr ""
+
+#
+msgid "Captcha"
+msgstr ""
+
+#
+msgid "Captcha length"
+msgstr ""
+
+#
+msgid "Change the look/responses of this plugin."
+msgstr ""
+
+#
+msgid "Chars"
+msgstr ""
+
+#
+msgid "Code:"
+msgstr ""
+
+#
+msgid "Community News Settings"
+msgstr ""
+
+#
+msgid "Community News Uninstall"
+msgstr ""
+
+#
+msgid "Configure your Community News RSS 2.0 feed."
+msgstr ""
+
+#
+msgid "Confirm"
+msgstr ""
+
+#
+msgid "Current default image."
+msgstr ""
+
+#
+msgid "Default Image"
+msgstr ""
+
+#
+msgid "Delete"
+msgstr ""
+
+#
+msgid "Delete this submission"
+msgstr ""
+
+#
+msgid "deleted"
+msgstr ""
+
+#
+msgid "Description"
+msgstr ""
+
+#
+msgid "Displaying %s&#8211;%s of %s"
+msgstr ""
+
+#
+msgid "E-mail (%s):"
+msgstr ""
+
+#
+msgid "E-mail me whenever"
+msgstr ""
+
+#
+msgid "E-mail:"
+msgstr ""
+
+#
+msgid "ERROR:"
+msgstr ""
+
+#
+msgid "Edit"
+msgstr ""
+
+#
+msgid "Edit Submission"
+msgstr ""
+
+#
+msgid "Email"
+msgstr ""
+
+#
+msgid "Empty Fields"
+msgstr ""
+
+#
+msgid "Enable Akismet spam protection."
+msgstr ""
+
+#
+msgid "Enable Captcha"
+msgstr ""
+
+#
+msgid "Enable Image Uploading"
+msgstr ""
+
+#
+msgid "Enable RSS Feed"
+msgstr ""
+
+#
+msgid "Enable a Captcha Image"
+msgstr ""
+
+#
+msgid "Enable or disable the RSS 2.0 Feed."
+msgstr ""
+
+#
+msgid "Enable or disable the use of a captcha."
+msgstr ""
+
+#
+msgid "Enable the RSS Feed"
+msgstr ""
+
+#
+msgid "Failed to create image dir, please create it manualy."
+msgstr ""
+
+#
+msgid "From"
+msgstr ""
+
+#
+msgid "General"
+msgstr ""
+
+#
+msgid "General Settings"
+msgstr ""
+
+#
+msgid "Get a key"
+msgstr ""
+
+#
+msgid "Get rid of those damn spambots. (Some default protection is already build-in)"
+msgstr ""
+
+#
+msgid "Give me an other image"
+msgstr ""
+
+#
+msgid "Height:"
+msgstr ""
+
+#
+msgid "Image"
+msgstr ""
+
+#
+msgid "Image Uploading"
+msgstr ""
+
+#
+msgid "Images"
+msgstr ""
+
+#
+msgid "Include StyleSheet"
+msgstr ""
+
+#
+msgid "Include a simple stylesheet to change the look of this plugin."
+msgstr ""
+
+#
+msgid "Invalid Captcha"
+msgstr ""
+
+#
+msgid "Invalid Email"
+msgstr ""
+
+#
+msgid "Invalid Image"
+msgstr ""
+
+#
+msgid "It is possible to allow people to upload an image together with their submission."
+msgstr ""
+
+#
+msgid "Line Color"
+msgstr ""
+
+#
+msgid "linking to"
+msgstr ""
+
+#
+msgid "Loading"
+msgstr ""
+
+#
+msgid "Manage Submissions"
+msgstr ""
+
+#
+msgid "Mark this submission as spam"
+msgstr ""
+
+#
+msgid "Max Image Size"
+msgstr ""
+
+#
+msgid "Maximum Description Length"
+msgstr ""
+
+#
+msgid "Maximum Title Length"
+msgstr ""
+
+#
+msgid "My Submissions"
+msgstr ""
+
+#
+msgid "Name"
+msgstr ""
+
+#
+msgid "No submissions here, must be your lucky day."
+msgstr ""
+
+#
+msgid "No submissions here, yet."
+msgstr ""
+
+#
+msgid "No submissions yet."
+msgstr ""
+
+#
+msgid "Number of RSS Items"
+msgstr ""
+
+#
+msgid "Number of Submissions"
+msgstr ""
+
+#
+msgid "Oversized Image"
+msgstr ""
+
+#
+msgid "Pending"
+msgstr ""
+
+#
+msgid "Phone Number"
+msgstr ""
+
+#
+msgid "pixels"
+msgstr ""
+
+#
+msgid "Please type the code to confirm your uninstall."
+msgstr ""
+
+#
+msgid "Post Title"
+msgstr ""
+
+#
+msgid "Post Title:"
+msgstr ""
+
+#
+msgid "Post URL"
+msgstr ""
+
+#
+msgid "Posting Failure"
+msgstr ""
+
+#
+msgid "Remove Data"
+msgstr ""
+
+#
+msgid "Remove Settings"
+msgstr ""
+
+#
+msgid "Remove the plugin data (Submissions + Pictures)."
+msgstr ""
+
+#
+msgid "Remove the plugin settings."
+msgstr ""
+
+#
+msgid "RSS"
+msgstr ""
+
+#
+msgid "RSS Location"
+msgstr ""
+
+#
+msgid "Remove captcha for users who are already logged in."
+msgstr ""
+
+#
+msgid "Required Login"
+msgstr ""
+
+#
+msgid "Required for valid form validation."
+msgstr ""
+
+#
+msgid "Save"
+msgstr ""
+
+#
+msgid "Save Changes"
+msgstr ""
+
+#
+msgid "Settings"
+msgstr ""
+
+#
+msgid "Settings updated."
+msgstr ""
+
+#
+msgid "Show All"
+msgstr ""
+
+#
+msgid "Spam"
+msgstr ""
+
+#
+msgid "Spam Protection"
+msgstr ""
+
+#
+msgid "Status"
+msgstr ""
+
+#
+msgid "Submission"
+msgstr ""
+
+#
+msgid "Submission Template"
+msgstr ""
+
+#
+msgid "Submission Updated."
+msgstr ""
+
+#
+msgid "Submission author must be logged in."
+msgstr ""
+
+#
+msgid "Submission author must have a previously approved submission."
+msgstr ""
+
+#
+msgid "Submissions"
+msgstr ""
+
+#
+msgid "Submit News"
+msgstr ""
+
+#
+msgid "Submitted"
+msgstr ""
+
+#
+msgid "Submitted on: <b>%1$s</b>"
+msgstr ""
+
+#
+msgid "Successful Posted"
+msgstr ""
+
+#
+msgid "Template"
+msgstr ""
+
+#
+msgid "Text Color"
+msgstr ""
+
+#
+msgid "Textshadow Color"
+msgstr ""
+
+#
+msgid "The Community News you have added."
+msgstr ""
+
+#
+msgid "The image that will be used if no image is uploaded."
+msgstr ""
+
+#
+msgid "The image you are trying to upload is invalid."
+msgstr ""
+
+#
+msgid "The message displayed when a submission is added successfull."
+msgstr ""
+
+#
+msgid "The message displayed when a submission is awaiting moderation."
+msgstr ""
+
+#
+msgid "The message displayed when an error occured while adding a submission."
+msgstr ""
+
+#
+msgid "The message displayed when an image is uploaded witch is too big."
+msgstr ""
+
+#
+msgid "The message displayed when an invalid (malicious) image file is uploaded."
+msgstr ""
+
+#
+msgid "The message displayed when an invalid captcha value is entered."
+msgstr ""
+
+#
+msgid "The message displayed when an invalid email is filled in."
+msgstr ""
+
+#
+msgid "The message displayed when an user is required to log in."
+msgstr ""
+
+#
+msgid "The message displayed when more then one submission is added within 2 minutes."
+msgstr ""
+
+#
+msgid "The message displayed when not all required fields are filled in."
+msgstr ""
+
+#
+msgid "The template for a single submission.<br />You can use the following tags: <strong>%submission_author%</strong>, <strong>%submission_author_email%</strong>, <strong>%submission_title%</strong>, <strong>%submission_url%</strong>, <strong>%submission_description%</strong>, <strong>%submission_date%</strong>, <strong>%submission_image%</strong>."
+msgstr ""
+
+#
+msgid "These settings could be overwritten with values in your template tags."
+msgstr ""
+
+#
+msgid "Title"
+msgstr ""
+
+#
+msgid "To prevent spam, please type the text (all <strong>uppercase</strong>) from this image in the textbox below."
+msgstr ""
+
+#
+msgid "unapproved"
+msgstr ""
+
+#
+msgid "URL (%s):"
+msgstr ""
+
+#
+msgid "URL:"
+msgstr ""
+
+#
+msgid "Unapprove"
+msgstr ""
+
+#
+msgid "Unapprove this submission"
+msgstr ""
+
+#
+msgid "Uninstall"
+msgstr ""
+
+#
+msgid "View All"
+msgstr ""
+
+#
+msgid "What is this?"
+msgstr ""
+
+#
+msgid "Width:"
+msgstr ""
+
+#
+msgid "WordPress.com API Key"
+msgstr ""
+
+#
+msgid "submissions"
+msgstr ""
+
+#
+msgid "Submission Template"
+msgstr ""
+
+#
+msgid "visit site"
+msgstr ""
