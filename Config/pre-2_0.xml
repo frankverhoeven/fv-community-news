@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+	<version>Version</version>
+	<dbname>DbName</dbname>
+	<dbversion>DbVersion</dbversion>
+	<captchaEnabled>CaptchaEnabled</captchaEnabled>
+	<hideCaptchaLoggedIn>HideCaptchaLoggedIn</hideCaptchaLoggedIn>
+	<alwaysAdmin>AlwasAdmin</alwaysAdmin>
+	<previousApproved>PreviousApproved</previousApproved>
+	<mailOnSubmission>MailOnSubmission</mailOnSubmission>
+	<mailOnModeration>MailOnModeration</mailOnModeration>
+	<numSubmissions>NumSubmissions</numSubmissions>
+	<submissionTemplate>SubmssionTemplate</submissionTemplate>
+	<formTitle>FormTitle</formTitle>
+	<submissionsTitle>SubmissionTitle</submissionsTitle>
+	<rssEnabled>RssEnabled</rssEnabled>
+	<loggedIn>LoggedIn</loggedIn>
+	<mySubmissions>MySubmissions</mySubmissions>
+	<akismetEnabled>AkismetEnabled</akismetEnabled>
+	<incStyle>IncStyle</incStyle>
+	<akismetApiKey>AkismetApiKey</akismetApiKey>
+	<uploadDir>deprecated</uploadDir>
+	<responseOversizedImage>deprecated</responseOversizedImage>
+	<responseInvalidImage>deprecated</responseInvalidImage>
+	<responseInvalidEmail>deprecated</responseInvalidEmail>
+	<responseEmpty>deprecated</responseEmpty>
+	<responseSuccess>deprecated</responseSuccess>
+	<responseInvalidCaptcha>deprecated</responseInvalidCaptcha>
+	<responseBumping>deprecated</responseBumping>
+	<responseLoggedIn>deprecated</responseLoggedIn>
+	<responseFailure>deprecated</responseFailure>
+	<responseModeration>deprecated</responseModeration>
+	<defaultImage>deprecated</defaultImage>
+	<uploadImage>deprecated</uploadImage>
+	<maxImageW>deprecated</maxImageW>
+	<maxImageH>deprecated</maxImageH>
+	<numRSSItems>deprecated</numRSSItems>
+	<rssLocation>deprecated</rssLocation>
+	<maxTitleLength>deprecated</maxTitleLength>
+	<titleBreaker>deprecated</titleBreaker>
+	<maxDescriptionLength>deprecated</maxDescriptionLength>
+	<descriptionBreaker>deprecated</descriptionBreaker>
+	<captchaLength>deprecated</captchaLength>
+	<captchaBgColor>deprecated</captchaBgColor>
+	<captchaLColor>deprecated</captchaLColor>
+	<captchaTsColor>deprecated</captchaTsColor>
+	<captchaTColor>deprecated</captchaTColor>
+</config>
+
