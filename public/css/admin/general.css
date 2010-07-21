@@ -1,0 +1,40 @@
+@charset "UTF-8";
+
+/**
+ *
+ */
+#fvcn-admin-widget .comment-meta .approve {
+	font-family: 'Lucida Grande', Verdana, Arial, 'Bitstream Vera Sans', sans-serif;
+	font-size: 10px;
+	font-style: italic;
+}
+
+
+
+
+#fvcn-add-submission p {
+	margin: 0;
+	margin-bottom: 3px;
+}
+
+#fvcn-add-submission label {
+	margin-left: .5em;
+}
+
+#fvcn-add-submission label sup {
+	color: #c00;
+	font-size: .8em;
+}
+
+#fvcn-add-submission .fvcn_ErrorMessage {
+	color: #c33;
+	font-size: .9em;
+	margin: -.2em 0 .2em .6em;
+	display: block;
+}
+
+#fvcn-add-submission input[type=text], #fvcn-add-submission textarea {
+	width: 170px;
+}
+
+
