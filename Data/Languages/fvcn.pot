@@ -1,0 +1,583 @@
+# Translation of the WordPress plugin   by .
+# Copyright (C) 2010 
+# This file is distributed under the same license as the  package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/fv-community-news\n"
+"POT-Creation-Date: 2010-07-21 12:46+0000\n"
+"PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: Application/Admin/Dashboard.php:24
+msgid "Recent Submissions"
+msgstr ""
+
+#: Application/Admin/EditSubmission.php:9
+#: Application/Admin/ManageSubmissions.php:12
+#: Application/Admin/MySubmissions.php:11 Application/Admin/Request.php:22
+#: Application/Admin/Request.php:79 Application/Admin/Request.php:98
+#: Application/Admin/Request.php:125 Application/Admin/Settings.php:8
+#: Application/Admin/Uninstall.php:8
+msgid "Cheatin&#8217; uh?"
+msgstr ""
+
+#: Application/Admin/ManageSubmissions.php:37
+#: Application/Admin/MySubmissions.php:37
+#, php-format
+msgid "Displaying %s&#8211;%s of %s"
+msgstr ""
+
+#: Application/Admin/ManageSubmissions.php:44
+#: Application/Admin/MySubmissions.php:44
+msgid "&laquo;"
+msgstr ""
+
+#: Application/Admin/ManageSubmissions.php:45
+#: Application/Admin/MySubmissions.php:45
+msgid "&raquo;"
+msgstr ""
+
+#: Application/Admin/Menu.php:19
+#: Application/View/Admin/ManageSubmissions.php:7
+msgid "Manage Submissions"
+msgstr ""
+
+#: Application/Admin/Menu.php:20 Application/Admin/Menu.php:40
+#: Application/Admin/Menu.php:41
+msgid "Submissions"
+msgstr ""
+
+#: Application/Admin/Menu.php:25 Application/View/Admin/Settings.php:6
+msgid "Community News Settings"
+msgstr ""
+
+#: Application/Admin/Menu.php:25
+msgid "Settings"
+msgstr ""
+
+#: Application/Admin/Menu.php:26 Application/View/Admin/Uninstall.php:2
+msgid "Community News Uninstall"
+msgstr ""
+
+#: Application/Admin/Menu.php:26 Application/View/Admin/Uninstall.php:42
+msgid "Uninstall"
+msgstr ""
+
+#: Application/Admin/Menu.php:31 Application/View/Admin/MySubmissions.php:2
+#: Application/View/Admin/Settings.php:54
+#: Application/View/Admin/Settings.php:56
+msgid "My Submissions"
+msgstr ""
+
+#: Application/Admin/Request.php:41
+msgid "approved"
+msgstr ""
+
+#: Application/Admin/Request.php:45
+msgid "unapproved"
+msgstr ""
+
+#: Application/Admin/Request.php:49
+msgid "marked as spam"
+msgstr ""
+
+#: Application/Admin/Request.php:52
+msgid "deleted"
+msgstr ""
+
+#: Application/Admin/Request.php:69
+#, php-format
+msgid "%d submissions %s."
+msgstr ""
+
+#: Application/Admin/Request.php:71
+#, php-format
+msgid "One submission %s."
+msgstr ""
+
+#: Application/Admin/Request.php:93
+msgid "Submission updated."
+msgstr ""
+
+#: Application/Admin/Request.php:132
+msgid "Incorrect confirm code."
+msgstr ""
+
+#: Application/AjaxRequest/AddSubmission.php:14
+msgid "Your submission has been added. Thank you!"
+msgstr ""
+
+#: Application/AjaxRequest/AddSubmission.php:17
+msgid "Validation errors occured, please fix them."
+msgstr ""
+
+#: Application/SubmissionsArchive.php:36
+msgid "Next &raquo;"
+msgstr ""
+
+#: Application/SubmissionsArchive.php:37
+msgid "&laquo; Previous"
+msgstr ""
+
+#: Application/View/Admin/Dashboard.php:14
+#, php-format
+msgid "%1$s from %2$s %3$s"
+msgstr ""
+
+#: Application/View/Admin/Dashboard.php:17
+msgid "[Pending]"
+msgstr ""
+
+#: Application/View/Admin/Dashboard.php:27
+#: Application/View/Admin/ManageSubmissions.php:48
+#: Application/View/Admin/ManageSubmissions.php:98
+#: Application/View/Admin/ManageSubmissions.php:141
+msgid "Approve"
+msgstr ""
+
+#: Application/View/Admin/Dashboard.php:33
+#: Application/View/Admin/ManageSubmissions.php:49
+#: Application/View/Admin/ManageSubmissions.php:104
+#: Application/View/Admin/ManageSubmissions.php:142
+msgid "Unapprove"
+msgstr ""
+
+#: Application/View/Admin/Dashboard.php:43
+#: Application/View/Admin/ManageSubmissions.php:113
+msgid "Edit"
+msgstr ""
+
+#: Application/View/Admin/Dashboard.php:49
+#: Application/View/Admin/EditSubmission.php:43
+#: Application/View/Admin/ManageSubmissions.php:31
+#: Application/View/Admin/ManageSubmissions.php:50
+#: Application/View/Admin/ManageSubmissions.php:119
+#: Application/View/Admin/ManageSubmissions.php:143
+msgid "Spam"
+msgstr ""
+
+#: Application/View/Admin/Dashboard.php:55
+#: Application/View/Admin/EditSubmission.php:56
+#: Application/View/Admin/ManageSubmissions.php:51
+#: Application/View/Admin/ManageSubmissions.php:125
+#: Application/View/Admin/ManageSubmissions.php:144
+msgid "Delete"
+msgstr ""
+
+#: Application/View/Admin/Dashboard.php:64
+msgid "View all"
+msgstr ""
+
+#: Application/View/Admin/Dashboard.php:71
+msgid "No submissions yet."
+msgstr ""
+
+#: Application/View/Admin/DashboardSettings.php:2
+msgid "Number of submissions to show:"
+msgstr ""
+
+#: Application/View/Admin/DashboardSettings.php:4
+msgid "(at most 30)"
+msgstr ""
+
+#: Application/View/Admin/EditSubmission.php:2
+msgid "Edit Submission"
+msgstr ""
+
+#: Application/View/Admin/EditSubmission.php:23
+msgid "Status"
+msgstr ""
+
+#: Application/View/Admin/EditSubmission.php:29
+msgid "Back"
+msgstr ""
+
+#: Application/View/Admin/EditSubmission.php:37
+#: Application/View/Admin/ManageSubmissions.php:21
+msgid "Approved"
+msgstr ""
+
+#: Application/View/Admin/EditSubmission.php:40
+#: Application/View/Admin/ManageSubmissions.php:26
+msgid "Pending"
+msgstr ""
+
+#: Application/View/Admin/EditSubmission.php:48
+#, php-format
+msgid "Submitted on: <b>%1$s</b>"
+msgstr ""
+
+#: Application/View/Admin/EditSubmission.php:48
+msgid "M j, Y @ G:i"
+msgstr ""
+
+#: Application/View/Admin/EditSubmission.php:59
+msgid "Save"
+msgstr ""
+
+#: Application/View/Admin/EditSubmission.php:71
+msgid "Details"
+msgstr ""
+
+#: Application/View/Admin/EditSubmission.php:76
+msgid "Author:"
+msgstr ""
+
+#: Application/View/Admin/EditSubmission.php:80
+msgid "E-mail:"
+msgstr ""
+
+#: Application/View/Admin/EditSubmission.php:84
+msgid "Title:"
+msgstr ""
+
+#: Application/View/Admin/EditSubmission.php:91
+msgid "visit site"
+msgstr ""
+
+#: Application/View/Admin/EditSubmission.php:92
+#, php-format
+msgid "URL (%s):"
+msgstr ""
+
+#: Application/View/Admin/EditSubmission.php:94
+msgid "URL:"
+msgstr ""
+
+#: Application/View/Admin/EditSubmission.php:124
+msgid "Invallid submission selected"
+msgstr ""
+
+#: Application/View/Admin/EditSubmission.php:125
+msgid "&laquo; Go Back"
+msgstr ""
+
+#: Application/View/Admin/ManageSubmissions.php:16
+msgid "Show All"
+msgstr ""
+
+#: Application/View/Admin/ManageSubmissions.php:47
+#: Application/View/Admin/ManageSubmissions.php:140
+msgid "Bulk Actions"
+msgstr ""
+
+#: Application/View/Admin/ManageSubmissions.php:53
+#: Application/View/Admin/ManageSubmissions.php:146
+msgid "Apply"
+msgstr ""
+
+#: Application/View/Admin/ManageSubmissions.php:62
+#: Application/View/Admin/ManageSubmissions.php:70
+#: Application/View/Admin/MySubmissions.php:16
+#: Application/View/Admin/MySubmissions.php:23
+msgid "Author"
+msgstr ""
+
+#: Application/View/Admin/ManageSubmissions.php:63
+#: Application/View/Admin/ManageSubmissions.php:71
+#: Application/View/Admin/MySubmissions.php:17
+#: Application/View/Admin/MySubmissions.php:24
+msgid "Submission"
+msgstr ""
+
+#: Application/View/Admin/ManageSubmissions.php:87
+#: Application/View/Admin/MySubmissions.php:39
+msgid "Y/m/d \\a\\t g:i A"
+msgstr ""
+
+#: Application/View/Admin/ManageSubmissions.php:156
+#: Application/View/ListSubmissions.php:3
+#: Application/View/SubmissionsArchive.php:3
+msgid "No submissions found."
+msgstr ""
+
+#: Application/View/Admin/MySubmissions.php:60
+msgid "No approved submissions found."
+msgstr ""
+
+#: Application/View/Admin/MySubmissions.php:64
+msgid "Add News"
+msgstr ""
+
+#: Application/View/Admin/Settings.php:11
+msgid "General"
+msgstr ""
+
+#: Application/View/Admin/Settings.php:12
+#: Application/View/Admin/Settings.php:65
+msgid "Spam Protection"
+msgstr ""
+
+#: Application/View/Admin/Settings.php:13
+#: Application/View/Admin/Settings.php:109
+msgid "Template"
+msgstr ""
+
+#: Application/View/Admin/Settings.php:14
+#: Application/View/Admin/Settings.php:131
+msgid "RSS"
+msgstr ""
+
+#: Application/View/Admin/Settings.php:15
+#: Application/View/Admin/Settings.php:147
+msgid "Appearance"
+msgstr ""
+
+#: Application/View/Admin/Settings.php:24
+#: Application/View/Admin/Settings.php:25
+msgid "General Settings"
+msgstr ""
+
+#: Application/View/Admin/Settings.php:28
+#: Application/View/Admin/Settings.php:30
+msgid "Before a submission appears"
+msgstr ""
+
+#: Application/View/Admin/Settings.php:33
+msgid "An administrator must always approve the submission."
+msgstr ""
+
+#: Application/View/Admin/Settings.php:37
+msgid "Submission author must have a previously approved submission."
+msgstr ""
+
+#: Application/View/Admin/Settings.php:41
+#: Application/View/Admin/Settings.php:43
+msgid "E-mail me whenever"
+msgstr ""
+
+#: Application/View/Admin/Settings.php:46
+msgid "Anyone posts a submission."
+msgstr ""
+
+#: Application/View/Admin/Settings.php:50
+msgid "A submission is held for moderation."
+msgstr ""
+
+#: Application/View/Admin/Settings.php:59
+msgid ""
+"Add a `My Submissions` page where registered users could view and add their "
+"submissions."
+msgstr ""
+
+#: Application/View/Admin/Settings.php:66
+msgid "Get rid of those spammers."
+msgstr ""
+
+#: Application/View/Admin/Settings.php:69
+#: Application/View/Admin/Settings.php:71
+msgid "Akismet"
+msgstr ""
+
+#: Application/View/Admin/Settings.php:74
+msgid "Enable Akismet spam protection."
+msgstr ""
+
+#: Application/View/Admin/Settings.php:79
+msgid "WordPress.com API Key"
+msgstr ""
+
+#: Application/View/Admin/Settings.php:80
+msgid "Get a key"
+msgstr ""
+
+#: Application/View/Admin/Settings.php:80
+msgid "What is this?"
+msgstr ""
+
+#: Application/View/Admin/Settings.php:83
+#: Application/View/Admin/Settings.php:85
+msgid "Authentication"
+msgstr ""
+
+#: Application/View/Admin/Settings.php:88
+msgid "Submission author must be logged in."
+msgstr ""
+
+#: Application/View/Admin/Settings.php:93
+msgid "Enable Captcha"
+msgstr ""
+
+#: Application/View/Admin/Settings.php:95
+msgid "Enable a Captcha Image"
+msgstr ""
+
+#: Application/View/Admin/Settings.php:98
+msgid "Enable the use of a captcha."
+msgstr ""
+
+#: Application/View/Admin/Settings.php:102
+msgid "Remove captcha for users who are already logged in."
+msgstr ""
+
+#: Application/View/Admin/Settings.php:110
+msgid "These settings could be overwritten with values in your template tags."
+msgstr ""
+
+#: Application/View/Admin/Settings.php:113
+msgid "Number of Submissions"
+msgstr ""
+
+#: Application/View/Admin/Settings.php:117
+#: Application/View/Admin/Settings.php:119
+msgid "Submission Template"
+msgstr ""
+
+#: Application/View/Admin/Settings.php:121
+msgid ""
+"The template for a single submission.<br />You can use the following tags: "
+"<strong>%submission_author%, %submission_author_email%, %submission_title%, %"
+"submission_url%, %submission_description%, %submission_date%, %"
+"submission_image%</strong>."
+msgstr ""
+
+#: Application/View/Admin/Settings.php:132
+msgid "Configure your Community News RSS 2.0 feed."
+msgstr ""
+
+#: Application/View/Admin/Settings.php:135
+msgid "Enable RSS Feed"
+msgstr ""
+
+#: Application/View/Admin/Settings.php:137
+msgid "Enable the RSS Feed"
+msgstr ""
+
+#: Application/View/Admin/Settings.php:140
+msgid "Enable the RSS 2.0 Feed."
+msgstr ""
+
+#: Application/View/Admin/Settings.php:148
+msgid "Change the look of the plugin."
+msgstr ""
+
+#: Application/View/Admin/Settings.php:151
+#: Application/View/Admin/Settings.php:153
+msgid "Include StyleSheet"
+msgstr ""
+
+#: Application/View/Admin/Settings.php:156
+msgid "Include a simple stylesheet to change the look of this plugin."
+msgstr ""
+
+#: Application/View/Admin/Settings.php:163
+msgid "Save Changes"
+msgstr ""
+
+#: Application/View/Admin/Uninstall.php:10
+msgid "After the uninstall, you should manually remove the plugin files."
+msgstr ""
+
+#: Application/View/Admin/Uninstall.php:13
+#: Application/View/Admin/Uninstall.php:15
+msgid "Remove Settings"
+msgstr ""
+
+#: Application/View/Admin/Uninstall.php:18
+msgid "Remove the plugin settings."
+msgstr ""
+
+#: Application/View/Admin/Uninstall.php:23
+#: Application/View/Admin/Uninstall.php:25
+msgid "Remove Data"
+msgstr ""
+
+#: Application/View/Admin/Uninstall.php:28
+msgid "Remove the plugin data (Submissions)."
+msgstr ""
+
+#: Application/View/Admin/Uninstall.php:33
+msgid "Confirm"
+msgstr ""
+
+#: Application/View/Admin/Uninstall.php:36
+msgid "Code:"
+msgstr ""
+
+#: Application/View/Admin/Uninstall.php:37
+msgid "Please type the code to confirm your uninstall."
+msgstr ""
+
+#: Application/View/Form/AddSubmission.php:3
+msgid "You must be logged in to add a submission."
+msgstr ""
+
+#: Application/View/Form/AddSubmission.php:7
+msgid "Your submission has been added, thank you!"
+msgstr ""
+
+#: Application/View/Form/AddSubmission.php:14
+msgid "Name"
+msgstr ""
+
+#: Application/View/Form/AddSubmission.php:14
+#: Application/View/Form/AddSubmission.php:19
+#: Application/View/Form/AddSubmission.php:24
+#: Application/View/Form/AddSubmission.php:36
+#: Application/View/Form/AddSubmission.php:45
+#: Application/View/Form/AddSubmission.php:56
+msgid "Required for valid form validation."
+msgstr ""
+
+#: Application/View/Form/AddSubmission.php:19
+msgid "Email"
+msgstr ""
+
+#: Application/View/Form/AddSubmission.php:24
+#: Application/View/Widget/FormSettings.php:2
+#: Application/View/Widget/ListSettings.php:2
+msgid "Title"
+msgstr ""
+
+#: Application/View/Form/AddSubmission.php:29
+msgid "URL"
+msgstr ""
+
+#: Application/View/Form/AddSubmission.php:36
+msgid "Captcha"
+msgstr ""
+
+#: Application/View/Form/AddSubmission.php:45
+#: Application/View/Widget/FormSettings.php:6
+msgid "Description"
+msgstr ""
+
+#: Application/View/Form/AddSubmission.php:56
+msgid "Phone Number"
+msgstr ""
+
+#: Application/View/Form/AddSubmission.php:64
+msgid "Submit News"
+msgstr ""
+
+#: Application/View/Form/AddSubmission.php:72
+msgid "Loading"
+msgstr ""
+
+#: Application/View/WpHead.php:2
+msgid "Community News RSS Feed"
+msgstr ""
+
+#: Application/Widget/Form.php:14
+msgid "The Add Submission form."
+msgstr ""
+
+#: Application/Widget/Form.php:15
+msgid "Community News Form"
+msgstr ""
+
+#: Application/Widget/List.php:14
+msgid "The Submissions list."
+msgstr ""
+
+#: Application/Widget/List.php:15
+msgid "Community News Submissions"
+msgstr ""

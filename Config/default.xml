@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+	<Version type="string">1.4</Version>
+	<DbName type="string">fv_community_news</DbName>
+	<DbVersion type="string">2.0</DbVersion>
+	<SubmissionTemplate type="string"><![CDATA[<li>
+	<h4><a href="%submission_url%">%submission_title%</a></h4>
+	<small>%submission_date%</small>
+	%submission_description%
+</li>]]></SubmissionTemplate>
+	<FormTitle type="string">Add News</FormTitle>
+	<SubmissionsTitle type="string">Community News</SubmissionsTitle>
+	<AkismetApiKey type="string"></AkismetApiKey>
+	<RssLocation type="string">community-news.rss</RssLocation>
+	<NumSubmissions type="int">4</NumSubmissions>
+	<DashboardNumSubmissions type="int">4</DashboardNumSubmissions>
+	<AlwaysAdmin type="bool">false</AlwaysAdmin>
+	<PreviousApproved type="bool">true</PreviousApproved>
+	<AutoSpamDeletion type="bool">true</AutoSpamDeletion>
+	<MailOnSubmission type="bool">false</MailOnSubmission>
+	<MailOnModeration type="bool">true</MailOnModeration>
+	<IncStyle type="bool">true</IncStyle>
+	<MySubmissions type="bool">false</MySubmissions>
+	<AkismetEnabled type="bool">false</AkismetEnabled>
+	<LoggedIn type="bool">false</LoggedIn>
+	<RssEnabled type="bool">true</RssEnabled>
+	<CaptchaEnabled type="bool">false</CaptchaEnabled>
+	<HideCaptchaLoggedIn type="bool">true</HideCaptchaLoggedIn>
+	<Tracking type="bool">false</Tracking>
+</config>
