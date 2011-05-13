@@ -95,7 +95,7 @@ class FvCommunityNews_Forms_AddPost extends FvCommunityNews_Form {
 			array(
 				new FvCommunityNews_Form_Filter_Trim(),
 				new FvCommunityNews_Form_Filter_Stripslashes(),
-				new FvCommunityNews_Form_Filter_Specialchars(),
+				new FvCommunityNews_Form_Filter_SpecialChars(),
 			)
 		));
 		
