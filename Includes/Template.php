@@ -30,6 +30,12 @@ class FvCommunityNews_Template {
 	protected $_customTemplateDir = '/fvcn/';
 	
 	/**
+	 *	Template Path
+	 *	@var string
+	 */
+	protected $_templatePath = null;
+	
+	/**
 	 *	Custom templates enabled
 	 *	@var bool
 	 */
@@ -109,8 +115,11 @@ class FvCommunityNews_Template {
 	 *
 	 */
 	public function __construct() {
-		$this->setTemplateDir(FVCN_PLUGIN_DIR . $this->getTemplateDir());
-		$this->setCustomTemplateDir(get_theme_root() . $this->getCustomTemplateDir());
+		if (is_dir(get_theme_root() . $this->getCustomTemplateDir())) {
+			$this->setTemplatePath(get_theme_root() . $this->getCustomTemplateDir());
+		} else {
+			$this->setTemplatePath(FVCN_PLUGIN_DIR . $this->getTemplateDir());
+		}
 	}
 	
 	/**
@@ -120,10 +129,6 @@ class FvCommunityNews_Template {
 	 *		@return object $this
 	 */
 	public function setTemplateDir($templateDir) {
-		if (!is_dir($templateDir)) {
-			throw new Exception('Template directory does not exist');
-		}
-		
 		$this->_templateDir = $templateDir;
 		return $this;
 	}
@@ -144,14 +149,6 @@ class FvCommunityNews_Template {
 	 *		@return object $this
 	 */
 	public function setCustomTemplateDir($customTemplateDir) {
-		if (!$this->_customTemplateEnabled) {
-			return $this;
-		}
-		
-		if (!is_dir($customTemplateDir)) {
-			throw new Exception('Custom template directory does not exist');
-		}
-		
 		$this->_customTemplateDir = $customTemplateDir;
 		return $this;
 	}
@@ -166,6 +163,51 @@ class FvCommunityNews_Template {
 	}
 	
 	/**
+	 *		setAdminTemplateDir()
+	 *
+	 *		@param string $adminTemplateDir
+	 *		@return object $this
+	 */
+	public function setAdminTemplateDir($adminTemplateDir) {
+		$this->_adminTemplateDir = $adminTemplateDir;
+		return $this;
+	}
+	
+	/**
+	 *		getAdminTemplateDir()
+	 *
+	 *		@return string
+	 */
+	public function getAdminTemplateDir() {
+		return $this->_adminTemplateDir;
+	}
+	
+	/**
+	 *		setTemplatePath()
+	 *
+	 *		@param string $templatePath
+	 *		@return object $this
+	 */
+	public function setTemplatePath($templatePath) {
+		$this->_templatePath = $templatePath;
+		return $this;
+	}
+	
+	/**
+	 *		getTemplatePath()
+	 *
+	 *		@param bool $admin
+	 *		@return string
+	 */
+	public function getTemplatePath($admin=false) {
+		if (!$admin) {
+			return $this->_templatePath;
+		} else {
+			return FVCN_PLUGIN_DIR . $this->getAdminTemplateDir();
+		}
+	}
+	
+	/**
 	 *		render()
 	 *
 	 *		@param string $name
@@ -175,22 +217,36 @@ class FvCommunityNews_Template {
 			throw new Exception('Invallid template file selected');
 		}
 		
-		if ('admin' == $this->_templateFiles[ $name ]['access']) {
-			$file = FVCN_PLUGIN_DIR . $this->_adminTemplateDir . $this->_templateFiles[ $name ]['file'];
-		} else if ($this->_customTemplateEnabled && 'public' == $this->_templateFiles[ $name ]['access']) {
-			$file = $this->getCustomTemplateDir() . $this->_templateFiles[ $name ]['file'];
-		} else {
-			$file = $this->getTemplateDir() . $this->_templateFiles[ $name ]['file'];
-		}
+		$file = $this->getTemplatePath('admin' == $this->_templateFiles[ $name ]['access']) . $this->_templateFiles[ $name ]['file'];
 		
 		if (!file_exists($file)) {
 			throw new Exception('Template file does not exist');
 		}
 		
-		require $file;
+		include $file;
 	}
 	
+	/**
+	 *		__set()
+	 *
+	 *		@param string $name
+	 *		@param mixed $value
+	 */
+	public function __set($name, $value) {
+		$this->_savedVars[ $name ] = $value;
+	}
 	
+	/**
+	 *		__get()
+	 *
+	 *		@param string $name
+	 *		@return mixed
+	 */
+	public function __get($name) {
+		if (array_key_exists($name, $this->_savedVars))
+			return $this->_savedVars[ $name ];
+		return;
+	}
 	
 	/**
 	 *		setInstance()
@@ -220,26 +276,5 @@ class FvCommunityNews_Template {
 		return self::$_instance;
 	}
 	
-	/**
-	 *		__set()
-	 *
-	 *		@param string $name
-	 *		@param mixed $value
-	 */
-	public function __set($name, $value) {
-		$this->_savedVars[ $name ] = $value;
-	}
-	
-	/**
-	 *		__get()
-	 *
-	 *		@param string $name
-	 *		@return mixed
-	 */
-	public function __get($name) {
-		if (array_key_exists($name, $this->_savedVars))
-			return $this->_savedVars[ $name ];
-		return;
-	}
-	
 }
+
