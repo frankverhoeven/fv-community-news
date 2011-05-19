@@ -56,7 +56,6 @@ class FvCommunityNews_Forms_AddPost extends FvCommunityNews_Form {
 			__('Title', 'fvcn'),
 			array(
 				new FvCommunityNews_Form_Validator_NotEmpty(),
-				new FvCommunityNews_Form_Validator_Alnum(true),
 			),
 			array(
 				new FvCommunityNews_Form_Filter_Trim(),

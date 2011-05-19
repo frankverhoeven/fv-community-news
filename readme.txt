@@ -5,7 +5,7 @@ Donate link:		https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=SB62
 Tags:			Community, News, Widget, Custom Posting, Post, Form, Akismet, Ajax
 Requires at least:	3.0
 Tested up to:		3.1.2
-Stable tag:		2.0.1
+Stable tag:		2.0.2
 
 Give the visitors of your site the ability to submit their news to you, and list it in a nice news feed.
 
@@ -224,9 +224,15 @@ Other functions.
 For more details on changes, please visit the [WordPress Trac](http://plugins.trac.wordpress.org/log/fv-community-news/ "FV Community News on WordPress Trac").
 
 
+= 2.0.2 =
+
+* Removed alnum validator on the title field.
+
+
 = 2.0.1 =
 
 * Fixed a bug that prevented the use of custom templates.
+
 
 = 2.0 =
 
