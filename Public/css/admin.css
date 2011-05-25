@@ -1,0 +1,78 @@
+@charset "UTF-8";
+
+/**
+ *		admin.css
+ *
+ *		Style fixes
+ *
+ *		@version 2.0
+ */
+
+.toplevel_page_fvcn-admin {
+	font-size: 10px !important;
+}
+#toplevel_page_fvcn-admin .wp-menu-image {
+	background: url(../images/menu-icon.png) no-repeat -1px -1px;
+}
+#toplevel_page_fvcn-admin:hover .wp-menu-image, #toplevel_page_fvcn-admin.wp-has-current-submenu .wp-menu-image {
+	background: url(../images/menu-icon.png) no-repeat -1px -33px;
+}
+
+#adminmenu #fvcn-awaiting-mod {
+	position: absolute;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 9px;
+	line-height: 17px;
+	font-weight: bold;
+	margin-top: 1px;
+	margin-left: 7px;
+	-moz-border-radius: 10px;
+	-khtml-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+}
+#adminmenu li #fvcn-awaiting-mod span {
+	display: block;
+	padding: 0 6px;
+}
+#adminmenu #fvcn-awaiting-mod {
+	background-color: #464646;
+	color: #fff;
+	-moz-box-shadow: #fff 0 -1px 0;
+	-khtml-box-shadow: #fff 0 -1px 0;
+	-webkit-box-shadow: #fff 0 -1px 0;
+	box-shadow: #fff 0 -1px 0;
+}
+#adminmenu li.current a #fvcn-awaiting-mod {
+	background-color: #464646;
+	color: #fff;
+	-moz-box-shadow: #fff 0 -1px 0;
+	-khtml-box-shadow: #fff 0 -1px 0;
+	-webkit-box-shadow: #fff 0 -1px 0;
+	box-shadow: #fff 0 -1px 0;
+}
+
+.fvcn-actions .spam a, .fvcn-actions .trash a {
+	color: #bc0b0b;
+}
+.fvcn-actions .approve a, .fvcn-actions .unspam a {
+	color: #006505;
+}
+
+#fvcn-form label {
+	display: block;
+	margin: 4px 0 0 6px;
+	width: 150px;
+}
+#fvcn-form input[type="text"] {
+	width: 180px;
+}
+#fvcn-form textarea {
+	width: 180px;
+	height: 55px;
+}
+.fvcn-error {
+	margin: 2px 4px;
+	color: #bc0b0b;
+	font-size: .9em;
+}
