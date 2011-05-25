@@ -6,10 +6,10 @@
  *	Description:	Give the visitors of your site the ability to submit their news to you, and list it in a nice news feed.
  *	Author:			Frank Verhoeven
  *	Author URI:		http://www.frank-verhoeven.com
- *	Version:		2.0.2
+ *	Version:		2.0.3
  */
 
-define('FVCN_VERSION', '2.0.2');
+define('FVCN_VERSION', '2.0.3');
 
 /**
  *		FvCommunityNews.php

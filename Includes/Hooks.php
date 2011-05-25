@@ -34,6 +34,7 @@ class FvCommunityNews_Hooks {
 		'post_title'	=> array(
 			array('sanitize_text_field'),
 			array('wp_kses_data'),
+			array('stripslashes', 12),
 			array('_wp_specialchars', 30),
 		),
 		'post_content'	=> array(
@@ -59,6 +60,7 @@ class FvCommunityNews_Hooks {
 			array('wp_strip_all_tags'),
 			array('esc_url'),
 			array('wp_kses_data'),
+			array('stripslashes', 12),
 		),
 		'post_pre_author'	=> array(
 			array('sanitize_text_field'),

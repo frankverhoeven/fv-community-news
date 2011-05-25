@@ -4,8 +4,8 @@ Contributors:		frankverhoeven
 Donate link:		https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=SB62B7H867Y4C&lc=US&item_name=Frank%20Verhoeven&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted
 Tags:			Community, News, Widget, Custom Posting, Post, Form, Akismet, Ajax
 Requires at least:	3.0
-Tested up to:		3.1.2
-Stable tag:		2.0.2
+Tested up to:		3.2
+Stable tag:		2.0.3
 
 Give the visitors of your site the ability to submit their news to you, and list it in a nice news feed.
 
@@ -222,6 +222,11 @@ Other functions.
 == Changelog ==
 
 For more details on changes, please visit the [WordPress Trac](http://plugins.trac.wordpress.org/log/fv-community-news/ "FV Community News on WordPress Trac").
+
+
+= 2.0.3 =
+
+* Fixed a bug that caused qoutes to display with slashes in the post title.
 
 
 = 2.0.2 =
