@@ -22,7 +22,7 @@ add_action('plugins_loaded',		'fvcn_loaded',						10 	);
 add_action('init',					'fvcn_init',						10 	);
 add_action('widgets_init',			'fvcn_widgets_init',				10  );
 add_action('wp_enqueue_scripts',	'fvcn_enqueue_scripts',				10  );
-add_action('after_setup_theme',		'fvcn_add_thumbnail_theme_support',	10  );
+add_action('after_setup_theme',		'fvcn_add_thumbnail_theme_support',	999 );
 add_filter('template_include',		'fvcn_template_include',			10  );
 
 

@@ -452,7 +452,7 @@ function fvcn_post_time($postId=0, $format='', $gmt=false) {
 /**
  * fvcn_has_post_thumbnail()
  *
- * @version 20120311
+ * @version 20120801
  * @param int $postId
  * @return bool
  */
@@ -460,7 +460,12 @@ function fvcn_has_post_thumbnail($postId=0)
 {
 	$id = fvcn_get_post_id($postId);
 	
-	return has_post_thumbnail($id);
+	// Double thumbnail display fix.
+	if ('the_content' != current_filter() || (fvcn_is_single_post($id) && false === FvCommunityNews_Registry::get('nativeThumbnailSupport'))) {
+		return has_post_thumbnail($id);
+	} else {
+		return false;
+	}
 }
 
 

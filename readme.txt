@@ -5,7 +5,7 @@ Donate link:		https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=SB62
 Tags:				Community News, Community, News, Widget, Custom Post, Custom Posting, Post, Form, Akismet, Ajax
 Requires at least:	3.3
 Tested up to:		3.4
-Stable tag:			3.0
+Stable tag:			3.0.1
 
 Give the visitors of your site the ability to submit their news to you, and list it in a nice news feed.
 
@@ -113,6 +113,11 @@ If you're still using version 1.x, you will have to update to version 2 first.
 == Changelog ==
 
 For more details on changes, please visit the [WordPress Trac](http://plugins.trac.wordpress.org/log/fv-community-news/ "FV Community News on WordPress Trac").
+
+
+= 3.0.1 =
+
+* Fix an issue that caused post thumbnails to display twice on certain themes.
 
 
 = 3.0 =

@@ -1,28 +1,28 @@
 <?php
 
 /**
- *	fvcn-common-functions.php
+ * fvcn-common-functions.php
  *
- *	Common Functions
+ * Common Functions
  *
- *	@package	FV Community News
- *	@subpackage	Functions
- *	@author		Frank Verhoeven
+ * @package		FV Community News
+ * @subpackage	Functions
+ * @author		Frank Verhoeven <info@frank-verhoeven.com>
  */
 
 if (!defined('ABSPATH')) {
-	die('Direct access is not allowed!');
+	exit;
 }
 
 
 /**
- *	fvcn_add_error()
+ * fvcn_add_error()
  *
- *	@version 20120229
- *	@param string $code
- *	@param string $message
- *	@param string $data
- *	@return void
+ * @version 20120229
+ * @param string $code
+ * @param string $message
+ * @param string $data
+ * @return void
  */
 function fvcn_add_error($code='', $message='', $data='')
 {
@@ -30,10 +30,10 @@ function fvcn_add_error($code='', $message='', $data='')
 }
 
 /**
- *	fvcn_has_errors()
+ * fvcn_has_errors()
  *
- *	@version 20120229
- *	@return bool
+ * @version 20120229
+ * @return bool
  */
 function fvcn_has_errors()
 {
@@ -47,21 +47,28 @@ function fvcn_has_errors()
 }
 
 /**
- *	fvcn_add_featured_image_theme_support()
+ * fvcn_add_featured_image_theme_support()
  *
- *	@version 20120306
- *	@return void
+ * @version 20120801
+ * @return void
  */
 function fvcn_add_thumbnail_theme_support()
 {
+	// Double thumbnail display fix.
+	if (true === get_theme_support( 'post-thumbnails' ) ) {
+		FvCommunityNews_Registry::set('nativeThumbnailSupport', true);
+	} else {
+		FvCommunityNews_Registry::set('nativeThumbnailSupport', false);
+	}
+	
 	add_theme_support('post-thumbnails', array(fvcn_get_post_type(), fvcn_get_post_slug()));
 }
 
 /**
- *	fvcn_get_public_post_status()
+ * fvcn_get_public_post_status()
  *
- *	@version 20120710
- *	@return string
+ * @version 20120710
+ * @return string
  */
 function fvcn_get_public_post_status()
 {
@@ -69,10 +76,10 @@ function fvcn_get_public_post_status()
 }
 
 /**
- *	fvcn_get_trash_post_status()
+ * fvcn_get_trash_post_status()
  *
- *	@version 20120710
- *	@return string
+ * @version 20120710
+ * @return string
  */
 function fvcn_get_trash_post_status()
 {
@@ -80,10 +87,10 @@ function fvcn_get_trash_post_status()
 }
 
 /**
- *	fvcn_get_private_post_status()
+ * fvcn_get_private_post_status()
  *
- *	@version 20120710
- *	@return string
+ * @version 20120710
+ * @return string
  */
 function fvcn_get_private_post_status()
 {
@@ -91,10 +98,10 @@ function fvcn_get_private_post_status()
 }
 
 /**
- *	fvcn_get_pending_post_status()
+ * fvcn_get_pending_post_status()
  *
- *	@version 20120710
- *	@return string
+ * @version 20120710
+ * @return string
  */
 function fvcn_get_pending_post_status()
 {
@@ -102,10 +109,10 @@ function fvcn_get_pending_post_status()
 }
 
 /**
- *	fvcn_get_spam_post_status()
+ * fvcn_get_spam_post_status()
  *
- *	@version 20120710
- *	@return string
+ * @version 20120710
+ * @return string
  */
 function fvcn_get_spam_post_status()
 {
@@ -113,12 +120,12 @@ function fvcn_get_spam_post_status()
 }
 
 /**
- *	fvcn_fix_post_author()
+ * fvcn_fix_post_author()
  *
- *	@version 20120321
- *	@param array $data
- *	@param array $postarr
- *	@return array
+ * @version 20120321
+ * @param array $data
+ * @param array $postarr
+ * @return array
  */
 function fvcn_fix_post_author($data = array(), $postarr = array())
 {
