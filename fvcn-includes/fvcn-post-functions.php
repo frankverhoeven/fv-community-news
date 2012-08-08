@@ -89,7 +89,7 @@ function fvcn_insert_post_thumbnail($postId)
 /**
  * fvcn_new_post_handler()
  *
- * @version 20120712
+ * @version 20120808
  * @return void
  */
 function fvcn_new_post_handler()
@@ -132,7 +132,7 @@ function fvcn_new_post_handler()
 		// Author Name
 		apply_filters('fvcn_post_author_name_validators', $validator->setValidators(array(
 			'FvCommunityNews_Validate_NotEmpty',
-			'FvCommunityNews_Validate_Alpha',
+			'FvCommunityNews_Validate_Name',
 			new FvCommunityNews_Validate_MinLength(2),
 			new FvCommunityNews_Validate_MaxLength(40)
 		)));
@@ -192,6 +192,9 @@ function fvcn_new_post_handler()
 			new FvCommunityNews_Validate_MinLength(6)
 		)));
 		
+		if (false === strpos($_POST['fvcn_post_form_link'], 'http://')) {
+			$_POST['fvcn_post_form_link'] = 'http://' . $_POST['fvcn_post_form_link'];
+		}
 		if ($validator->isValid($_POST['fvcn_post_form_link'])) {
 			$postData['post_link'] = $_POST['fvcn_post_form_link'];
 		} else {
@@ -206,6 +209,9 @@ function fvcn_new_post_handler()
 				new FvCommunityNews_Validate_MinLength(6)
 			)));
 			
+			if (false === strpos($_POST['fvcn_post_form_link'], 'http://')) {
+				$_POST['fvcn_post_form_link'] = 'http://' . $_POST['fvcn_post_form_link'];
+			}
 			if ($validator->isValid($_POST['fvcn_post_form_link'])) {
 				$postData['post_link'] = $_POST['fvcn_post_form_link'];
 			} else {

@@ -461,7 +461,7 @@ function fvcn_has_post_thumbnail($postId=0)
 	$id = fvcn_get_post_id($postId);
 	
 	// Double thumbnail display fix.
-	if ('the_content' != current_filter() || (fvcn_is_single_post($id) && false === FvCommunityNews_Registry::get('nativeThumbnailSupport'))) {
+	if ('the_content' != current_filter() || false === FvCommunityNews_Registry::get('nativeThumbnailSupport')) {
 		return has_post_thumbnail($id);
 	} else {
 		return false;

@@ -253,7 +253,7 @@ class FvCommunityNews_Admin_PostModeration
 	/**
 	 * columnData()
 	 *
-	 * @version 20120721
+	 * @version 20120805
 	 * @param string $column
 	 * @param int $postId
 	 * @return void
@@ -262,7 +262,7 @@ class FvCommunityNews_Admin_PostModeration
 	{
 		switch ($column) {
 			case 'fvcn_post_details' :
-				if (fvcn_is_post_form_thumbnail_enabled() && fvcn_has_post_thumbnail($postId)) {
+				if (fvcn_has_post_thumbnail($postId)) {
 					fvcn_post_thumbnail($postId, array(46, 46), 'class=fvcn-post-thumbnail');
 				}
 				

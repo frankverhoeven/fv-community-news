@@ -254,6 +254,19 @@ class FvCommunityNews_Validate_Url extends FvCommunityNews_Validate_Abstract
 	}
 }
 
+class FvCommunityNews_Validate_Name extends FvCommunityNews_Validate_Abstract
+{
+	public function __construct()
+	{
+		$this->setMessage( __('Value can only contain letters.', 'fvcn') );
+	}
+
+	public function isValid($value)
+	{
+		return (bool) preg_match('/^[\p{L}\p{M}]+$/u', str_replace(' ', '', $value) );
+	}
+}
+
 class FvCommunityNews_Validate_Alpha extends FvCommunityNews_Validate_Abstract
 {
 	public function __construct()
@@ -292,7 +305,7 @@ class FvCommunityNews_Validate_MinLength extends FvCommunityNews_Validate_Abstra
 
 	public function isValid($value)
 	{
-		return (bool) (strlen($value) >= $this->_minLength);
+		return (bool) (mb_strlen($value) >= $this->_minLength);
 	}
 }
 
@@ -308,7 +321,7 @@ class FvCommunityNews_Validate_MaxLength extends FvCommunityNews_Validate_Abstra
 
 	public function isValid($value)
 	{
-		return (bool) (strlen($value) <= $this->_maxLength);
+		return (bool) (mb_strlen($value) <= $this->_maxLength);
 	}
 }
 

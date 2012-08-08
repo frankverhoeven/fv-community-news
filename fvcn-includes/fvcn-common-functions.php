@@ -37,31 +37,29 @@ function fvcn_add_error($code='', $message='', $data='')
  */
 function fvcn_has_errors()
 {
-	$has_errors = false;
+	$hasErrors = false;
 	
 	if (FvCommunityNews_Container::getInstance()->getWpError()->get_error_codes()) {
-		$has_errors = true;
+		$hasErrors = true;
 	}
 	
-	return apply_filters('fvcn_has_errors', $has_errors, FvCommunityNews_Container::getInstance()->getWpError());
+	return apply_filters('fvcn_has_errors', $hasErrors, FvCommunityNews_Container::getInstance()->getWpError());
 }
 
 /**
  * fvcn_add_featured_image_theme_support()
  *
- * @version 20120801
+ * @version 20120805
  * @return void
  */
 function fvcn_add_thumbnail_theme_support()
 {
-	// Double thumbnail display fix.
 	if (true === get_theme_support( 'post-thumbnails' ) ) {
 		FvCommunityNews_Registry::set('nativeThumbnailSupport', true);
 	} else {
 		FvCommunityNews_Registry::set('nativeThumbnailSupport', false);
+		add_theme_support('post-thumbnails', array(fvcn_get_post_type(), fvcn_get_post_slug()));
 	}
-	
-	add_theme_support('post-thumbnails', array(fvcn_get_post_type(), fvcn_get_post_slug()));
 }
 
 /**

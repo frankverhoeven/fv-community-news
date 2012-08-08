@@ -123,13 +123,14 @@ function fvcn_get_query_template($type, $templates)
 /**
  * fvcn_theme_get_single_post_template()
  *
- * @version 20120716
+ * @version 20120806
  * @return string
  */
 function fvcn_theme_get_single_post_template()
 {
 	return fvcn_get_query_template('single_post', array(
-		'single-' . fvcn_get_post_type() . '.php'
+		'single-' . fvcn_get_post_type() . '.php',
+		'single-fvcn.php'
 	));
 }
 
@@ -137,13 +138,14 @@ function fvcn_theme_get_single_post_template()
 /**
  * fvcn_theme_get_post_archive_template()
  *
- * @version 20120716
+ * @version 20120806
  * @return string
  */
 function fvcn_theme_get_post_archive_template()
 {
 	return fvcn_get_query_template('post_archive', array(
-		'archive-' . fvcn_get_post_type() . '.php'
+		'archive-' . fvcn_get_post_type() . '.php',
+		'archive-fvcn.php'
 	));
 }
 
@@ -151,13 +153,14 @@ function fvcn_theme_get_post_archive_template()
 /**
  * fvcn_theme_get_post_tag_archive_template()
  *
- * @version 20120716
+ * @version 20120806
  * @return string
  */
 function fvcn_theme_get_post_tag_archive_template()
 {
 	return fvcn_get_query_template('post_tag', array(
-		'taxonomy-' . fvcn_get_post_tag_id() . '.php'
+		'taxonomy-' . fvcn_get_post_tag_id() . '.php',
+		'taxonomy-fvcn.php'
 	));
 }
 

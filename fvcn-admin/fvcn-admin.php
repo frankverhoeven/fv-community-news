@@ -83,7 +83,7 @@ class FvCommunityNews_Admin
 	/**
 	 * factory()
 	 *
-	 * @version 20120721
+	 * @version 20120808
 	 * @return FvCommunityNews_Admin
 	 */
 	public function factory()
@@ -117,10 +117,12 @@ class FvCommunityNews_Admin
 				$this->_factory->getPostEdit();
 			break;
 			
+			case 'admin-fvcn-settings' :
 			case 'edit-' . $postType . '-fvcn-settings' :
 				$this->_factory->getSettings();
 			break;
 			
+			case 'admin-fvcn-form' :
 			case 'edit-' . $postType . '-fvcn-form' :
 				$this->_factory->getForm();
 			break;
