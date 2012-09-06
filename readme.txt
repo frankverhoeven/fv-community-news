@@ -1,11 +1,11 @@
 === FV Community News ===
 
-Contributors:		frankverhoeven
-Donate link:		https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=SB62B7H867Y4C&lc=US&item_name=Frank%20Verhoeven&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted
-Tags:				Community News, Community, News, Widget, Custom Post, Custom Posting, Post, Form, Akismet, Ajax
-Requires at least:	3.3
-Tested up to:		3.4
-Stable tag:			3.0.2
+Contributors:       frankverhoeven
+Donate link:        https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=SB62B7H867Y4C&lc=US&item_name=Frank%20Verhoeven&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted
+Tags:               Community News, Community, News, Widget, Custom Post, Custom Posting, Post, Form, Akismet, Ajax
+Requires at least:  3.3
+Tested up to:       3.4
+Stable tag:         3.0.2
 
 Give the visitors of your site the ability to submit their news to you, and list it in a nice news feed.
 
