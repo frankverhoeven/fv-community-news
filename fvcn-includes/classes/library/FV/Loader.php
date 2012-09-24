@@ -5,12 +5,12 @@
  *
  * @author Frank Verhoeven <info@frank-verhoeven.com>
  */
-class FV_Loader
+class FV_Loader implements FV_Loader_Interface
 {
     /**
      * Load a file.
      *
-     * @param type $file
+     * @param string $file
      * @param bool $once
      * @return bool
      * @throws Exception
@@ -18,7 +18,7 @@ class FV_Loader
     public function loadFile($file, $once=true)
     {
         if (!file_exists($file)) {
-            throw new Exception( sprintf('The file "%s" could not be found', $file) );
+            throw new Exception( 'The file "' . $file . '" could not be found' );
         }
 
         if (true === $once) {
