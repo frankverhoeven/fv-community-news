@@ -101,7 +101,7 @@ class FvCommunityNews_Admin_PostEdit
 			update_post_meta($postId, '_fvcn_post_url', apply_filters('fvcn_new_post_pre_url', esc_url(strip_tags($_POST['fvcn_post_url']))));
 		
 		
-		do_action('fvcn_save_metabox_post_info', $postId, $anonymous_data);
+		do_action('fvcn_save_metabox_post_info', $postId);
 		
 		return $postId;
 	}

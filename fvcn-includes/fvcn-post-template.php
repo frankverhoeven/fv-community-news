@@ -424,10 +424,10 @@ function fvcn_post_time($postId=0, $format='', $gmt=false) {
 	/**
 	 * fvcn_get_post_time()
 	 *
-	 * @version 20120322
+	 * @version 20120924
 	 * @param int $postId
 	 * @param string $format
- 	*	@param bool $gmt
+ 	 * @param bool $gmt
 	 * @return string
 	 */
 	function fvcn_get_post_time($postId=0, $format='', $gmt=false) {
@@ -440,9 +440,9 @@ function fvcn_post_time($postId=0, $format='', $gmt=false) {
 		}
 		
 		if (empty($format)) {
-			$time = mysql2time(get_option('time_format'), $date);
+			$time = mysql2date(get_option('time_format'), $date);
 		} else {
-			$time = mysql2time($format, $date);
+			$time = mysql2date($format, $date);
 		}
 		
 		return apply_filters('fvcn_get_post_time', $time, $id);
@@ -1222,6 +1222,7 @@ function fvcn_post_tag_list($postId=0, $args='')
 		);
 		
 		$args = wp_parse_args($args, $default);
+		$before = $sep = $after = '';
 		extract($args);
 		
 		$tag_list = get_the_term_list($id, fvcn_get_post_tag_id(), $before, $sep, $after);

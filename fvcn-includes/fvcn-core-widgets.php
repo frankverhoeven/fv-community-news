@@ -60,6 +60,7 @@ class FvCommunityNews_Widget_ListPosts extends WP_Widget {
 	 */
 	public function widget($args, $instance)
 	{
+	    $before_widget = $after_widget = $before_title = $after_title = '';
 		extract($args);
 		
 		$title		= apply_filters('fvcn_list_posts_widget_title', $instance['title']);
@@ -198,7 +199,9 @@ class FvCommunityNews_Widget_Form extends WP_Widget {
 	 *	@param array $instance
 	 *	@return void
 	 */
-	public function widget($args, $instance) {
+	public function widget($args, $instance)
+	{
+	    $before_widget = $after_widget = $before_title = $after_title = '';
 		extract($args);
 		
 		$title = apply_filters('fvcn_form_widget_title', $instance['title']);
@@ -307,7 +310,9 @@ class FvCommunityNews_Widget_TagCloud extends WP_Widget {
 	 *	@param array $instance
 	 *	@return void
 	 */
-	public function widget($args, $instance) {
+	public function widget($args, $instance)
+	{
+	    $before_widget = $after_widget = $before_title = $after_title = '';
 		extract($args);
 		
 		$title = apply_filters('fvcn_form_widget_title', $instance['title']);

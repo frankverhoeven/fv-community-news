@@ -127,6 +127,12 @@ a page for the post form and exclude it from the cache.
 For more details on changes, please visit the [WordPress Trac](http://plugins.trac.wordpress.org/log/fv-community-news/ "FV Community News on WordPress Trac").
 
 
+= 3.0.3 =
+
+* Fixed the fvcn_get_post_time() function.
+* Various other improvements and minor bugfixes.
+
+
 = 3.0.2 =
 
 * Fixed featured image metabox on normal posts/pages.

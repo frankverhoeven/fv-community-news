@@ -4,7 +4,7 @@
  * Plugin Name: FV Community News
  * Plugin URI:  http://www.frank-verhoeven.com/wordpress-plugin-fv-community-news/
  * Description: Allow visitors of your site to post articles.
- * Version:     3.0.2
+ * Version:     3.0.3
  * Author:      Frank Verhoeven
  * Author URI:  http://www.frank-verhoeven.com/
  */
@@ -24,13 +24,12 @@ if (!class_exists('FvCommunityNews'))
 		/**
 		 * @var string
 		 */
-		public $version	= '3.0.2';
+		public $version	= '3.0.3';
 
 		/**
 		 * @var FvCommunityNews
 		 */
 		private static $_instance;
-
 
 		/**
 		 * __construct()
@@ -355,7 +354,7 @@ if (!class_exists('FvCommunityNews'))
 		FvCommunityNews::getInstance()->start();
 	} catch (Exception $e) {
         if (defined('WP_DEBUG') && true === WP_DEBUG) {
-            printf('<h3>fvcn: %s</h3><pre>%s</pre>', $e->getMessage(), $e->getTraceAsString());
+            echo '<h3>' . $e->getMessage() . '</h3><pre>' . $e->getTraceAsString() . '</pre>';
         }
 
 		error_log( 'fvcn: ' . $e->getMessage() . PHP_EOL . $e->getTraceAsString() );
@@ -369,3 +368,4 @@ if (!class_exists('FvCommunityNews'))
  *		Q.E.D. (Quod Erat Demonstrandum)
  *
  */
+
