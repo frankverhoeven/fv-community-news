@@ -1,5 +1,8 @@
 <?php
 
+require_once './Autoloader/Interface.php';
+
+
 /**
  * FV_Loader_AutoLoader
  *
@@ -117,7 +120,7 @@ class FV_Loader_AutoLoader implements FV_Loader_Autoloader_Interface
             }
         }
 
-        $filename .= '/' . str_replace(array('_', '\\'), DIRECTORY_SEPARATOR, $className);
+        $filename .= './' . str_replace(array('_', '\\'), '/', $className) . '.php';
 
         return $filename;
     }

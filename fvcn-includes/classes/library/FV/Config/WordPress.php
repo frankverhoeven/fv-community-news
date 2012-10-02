@@ -26,6 +26,10 @@ class FV_Config_WordPress implements FV_Config_Interface
      */
     public function __construct(FV_Config_Interface $default)
     {
+        if ($default instanceof FV_Config_WordPress) {
+            throw new Exception('WordPress default config cannot be an instance of FV_Config_WordPress.');
+        }
+
         $this->_defaultConfig = $default;
     }
 
