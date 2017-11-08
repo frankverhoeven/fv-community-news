@@ -391,22 +391,8 @@ class FvCommunityNews_Validate_Timeout extends FvCommunityNews_Validate_Abstract
 
 	public function isValid($value)
 	{
-		$crypt = new FvCommunityNews_Crypt( hash('sha256', wp_create_nonce('fvcn-post-form-time-key')) );
-		if ($crypt->canEncrypt()) {
-			$value = explode(':', $value);
-			if (2 != count($value)) {
-				return false;
-			}
-			
-			try {
-				$time = (int) $crypt->setIv( base64_decode($value[0]) )->decrypt($value[1]);
-			} catch (Exception $e) {
-				return false;
-			}
-		} else {
-			$time = (int) base64_decode($value);
-		}
-		
+        $time = (int) base64_decode($value);
+
 		// min 15 sec, max 1 hour
 		if ($time+15 > time() || time()-3600 > $time) {
 			return false;

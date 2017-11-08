@@ -94,21 +94,6 @@ class FvCommunityNews_Container
 	}
 
 	/**
-	 * getCrypt()
-	 *
-	 * @version 20120709
-	 * @return FvCommunityNews_Crypt
-	 */
-	public function getCrypt()
-	{
-		if (isset($this->_objects['crypt'])) {
-			return $this->_objects['crypt'];
-		}
-
-		return $this->_objects['crypt'] = new FvCommunityNews_Crypt( fvcn_get_option('_fvcn_sync_key') );
-	}
-
-	/**
 	 * getJavascript()
 	 *
 	 * @version 20120714
@@ -165,7 +150,7 @@ class FvCommunityNews_Container
 			return $this->_objects['sync'];
 		}
 
-		return $this->_objects['sync'] = new FvCommunityNews_Sync( $this->getCrypt() );
+		return $this->_objects['sync'] = new FvCommunityNews_Sync();
 	}
 
 	/**

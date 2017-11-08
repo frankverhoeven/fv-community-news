@@ -1243,17 +1243,7 @@ function fvcn_post_form_fields()
 	
 	<input type="hidden" name="fvcn_post_form_action" id="fvcn_post_form_action" value="fvcn-new-post" />
 	<?php wp_nonce_field('fvcn-new-post', 'fvcn_post_form_nonce'); ?>
-	
-	<?php
-	$crypt = new FvCommunityNews_Crypt( hash('sha256', wp_create_nonce('fvcn-post-form-time-key')) );
-	
-	if ($crypt->canEncrypt()) {
-		$value = base64_encode($crypt->getIv()) . ':' . $crypt->encrypt( time() );
-	} else {
-		$value = base64_encode( time() );
-	}
-	?>
-	
+	<?php $value = base64_encode( time() ); ?>
 	<input type="hidden" name="fvcn_post_form_time_key" id="fvcn_post_form_time_key" value="<?php echo $value; ?>" />
 	
 <?php

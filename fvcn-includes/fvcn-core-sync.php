@@ -16,162 +16,6 @@ if (!defined('ABSPATH')) {
 
 
 /**
- * FvCommunityNews_Crypt
- *
- * Rijndael 128 bit encryption.
- *
- * @author Frank Verhoeven <info@frank-verhoeven.com>
- */
-class FvCommunityNews_Crypt
-{
-	const CIPHER = MCRYPT_RIJNDAEL_128;
-	const MODE	 = MCRYPT_MODE_CBC;
-	
-	/**
-	 * @var string
-	 */
-	protected $_key	= null;
-	
-	/**
-	 * @var string
-	 */
-	protected $_iv	= null;
-	
-	/**
-	 * __construct()
-	 *
-	 * @version 20120701
-	 * @param string $key
-	 * @param string $iv
-	 */
-	public function __construct($key, $iv=null)
-	{
-		$this->setKey($key);
-		
-		if (null !== $iv) {
-			$this->setIv($iv);
-		}
-	}
-	
-	/**
-	 * canEncrypt()
-	 *
-	 * @version 20120701
-	 * @return bool
-	 */
-	public function canEncrypt()
-	{
-		return extension_loaded('mcrypt');
-	}
-	
-	/**
-	 * setKey()
-	 *
-	 * @version 20120701
-	 * @param string $key
-	 * @return FvCommunityNews_Crypt
-	 */
-	public function setKey($key)
-	{
-		$this->_key = (string) $key;
-		return $this;
-	}
-	
-	/**
-	 * getKey()
-	 *
-	 * @version 20120701
-	 * @return string
-	 */
-	public function getKey()
-	{
-		if (strlen($this->_key) > mcrypt_get_key_size(self::CIPHER, self::MODE)) {
-			return substr($this->_key, 1, mcrypt_get_key_size(self::CIPHER, self::MODE));
-		}
-		
-		return $this->_key;
-	}
-	
-	/**
-	 * createIv()
-	 *
-	 * @version 20120701
-	 * @return string
-	 */
-	public function createIv()
-	{
-		$iv = mcrypt_create_iv(mcrypt_get_iv_size(self::CIPHER, self::MODE), MCRYPT_RAND);
-		
-		if (false === $iv) {
-			throw new Exception('Failed to create an initialization vector.');
-		}
-		
-		return $this->setIv( $iv )->getIv();
-	}
-	
-	/**
-	 * setIv()
-	 *
-	 * @version 20120701
-	 * @param string $iv
-	 * @return FvCommunityNews_Crypt
-	 */
-	public function setIv($iv)
-	{
-		if (0 !== mcrypt_get_iv_size(self::CIPHER, self::MODE) && strlen($iv) != mcrypt_get_iv_size(self::CIPHER, self::MODE)) {
-			throw new Exception('Invallid IV size.');
-		}
-		
-		$this->_iv = $iv;
-		return $this;
-	}
-	
-	/**
-	 * getIv()
-	 *
-	 * @version 20120701
-	 * @return string
-	 */
-	public function getIv()
-	{
-		if (null !== $this->_iv) {
-			return $this->_iv;
-		}
-		
-		return $this->createIv();
-	}
-	
-	/**
-	 * encrypt()
-	 *
-	 * @version 20120701
-	 * @param string $value
-	 * @return string
-	 */
-	public function encrypt($value)
-	{
-		$encrypted = mcrypt_encrypt(self::CIPHER, $this->getKey(), trim($value), self::MODE, $this->getIv());
-		
-		return base64_encode( $encrypted );
-	}
-	
-	/**
-	 * decrypt()
-	 *
-	 * @version 20120701
-	 * @param string $value
-	 * @return string
-	 */
-	public function decrypt($value)
-	{
-		$decrypted = mcrypt_decrypt(self::CIPHER, $this->getKey(), base64_decode($value), self::MODE, $this->getIv());
-		
-		return rtrim($decrypted, "\0\4");
-	}
-}
-
-
-/**
  * FvCommunityNews_Sync
  *
  * Synchronisation
@@ -200,21 +44,14 @@ class FvCommunityNews_Sync
 	 * @var bool
 	 */
 	protected $_registered = false;
-	
-	/**
-	 * @var FvCommunityNews_Crypt
-	 */
-	protected $_crypt	= null;
-	
+
 	/**
 	 * __construct()
 	 *
 	 * @version 20120716
-	 * @param FvCommunityNews_Crypt $crypt
 	 */
-	public function __construct(FvCommunityNews_Crypt $crypt)
+	public function __construct()
 	{
-		$this->_crypt = $crypt;
 		$this->_setupOptions();
 		
 		if (!$this->isSiteRegistered()) {
@@ -284,28 +121,6 @@ class FvCommunityNews_Sync
 	 */
 	protected function _encryptData(array $data, $root=true)
 	{
-		if (!$this->_crypt->canEncrypt()) {
-			if ($root) {
-				$data['encrypted'] = false;
-			}
-			
-			return $data;
-		}
-		
-		foreach ($data as $key=>$val) {
-			if (is_array($val)) {
-				$data[ $key ] = $this->_encryptData($val, false);
-			} else {
-				$data[ $key ] = $this->_crypt->encrypt($val);
-			}
-		}
-		
-		if ($root) {
-			$data['encrypted']	= true;
-			$data['validator']	= $this->_crypt->encrypt( home_url('/') );
-			$data['iv']			= base64_encode( $this->_crypt->getIv() );
-		}
-		
 		return $data;
 	}
 	
@@ -384,14 +199,14 @@ class FvCommunityNews_Sync
 		
 		return $this;
 	}
-	
-	/**
-	 * increasePostViewCount()
-	 *
-	 * @version 20120712
-	 * @paran int $postId
-	 * @return FvCommunityNews_Sync
-	 */
+
+    /**
+     * increasePostViewCount()
+     *
+     * @version 20120712
+     * @param int $postId
+     * @return FvCommunityNews_Sync
+     */
 	public function increasePostViewCount($postId)
 	{
 		$data = array(
