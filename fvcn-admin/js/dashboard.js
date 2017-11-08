@@ -6,7 +6,7 @@
  * @version		20120730
  * @package		FV Community News
  * @subpackage	Admin Dashboard
- * @author		Frank Verhoeven <info@frank-verhoeven.com>
+ * @author		Frank Verhoeven <hi@frankverhoeven.me>
  */
 
 (function($, options)

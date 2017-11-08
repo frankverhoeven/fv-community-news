@@ -3,7 +3,7 @@
 /**
  * FV_Loader
  *
- * @author Frank Verhoeven <info@frank-verhoeven.com>
+ * @author Frank Verhoeven <hi@frankverhoeven.me>
  */
 class FV_Loader implements FV_Loader_Interface
 {

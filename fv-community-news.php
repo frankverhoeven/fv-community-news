@@ -2,11 +2,11 @@
 
 /**
  * Plugin Name: FV Community News
- * Plugin URI:  http://www.frank-verhoeven.com/wordpress-plugin-fv-community-news/
+ * Plugin URI:  https://frankverhoeven.me/wordpress-plugin-fv-community-news/
  * Description: Allow visitors of your site to post articles.
  * Version:     3.0.3
  * Author:      Frank Verhoeven
- * Author URI:  http://www.frank-verhoeven.com/
+ * Author URI:  https://frankverhoeven.me/
  */
 
 if (!defined('ABSPATH')) exit;
@@ -15,7 +15,7 @@ if (!defined('ABSPATH')) exit;
 /**
  * FvCommunityNews
  *
- * @author Frank Verhoeven <info@frank-verhoeven.com>
+ * @author Frank Verhoeven <hi@frankverhoeven.me>
  */
 if (!class_exists('FvCommunityNews'))
 {

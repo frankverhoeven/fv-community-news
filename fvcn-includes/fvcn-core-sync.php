@@ -7,7 +7,7 @@
  *
  * @package		FV Community News
  * @subpackage	Sync
- * @author		Frank Verhoeven <info@frank-verhoeven.com>
+ * @author		Frank Verhoeven <hi@frankverhoeven.me>
  */
 
 if (!defined('ABSPATH')) {
@@ -20,15 +20,15 @@ if (!defined('ABSPATH')) {
  *
  * Synchronisation
  *
- * @author Frank Verhoeven <info@frank-verhoeven.com>
+ * @author Frank Verhoeven <hi@frankverhoeven.me>
  */
 class FvCommunityNews_Sync
 {
-	const API_REGISTER				= 'http://fvcn.frank-verhoeven.com/api/register-site/';
-	const API_SUBMIT_POST			= 'http://fvcn.frank-verhoeven.com/api/submit-post/';
-	const API_INC_POST_VIEW_COUNT	= 'http://fvcn.frank-verhoeven.com/api/increase-post-view-count/';
-	const API_INC_POST_RATING		= 'http://fvcn.frank-verhoeven.com/api/increase-post-rating/';
-	const API_DEC_POST_RATING		= 'http://fvcn.frank-verhoeven.com/api/decrease-post-rating/';
+	const API_REGISTER				= 'https://api.frankverhoeven.me/fvcn/1.0/register-site/';
+	const API_SUBMIT_POST			= 'https://api.frankverhoeven.me/fvcn/1.0/submit-post/';
+	const API_INC_POST_VIEW_COUNT	= 'https://api.frankverhoeven.me/fvcn/1.0/increase-post-view-count/';
+	const API_INC_POST_RATING		= 'https://api.frankverhoeven.me/fvcn/1.0/increase-post-rating/';
+	const API_DEC_POST_RATING		= 'https://api.frankverhoeven.me/fvcn/1.0/decrease-post-rating/';
 	
 	/**
 	 * @var array

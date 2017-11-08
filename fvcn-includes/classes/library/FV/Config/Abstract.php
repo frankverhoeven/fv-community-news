@@ -3,7 +3,7 @@
 /**
  * FV_Config_Abstract
  *
- * @author Frank Verhoeven <info@frank-verhoeven.com>
+ * @author Frank Verhoeven <hi@frankverhoeven.me>
  */
 abstract class FV_Config_Abstract implements Iterator
 {

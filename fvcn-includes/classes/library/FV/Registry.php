@@ -3,7 +3,7 @@
 /**
  * FV_Registry
  *
- * @author Frank Verhoeven <info@frank-verhoeven.com>
+ * @author Frank Verhoeven <hi@frankverhoeven.me>
  */
 class FV_Registry extends FV_Singleton
 {

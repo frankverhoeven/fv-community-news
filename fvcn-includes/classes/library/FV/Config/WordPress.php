@@ -3,7 +3,7 @@
 /**
  * FV_Config_WordPress
  *
- * @author Frank Verhoeven <info@frank-verhoeven.com>
+ * @author Frank Verhoeven <hi@frankverhoeven.me>
  */
 class FV_Config_WordPress implements FV_Config_Interface
 {

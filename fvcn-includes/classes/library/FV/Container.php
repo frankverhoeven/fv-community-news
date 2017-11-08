@@ -3,7 +3,7 @@
 /**
  * FV_Container
  *
- * @author Frank Verhoeven <info@frank-verhoeven.com>
+ * @author Frank Verhoeven <hi@frankverhoeven.me>
  */
 abstract class FV_Container extends FV_Singleton
 {

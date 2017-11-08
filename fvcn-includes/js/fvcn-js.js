@@ -5,7 +5,7 @@
  *
  * @package		FV Community News
  * @subpackage	Javascript
- * @author		Frank Verhoeven <info@frank-verhoeven.com>
+ * @author		Frank Verhoeven <hi@frankverhoeven.me>
  */
 
 (function($, options) {

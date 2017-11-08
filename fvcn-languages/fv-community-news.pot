@@ -678,7 +678,7 @@ msgid "Tag Archives: %s"
 msgstr ""
 
 #. Plugin URI of the plugin/theme
-msgid "http://www.frank-verhoeven.com/wordpress-plugin-fv-community-news/"
+msgid "https://frankverhoeven.me/wordpress-plugin-fv-community-news/"
 msgstr ""
 
 #. Description of the plugin/theme
@@ -690,5 +690,5 @@ msgid "Frank Verhoeven"
 msgstr ""
 
 #. Author URI of the plugin/theme
-msgid "http://www.frank-verhoeven.com/"
+msgid "https://frankverhoeven.me/"
 msgstr ""

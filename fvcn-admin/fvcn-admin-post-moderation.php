@@ -7,7 +7,7 @@
  *
  * @package		FV Community News
  * @subpackage	Admin Post Moderation
- * @author		Frank Verhoeven <info@frank-verhoeven.com>
+ * @author		Frank Verhoeven <hi@frankverhoeven.me>
  */
 
 if (!defined('ABSPATH')) {

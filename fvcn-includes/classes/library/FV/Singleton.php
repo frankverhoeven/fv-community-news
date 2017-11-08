@@ -3,7 +3,7 @@
 /**
  * FV_Singleton
  *
- * @author Frank Verhoeven <info@frank-verhoeven.com>
+ * @author Frank Verhoeven <hi@frankverhoeven.me>
  */
 abstract class FV_Singleton
 {

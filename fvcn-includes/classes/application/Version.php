@@ -3,7 +3,7 @@
 /**
  * FvCommunityNews_Version
  *
- * @author Frank Verhoeven <info@frank-verhoeven.com>
+ * @author Frank Verhoeven <hi@frankverhoeven.me>
  */
 final class FvCommunityNews_Version
 {

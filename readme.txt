@@ -1,10 +1,10 @@
 === FV Community News ===
 
 Contributors:       frankverhoeven
-Donate link:        https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=SB62B7H867Y4C&lc=US&item_name=Frank%20Verhoeven&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted
+Donate link:        https://www.paypal.me/FrankVerhoeven
 Tags:               Community News, Community, News, Widget, Custom Post, Custom Posting, Post, Form, Akismet, Ajax
 Requires at least:  3.3
-Tested up to:       3.4
+Tested up to:       4.8.3
 Stable tag:         3.0.2
 
 Give the visitors of your site the ability to submit their news to you, and list it in a nice news feed.
@@ -93,7 +93,7 @@ of the default files.
 = Updating From Version 2 =
 
 Version 2 and older are not compatible with version 3 and later. To convert your posts
-to work with the new version, download the [FV Community News Upgrader](http://www.frank-verhoeven.com/fv-community-news-upgrader/ "FV Community News Upgrader").
+to work with the new version, download the [FV Community News Upgrader](https://frankverhoeven.me/fv-community-news-upgrader/ "FV Community News Upgrader").
 
 If you're still using version 1.x, you will have to update to version 2 first.
 
