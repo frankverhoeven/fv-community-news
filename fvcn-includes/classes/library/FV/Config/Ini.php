@@ -49,6 +49,7 @@ class FV_Config_Ini implements FV_Config_Interface
      */
     public function set($key, $value)
     {
-        throw new Exception('Ini configuration is read-only');
+        $this->_config[ $key ] = $value;
+        return $this;
     }
 }

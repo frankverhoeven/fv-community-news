@@ -1,8 +1,5 @@
 <?php
 
-require_once './Loader/Interface.php';
-
-
 /**
  * FV_Loader
  *

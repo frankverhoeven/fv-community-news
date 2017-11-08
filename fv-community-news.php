@@ -22,6 +22,16 @@ if (!class_exists('FvCommunityNews'))
 	final class FvCommunityNews
 	{
 		/**
+		 * @var string
+		 */
+		public $version	= '3.0.3';
+
+		/**
+		 * @var FvCommunityNews
+		 */
+		private static $_instance;
+
+		/**
 		 * __construct()
 		 *
 		 * @version 20120709
@@ -29,7 +39,7 @@ if (!class_exists('FvCommunityNews'))
 		 */
 		public function __construct()
 		{
-		    $this->_setupAutoloader();
+
 		}
 
 		/**
@@ -81,24 +91,6 @@ if (!class_exists('FvCommunityNews'))
 			)));
 
 			return $this;
-		}
-
-		/**
-		 * Start the autoloader.
-		 *
-		 * @return FvCommunityNews
-		 */
-		protected function _setupAutoloader()
-		{
-		    require_once './fvcn-includes/classes/library/FV/Loader.php';
-		    require_once './fvcn-includes/classes/library/FV/Loader/Autoloader.php';
-
-			$autoloader = new FV_Loader_AutoLoader( new FV_Loader() );
-
-            $autoloader->registerNamespace('FvCommunityNews', '../../../application')
-                       ->register();
-
-            return $this;
 		}
 
 		/**
@@ -320,6 +312,37 @@ if (!class_exists('FvCommunityNews'))
 
 			return $this;
 		}
+
+
+		/**
+		 * setInstance()
+		 *
+		 * @version 20120710
+		 * @param FvCommunityNews $instance
+		 * @return FvCommunityNews
+		 */
+		public static function setInstance(FvCommunityNews $instance=null)
+		{
+			if (null === self::$_instance) {
+				if (null === $instance) {
+					self::$_instance = new FvCommunityNews();
+				} else {
+					self::$_instance = $instance;
+				}
+			}
+		}
+
+		/**
+		 * getInstance()
+		 *
+		 * @version 20120710
+		 * @return FvCommunityNews
+		 */
+		public static function getInstance()
+		{
+			self::setInstance();
+			return self::$_instance;
+		}
 	}
 
 
@@ -328,8 +351,7 @@ if (!class_exists('FvCommunityNews'))
 	 *
 	 */
 	try {
-	    $FvCommunityNews = new FvCommunityNews();
-	    $FvCommunityNews->start();
+		FvCommunityNews::getInstance()->start();
 	} catch (Exception $e) {
         if (defined('WP_DEBUG') && true === WP_DEBUG) {
             echo '<h3>' . $e->getMessage() . '</h3><pre>' . $e->getTraceAsString() . '</pre>';
