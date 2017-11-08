@@ -67,7 +67,7 @@ if (!class_exists('FvCommunityNews'))
 			$pluginUrl = plugin_dir_url(__FILE__);
 			$baseSlug  = fvcn_get_option('_fvcn_base_slug');
 
-			FvCommunityNews_Registry::setInstance(new FvCommunityNews_Registry(array(
+			FvCommunityNews_Registry::setInstance(new FvCommunityNews_Registry([
 				'pluginDir'		=> $pluginDir,
 				'pluginUrl'		=> $pluginUrl,
 
@@ -88,7 +88,7 @@ if (!class_exists('FvCommunityNews'))
 				'postSlug'		=> apply_filters('fvcn_post_slug',			$baseSlug . '/' . fvcn_get_option('_fvcn_post_slug')		),
 				'postTagSlug'	=> apply_filters('fvcn_post_tag_slug',		$baseSlug . '/' . fvcn_get_option('_fvcn_post_tag_slug')	),
 				'postArchiveSlug'=>apply_filters('fvcn_post_archive_slug',	$baseSlug . '/' . fvcn_get_option('_fvcn_post_archive_slug')),
-			)));
+            ]));
 
 			return $this;
 		}
@@ -101,7 +101,7 @@ if (!class_exists('FvCommunityNews'))
 		 */
 		private function _loadFiles()
 		{
-			$files = array(
+			$files = [
 				'fvcn-includes/fvcn-core-hooks.php',
 				'fvcn-includes/fvcn-core-classes.php',
 				'fvcn-includes/fvcn-core-options.php',
@@ -121,7 +121,7 @@ if (!class_exists('FvCommunityNews'))
 				'fvcn-includes/fvcn-user-template.php',
 				'fvcn-includes/fvcn-deprecated-functions.php',
 				'fvcn-includes/fvcn-extend-akismet.php'
-			);
+            ];
 
 			if (is_admin()) {
 				$files[] = 'fvcn-admin/fvcn-admin.php';
@@ -150,15 +150,15 @@ if (!class_exists('FvCommunityNews'))
 			register_activation_hook(  __FILE__, 'fvcn_activation'  );
 			register_deactivation_hook(__FILE__, 'fvcn_deactivation');
 
-			$actions = array(
+			$actions = [
 				'register_post_type'	=> 'registerPostType',
 				'register_post_statuses'=> 'registerPostStatuses',
 				'register_taxonomy'		=> 'registerTaxonomy',
 				'load_text_domain'		=> 'loadTextdomain'
-			);
+            ];
 
 			foreach ($actions as $hook=>$method) {
-				add_action('fvcn_' . $hook, array($this, $method), 5);
+				add_action('fvcn_' . $hook, [$this, $method], 5);
 			}
 
 			return $this;
@@ -198,8 +198,8 @@ if (!class_exists('FvCommunityNews'))
 		 * @return FvCommunityNews
 		 */
 		public function registerPostType() {
-			$post = array(
-				'labels'	=> array(
+			$post = [
+				'labels'	=> [
 					'name'				=> __('FV Community News',		'fvcn'),
 					'menu_name'			=> __('Community News',			'fvcn'),
 					'singular_name'		=> __('Community News',			'fvcn'),
@@ -214,20 +214,20 @@ if (!class_exists('FvCommunityNews'))
 					'search_items'		=> __('Search Community News',	'fvcn'),
 					'not_found'			=> __('No posts found',			'fvcn'),
 					'not_found_in_trash'=> __('No posts found in Trash','fvcn')
-				),
-				'rewrite'	=> array(
+                ],
+				'rewrite'	=> [
 					'slug'			=> FvCommunityNews_Registry::get('postSlug'),
 					'with_front'	=> false
-				),
-				'supports'	=> array(
+                ],
+				'supports'	=> [
 					'title',
 					'editor',
 					'thumbnail',
 					'comments'
-				)
-			);
+                ]
+            ];
 
-			$options = apply_filters('fvcn_register_fvcn_post_type', array(
+			$options = apply_filters('fvcn_register_fvcn_post_type', [
 				'labels'				=> $post['labels'],
 				'rewrite'				=> $post['rewrite'],
 				'supports'				=> $post['supports'],
@@ -244,7 +244,7 @@ if (!class_exists('FvCommunityNews'))
 				'menu_position'			=> 20,
 				'menu_icon'				=> '',
 				'capability_type'		=> 'post',
-			));
+            ]);
 
 			register_post_type(FvCommunityNews_Registry::get('postType'), $options);
 
@@ -258,14 +258,14 @@ if (!class_exists('FvCommunityNews'))
 		 * @return FvCommunityNews
 		 */
 		public function registerPostStatuses() {
-			$status = apply_filters('fvcn_register_spam_post_status', array(
+			$status = apply_filters('fvcn_register_spam_post_status', [
 				'label'						=> __('Spam', 'fvcn'),
 				'label_count'				=> _nx_noop('Spam <span class="count">(%s)</span>', 'Spam <span class="count">(%s)</span>', 'fvcn'),
 				'protected'                 => true,
 				'exclude_from_search'		=> true,
 				'show_in_admin_status_list'	=> true,
 				'show_in_admin_all_list'	=> false
-			));
+            ]);
 
 			register_post_status(FvCommunityNews_Registry::get('psSpam'), $status);
 
@@ -280,8 +280,8 @@ if (!class_exists('FvCommunityNews'))
 		 */
 		public function registerTaxonomy()
 		{
-			$tag = array(
-				'labels'	=> array(
+			$tag = [
+				'labels'	=> [
 					'name'              => __('Tags',			'fvcn'),
 					'singular_name'     => __('Tag',			'fvcn'),
 					'search_items'      => __('Search Tags',	'fvcn'),
@@ -291,18 +291,18 @@ if (!class_exists('FvCommunityNews'))
 					'update_item'       => __('Update Tag',		'fvcn'),
 					'add_new_item'      => __('Add New Tag',	'fvcn'),
 					'new_item_name'     => __('New Tag Name',	'fvcn'),
-				),
-				'rewrite'	=> array(
+                ],
+				'rewrite'	=> [
 					'slug'			=> FvCommunityNews_Registry::get('postTagSlug'),
 					'with_front'	=> false
-				)
-			);
+                ]
+            ];
 
-			$options = apply_filters('fvcn_register_fvcn_post_tag_id', array(
+			$options = apply_filters('fvcn_register_fvcn_post_tag_id', [
 				'labels'		=> $tag['labels'],
 				'rewrite'		=> $tag['rewrite'],
 				'public'		=> true
-			));
+            ]);
 
 			register_taxonomy(
 				FvCommunityNews_Registry::get('postTagId'),

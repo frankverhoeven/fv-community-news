@@ -44,16 +44,16 @@ class FvCommunityNews_Admin_PostModeration
 	 */
 	private function _setupActions()
 	{
-		add_action('fvcn_admin_enqueue_scripts', array($this, 'enqueueScripts'));
+		add_action('fvcn_admin_enqueue_scripts', [$this, 'enqueueScripts']);
 		
-		add_filter('post_row_actions', array($this, 'postRowActions'), 10, 2);
+		add_filter('post_row_actions', [$this, 'postRowActions'], 10, 2);
 		
-		add_filter('manage_' . $this->_postType . '_posts_columns', array($this, 'columnHeaders'));
-		add_action('manage_' . $this->_postType . '_posts_custom_column', array($this, 'columnData'), 10, 2);
+		add_filter('manage_' . $this->_postType . '_posts_columns', [$this, 'columnHeaders']);
+		add_action('manage_' . $this->_postType . '_posts_custom_column', [$this, 'columnData'], 10, 2);
 		
-		add_filter('restrict_manage_posts', array($this, 'filterDropdown'));
+		add_filter('restrict_manage_posts', [$this, 'filterDropdown']);
 		
-		add_action('all_admin_notices', array($this, 'displayNotice'));
+		add_action('all_admin_notices', [$this, 'displayNotice']);
 		
 		$this->_togglePost();
 		
@@ -71,7 +71,7 @@ class FvCommunityNews_Admin_PostModeration
 		wp_enqueue_script(
 			'fvcn-admin-post-moderation-js',
 			FvCommunityNews_Registry::get('adminUrl') . 'js/post-moderation.js',
-			array('jquery'),
+			['jquery'],
 			'20120730'
 		);
 		
@@ -79,20 +79,20 @@ class FvCommunityNews_Admin_PostModeration
 		wp_localize_script(
 			'fvcn-admin-post-moderation-js',
 			'FvCommunityNewsAdminPostModeration',
-			array(
-				'ps'	=> array(
+			[
+				'ps'	=> [
 					'all'		=> 'all',
 					'public'	=> $registry->psPublic,
 					'pending'	=> $registry->psPending,
 					'spam'		=> $registry->psSpam,
 					'trash'		=> $registry->psTrash
-				),
-				'locale'=> array(
+                ],
+				'locale'=> [
 					'publish'	=> __('Publish', 'fvcn'),
 					'unpublish'	=> __('Unpublish', 'fvcn'),
 					'spam'		=> __('Mark as spam', 'fvcn')
-				)
-			)
+                ]
+            ]
 		);
 	}
 	
@@ -119,7 +119,7 @@ class FvCommunityNews_Admin_PostModeration
 		if (isset($_GET['fvcn-remove-all-spam-submit'], $_GET['_fvcn_bulk_action'])) {
 			check_admin_referer('fvcn-bulk-action', '_fvcn_bulk_action');
 			
-			if (fvcn_has_posts(array('post_status'=>fvcn_get_spam_post_status(), 'posts_per_page'=>-1))) {
+			if (fvcn_has_posts(['post_status'=>fvcn_get_spam_post_status(), 'posts_per_page'=>-1])) {
 				while (fvcn_posts()) {
 					fvcn_the_post();
 					
@@ -128,8 +128,8 @@ class FvCommunityNews_Admin_PostModeration
 			}
 			
 			wp_redirect(
-				add_query_arg(array('fvcn-updated' => 'bulk-remove-all-spam'),
-				remove_query_arg(array('action', 'action2', 'm', 's', 'mode', '_fvcn_post_status', '_wpnonce', '_wp_http_referer', '_fvcn_bulk_action', 'fvcn-remove-all-spam-submit')))
+				add_query_arg(['fvcn-updated' => 'bulk-remove-all-spam'],
+				remove_query_arg(['action', 'action2', 'm', 's', 'mode', '_fvcn_post_status', '_wpnonce', '_wp_http_referer', '_fvcn_bulk_action', 'fvcn-remove-all-spam-submit']))
 			);
 			exit;
 		}
@@ -167,8 +167,8 @@ class FvCommunityNews_Admin_PostModeration
 				}
 				
 				wp_redirect(
-					add_query_arg(array('fvcn-updated' => str_replace('fvcn-', '', $action), 'fvcn-bulk-count' => count($_GET['post'])),
-					remove_query_arg(array('action', 'action2', 'm', 's', 'mode', 'post', '_fvcn_post_status', '_wpnonce', '_wp_http_referer', '_fvcn_bulk_action')))
+					add_query_arg(['fvcn-updated' => str_replace('fvcn-', '', $action), 'fvcn-bulk-count' => count($_GET['post'])],
+					remove_query_arg(['action', 'action2', 'm', 's', 'mode', 'post', '_fvcn_post_status', '_wpnonce', '_wp_http_referer', '_fvcn_bulk_action']))
 				);
 				exit;
 			}
@@ -225,7 +225,7 @@ class FvCommunityNews_Admin_PostModeration
 		}
 		
 		if (false !== $updated) {
-			wp_redirect( add_query_arg(array('fvcn-updated' => $updated), remove_query_arg(array('fvcn-updated', 'action', 'post_id', '_wpnonce'))) );
+			wp_redirect( add_query_arg(['fvcn-updated' => $updated], remove_query_arg(['fvcn-updated', 'action', 'post_id', '_wpnonce'])) );
 			exit;
 		}
 	}
@@ -238,14 +238,14 @@ class FvCommunityNews_Admin_PostModeration
 	 */
 	public function columnHeaders()
 	{
-		$columns = array(
+		$columns = [
 			'cb'				=> '<input type="checkbox" />',
 			'title'				=> __('Title', 'fvcn'),
 			'fvcn_post_details'	=> __('Post Details', 'fvcn'),
 			'fvcn_tags'			=> __('Tags', 'fvcn'),
 			'comments'			=> '<span class="vers"><img alt="' . esc_attr__('Comments', 'fvcn') . '" src="' . esc_url(admin_url('images/comment-grey-bubble.png')) . '" /></span>',
 			'date'				=> __('Date', 'fvcn')
-		);
+        ];
 
 		return apply_filters('fvcn_admin_postmoderation_column_headers', $columns);
 	}
@@ -263,7 +263,7 @@ class FvCommunityNews_Admin_PostModeration
 		switch ($column) {
 			case 'fvcn_post_details' :
 				if (fvcn_has_post_thumbnail($postId)) {
-					fvcn_post_thumbnail($postId, array(46, 46), 'class=fvcn-post-thumbnail');
+					fvcn_post_thumbnail($postId, [46, 46], 'class=fvcn-post-thumbnail');
 				}
 				
 				echo '<span class="fvcn-post-author-details">';
@@ -310,29 +310,29 @@ class FvCommunityNews_Admin_PostModeration
 				unset($actions['delete']);
 			}
 			
-			$spamUri = esc_url( wp_nonce_url( add_query_arg(array(
+			$spamUri = esc_url( wp_nonce_url( add_query_arg([
 				'post_id'	=> $post->ID,
 				'action'	=> 'fvcn_toggle_post_spam_status'
-			),
-			remove_query_arg(array(
+            ],
+			remove_query_arg([
 				'fvcn-updated',
 				'post_id',
 				'failed',
 				'super'
-			))), 'fvcn-spam-post_' . $post->ID));
+            ])), 'fvcn-spam-post_' . $post->ID));
 			if (fvcn_is_post_spam()) {
 				$actions['spam'] = '<a href="' . $spamUri . '">' . __('Not Spam', 'fvcn') . '</a>';
 			} else {
-				$publishUri = esc_url( wp_nonce_url( add_query_arg(array(
+				$publishUri = esc_url( wp_nonce_url( add_query_arg([
 					'post_id'	=> $post->ID,
 					'action'	=> 'fvcn_toggle_post_publish_status'
-				),
-				remove_query_arg(array(
+                ],
+				remove_query_arg([
 					'fvcn-updated',
 					'post_id',
 					'failed',
 					'super'
-				))), 'fvcn-publish-post_' . $post->ID));
+                ])), 'fvcn-publish-post_' . $post->ID));
 				if (fvcn_is_post_published()) {
 					$actions['publish'] = '<a href="' . $publishUri . '">' . __('Unpublish', 'fvcn') . '</a>';
 				} else {

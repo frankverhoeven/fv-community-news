@@ -69,12 +69,12 @@ function fvcn_post_slug()
  */
 function fvcn_has_posts($args='')
 {
-	$defaults = array(
+	$defaults = [
 		'post_type'		=> fvcn_get_post_type(),
 		'post_status'	=> fvcn_get_public_post_status(),
 		'posts_per_page'=> 15,
 		'order'			=> 'DESC'
-	);
+    ];
 	
 	$options = wp_parse_args($args, $defaults);
 	$options = apply_filters('fvcn_has_posts_query', $options);
@@ -478,7 +478,7 @@ function fvcn_has_post_thumbnail($postId=0)
  * @param string|array $attributes
  * @return void
  */
-function fvcn_post_thumbnail($postId=0, $size='thumbnail', $attributes=array()) {
+function fvcn_post_thumbnail($postId=0, $size='thumbnail', $attributes= []) {
 	echo fvcn_get_post_thumbnail($postId, $size, $attributes);
 }
 	
@@ -491,7 +491,7 @@ function fvcn_post_thumbnail($postId=0, $size='thumbnail', $attributes=array()) 
 	 * @param string|array $attributes
 	 * @return string
 	 */
-	function fvcn_get_post_thumbnail($postId=0, $size='thumbnail', $attributes=array()) {
+	function fvcn_get_post_thumbnail($postId=0, $size='thumbnail', $attributes= []) {
 		$id = fvcn_get_post_id($postId);
 		
 		return apply_filters('fvcn_get_post_thumbnail', get_the_post_thumbnail($id, $size, $attributes), $id);
@@ -555,10 +555,10 @@ function fvcn_post_rating_increment_link($postId=0)
 		$id = fvcn_get_post_id($postId);
 		
 		$link = wp_nonce_url(add_query_arg(
-			array(
+			[
 				'post_id'					=> $id,
 				'fvcn_post_rating_action'	=> 'increase'
-			),
+            ],
 			fvcn_get_post_permalink($id)
 		), 'fvcn-post-rating');
 		
@@ -590,10 +590,10 @@ function fvcn_post_rating_decrement_link($postId=0)
 		$id = fvcn_get_post_id($postId);
 		
 		$link = wp_nonce_url(add_query_arg(
-			array(
+			[
 				'post_id'					=> $id,
 				'fvcn_post_rating_action'	=> 'decrease'
-			),
+            ],
 			fvcn_get_post_permalink($id)
 		), 'fvcn-post-rating');
 		
@@ -1215,11 +1215,11 @@ function fvcn_post_tag_list($postId=0, $args='')
 	{
 		$id = fvcn_get_post_id($postId);
 		
-		$default = array(
+		$default = [
 			'before'	=> '<div class="fvcn-post-tags"><p>' . __('Tags:', 'fvcn') . ' ',
 			'sep'		=> ', ',
 			'after'		=> '</p></div>'
-		);
+        ];
 		
 		$args = wp_parse_args($args, $default);
 		$before = $sep = $after = '';

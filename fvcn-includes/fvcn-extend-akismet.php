@@ -105,16 +105,16 @@ class FvCommunityNews_Akismet
 	protected function _post($host, $path, array $params)
 	{
 		$uri	 = 'http://' . $host . $path;
-		$request = array(
+		$request = [
 			'body'				=> $params,
-			'headers'			=> array(
+			'headers'			=> [
 				'Content-Type'	=> 'application/x-www-form-urlencoded; charset=' . get_option('blog_charset'),
 				'Host'			=> $host,
 				'User-Agent'	=> 'FV Community News/' . fvcn_get_version() . ' | Akismet/20120711'
-			),
+            ],
 			'httpversion'		=> '1.0',
 			'timeout'			=> 15
-		);
+        ];
 		
 		$response = wp_remote_post($uri, $request);
 		
@@ -161,7 +161,7 @@ class FvCommunityNews_Akismet
 			$blog = $this->getBlogUrl();
 		}
 		
-		return ('valid' == $this->_post('rest.akismet.com', '/1.1/verify-key', array('key' => $key, 'blog' => $blog)));
+		return ('valid' == $this->_post('rest.akismet.com', '/1.1/verify-key', ['key' => $key, 'blog' => $blog]));
 	}
 	
 	/**
@@ -248,7 +248,7 @@ class FvCommunityNews_Akismet_Handler
 	 */
 	protected function _getParams($postId)
 	{
-		$params = array(
+		$params = [
 			'user_ip'				=> fvcn_get_post_author_ip($postId),
 			'user_agent'			=> fvcn_get_post_author_ua($postId),
 			'referer'				=> $_SERVER['HTTP_REFERER'],
@@ -260,9 +260,9 @@ class FvCommunityNews_Akismet_Handler
 			'comment_content'		=> fvcn_get_post_content($postId),
 			'blog_charset'			=> get_option('blog_charset'),
 			'blog_lang'				=> get_locale()
-		);
+        ];
 		
-		$ignore = array('HTTP_COOKIE', 'HTTP_COOKIE2', 'PHP_AUTH_PW');
+		$ignore = ['HTTP_COOKIE', 'HTTP_COOKIE2', 'PHP_AUTH_PW'];
 		foreach ($_SERVER as $key=>$value) {
 			if (!in_array($key, $ignore) && is_string($value)) {
 				$params[ $key ] = $value;
@@ -329,9 +329,9 @@ class FvCommunityNews_Akismet_Handler
 	 */
 	public function registerSettings()
 	{
-		add_settings_section('fvcn_settings_akismet', __('Akismet', 'fvcn'), array($this, 'settingsCallbackSection'), 'fvcn-settings');
+		add_settings_section('fvcn_settings_akismet', __('Akismet', 'fvcn'), [$this, 'settingsCallbackSection'], 'fvcn-settings');
 		
-		add_settings_field('_fvcn_akismet_enabled', __('Enabled', 'fvcn'), array($this, 'settingsCallbackEnabled'), 'fvcn-settings', 'fvcn_settings_akismet');
+		add_settings_field('_fvcn_akismet_enabled', __('Enabled', 'fvcn'), [$this, 'settingsCallbackEnabled'], 'fvcn-settings', 'fvcn_settings_akismet');
 		register_setting('fvcn-settings', '_fvcn_akismet_enabled', 'intval');
 	}
 	

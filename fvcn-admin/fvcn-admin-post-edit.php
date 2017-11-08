@@ -36,8 +36,8 @@ class FvCommunityNews_Admin_PostEdit
 	{
 		$this->_postType = fvcn_get_post_type();
 		
-		add_action('add_meta_boxes',	array($this, 'registerMetaboxPostInfo')	);
-		add_action('save_post',			array($this, 'saveMetaboxPostInfo')		);
+		add_action('add_meta_boxes',	[$this, 'registerMetaboxPostInfo']);
+		add_action('save_post',			[$this, 'saveMetaboxPostInfo']);
 	}
 	
 	/** 
@@ -55,7 +55,7 @@ class FvCommunityNews_Admin_PostEdit
 		add_meta_box(
 			'fvcn_post_info_metabox',
 			__('Post Information', 'fvcn'),
-			array($this, 'metaboxPostInfo'),
+			[$this, 'metaboxPostInfo'],
 			$this->_postType,
 			'side',
 			'high'

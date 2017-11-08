@@ -33,7 +33,7 @@ class FvCommunityNews_Sync
 	/**
 	 * @var array
 	 */
-	protected $_options	= array();
+	protected $_options	= [];
 	
 	/**
 	 * @var bool
@@ -67,7 +67,7 @@ class FvCommunityNews_Sync
 	 */
 	protected function _setupOptions()
 	{
-		$this->_options = array(
+		$this->_options = [
 			'method'		=> 'POST',
 			'timeout'		=> 10,
 			'redirection'	=> 1,
@@ -75,10 +75,10 @@ class FvCommunityNews_Sync
 			'blocking'		=> true,
 			'compress'		=> true,
 			'decompress'	=> true,
-			'headers'		=> array(),
-			'body'			=> array(),
-			'cookies'		=> array()
-		);
+			'headers'		=> [],
+			'body'			=> [],
+			'cookies'		=> []
+        ];
 		
 		return $this;
 	}
@@ -134,7 +134,7 @@ class FvCommunityNews_Sync
 	 * @param bool $encrypt
 	 * @return bool|string
 	 */
-	protected function _makeApiCall($uri, array $data, array $options=array(), $encrypt=true)
+	protected function _makeApiCall($uri, array $data, array $options= [], $encrypt=true)
 	{
 		if (!$this->isEnabled()) {
 			return false;
@@ -169,14 +169,14 @@ class FvCommunityNews_Sync
 			return $this;
 		}
 		
-		$data = array(
+		$data = [
 			'blog_name'			=> get_bloginfo('name'),
 			'blog_description'	=> get_bloginfo('description'),
 			'blog_url'			=> home_url('/'),
 			'blog_language'		=> get_bloginfo('language')
-		);
+        ];
 		
-		if (false === ($key = $this->_makeApiCall(self::API_REGISTER, $data, array(), false))) {
+		if (false === ($key = $this->_makeApiCall(self::API_REGISTER, $data, [], false))) {
 			$this->_enabled = false;
 		} else {
 			update_option('_fvcn_sync_key', $key);
@@ -195,7 +195,7 @@ class FvCommunityNews_Sync
 	 */
 	public function submitPost(array $postData)
 	{
-		$this->_makeApiCall(self::API_SUBMIT_POST, $postData, array('blocking' => false));
+		$this->_makeApiCall(self::API_SUBMIT_POST, $postData, ['blocking' => false]);
 		
 		return $this;
 	}
@@ -209,12 +209,12 @@ class FvCommunityNews_Sync
      */
 	public function increasePostViewCount($postId)
 	{
-		$data = array(
+		$data = [
 			'post_link'		=> fvcn_get_post_link($postId),
 			'post_title'	=> fvcn_get_post_title($postId)
-		);
+        ];
 		
-		$this->_makeApiCall(self::API_INC_POST_VIEW_COUNT, $data, array('blocking' => false));
+		$this->_makeApiCall(self::API_INC_POST_VIEW_COUNT, $data, ['blocking' => false]);
 		
 		return $this;
 	}
@@ -228,12 +228,12 @@ class FvCommunityNews_Sync
 	 */
 	public function increasePostRating($postId)
 	{
-		$data = array(
+		$data = [
 			'post_link'		=> fvcn_get_post_link($postId),
 			'post_title'	=> fvcn_get_post_title($postId)
-		);
+        ];
 		
-		$this->_makeApiCall(self::API_INC_POST_RATING, $data, array('blocking' => false));
+		$this->_makeApiCall(self::API_INC_POST_RATING, $data, ['blocking' => false]);
 		
 		return $this;
 	}
@@ -247,12 +247,12 @@ class FvCommunityNews_Sync
 	 */
 	public function decreasePostRating($postId)
 	{
-		$data = array(
+		$data = [
 			'post_link'		=> fvcn_get_post_link($postId),
 			'post_title'	=> fvcn_get_post_title($postId)
-		);
+        ];
 		
-		$this->_makeApiCall(self::API_DEC_POST_RATING, $data, array('blocking' => false));
+		$this->_makeApiCall(self::API_DEC_POST_RATING, $data, ['blocking' => false]);
 		
 		return $this;
 	}
@@ -272,20 +272,20 @@ function fvcn_sync_submit_post($postId)
 		return;
 	}
 	
-	$data = array(
+	$data = [
 		'post_id'		=> $postId,
 		'post_title'	=> fvcn_get_post_title($postId),
 		'post_content'	=> strip_tags( fvcn_get_post_content($postId) ),
 		'post_url'		=> fvcn_get_post_link($postId),
-		'post_tags'		=> strip_tags( fvcn_get_post_tag_list($postId, array('before'=>'', 'sep'=>';', 'after'=>'')) ),
+		'post_tags'		=> strip_tags( fvcn_get_post_tag_list($postId, ['before'=>'', 'sep'=>';', 'after'=>'']) ),
 		'post_rating'	=> fvcn_get_post_rating($postId),
 		'post_views'	=> fvcn_get_post_views($postId),
 		'post_status'	=> fvcn_get_public_post_status(),
-		'post_author'	=> array(
+		'post_author'	=> [
 			'author_name'	=> fvcn_get_post_author_display_name($postId),
 			'author_email'	=> fvcn_get_post_author_email($postId)
-		)
-	);
+        ]
+    ];
 	
 	if (fvcn_has_post_thumbnail($postId)) {
 		$data['post_thumbnail'] = wp_get_attachment_url( get_post_thumbnail_id($postId) );

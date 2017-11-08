@@ -44,9 +44,9 @@ add_action('fvcn_ready',			'fvcn_akismet'							);
 /**
  * fvcn_widgets_init
  */
-add_action('fvcn_widgets_init',	array('FvCommunityNews_Widget_ListPosts',	'register_widget'),	10  );
-add_action('fvcn_widgets_init', array('FvCommunityNews_Widget_Form',		'register_widget'),	10  );
-add_action('fvcn_widgets_init', array('FvCommunityNews_Widget_TagCloud',	'register_widget'),	10  );
+add_action('fvcn_widgets_init', ['FvCommunityNews_Widget_ListPosts',	'register_widget'],	10  );
+add_action('fvcn_widgets_init', ['FvCommunityNews_Widget_Form',		'register_widget'],	10  );
+add_action('fvcn_widgets_init', ['FvCommunityNews_Widget_TagCloud',	'register_widget'],	10  );
 
 add_action('wp_head',				'fvcn_head'								);
 

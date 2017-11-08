@@ -123,10 +123,10 @@ function fvcn_has_user_posts($user_id=0, $post_status='') {
 			$post_status = fvcn_get_public_post_status();
 		}
 		
-		$args = array(
+		$args = [
 			'author'		=> $id,
 			'post_status'	=> $post_status
-		);
+        ];
 		
 		$retval = fvcn_has_posts($args);
 	}

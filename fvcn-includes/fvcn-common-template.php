@@ -66,7 +66,7 @@ function fvcn_template_notices()
 		return;
 	}
 	
-	$errors = $messages = array();
+	$errors = $messages = [];
 	
 	foreach (FvCommunityNews_Container::getInstance()->getWpError()->get_error_codes() as $code) {
 		$severity = FvCommunityNews_Container::getInstance()->getWpError()->get_error_data($code);

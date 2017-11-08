@@ -80,7 +80,7 @@ class FvCommunityNews_Validate extends FvCommunityNews_Validate_Abstract
 	/**
 	 * @var array
 	 */
-	protected $_validators = array();
+	protected $_validators = [];
 
 	/**
 	 * __construct()
@@ -121,7 +121,7 @@ class FvCommunityNews_Validate extends FvCommunityNews_Validate_Abstract
 	 */
 	public function clearValidators()
 	{
-		$this->_validators = array();
+		$this->_validators = [];
 		return $this;
 	}
 
@@ -360,13 +360,13 @@ class FvCommunityNews_Validate_ImageUpload extends FvCommunityNews_Validate_Abst
 			return false;
 		}
 		
-		$valid	= array(
+		$valid	= [
 			'gif'	=> IMAGETYPE_GIF,
 			'png'	=> IMAGETYPE_PNG,
 			'jpg'	=> IMAGETYPE_JPEG,
 			'jpe'	=> IMAGETYPE_JPEG,
 			'jpeg'	=> IMAGETYPE_JPEG
-		);
+        ];
 		
 		if (!array_key_exists(strtolower(pathinfo($value['name'], PATHINFO_EXTENSION)), $valid)) {
 			return false;

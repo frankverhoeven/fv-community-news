@@ -139,11 +139,11 @@ function fvcn_admin_form_help()
 	$content .= '<li>' . __('Make a field required or optional.', 'fvcn') . '</li></ul>';
 	$content .= '<p>' . __('Remember to save your settings when you are done!', 'fvcn') . '</p>';
 	
-	$screen->add_help_tab( array(
+	$screen->add_help_tab( [
 		'id'		=> 'fvcn-admin-form-help',
 		'title'		=> __('Overview', 'fvcn'),
 		'content'	=> $content
-	) );
+    ]);
 }
 
 

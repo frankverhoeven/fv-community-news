@@ -15,7 +15,7 @@
 <div class="entry-content fvcn-post-content">
 	<?php if (fvcn_has_post_thumbnail()) : ?>
 		<div class="fvcn-post-thumbnail">
-			<?php fvcn_post_thumbnail(0, array(110, 110)); ?>
+			<?php fvcn_post_thumbnail(0, [110, 110]); ?>
 		</div>
 	<?php endif; ?>
 	
@@ -31,7 +31,7 @@
 
 <footer class="fvcn-post-meta">
 	<span class="fvcn-post-tags">
-		<?php fvcn_post_tag_list(0, array('before'=>__('Tags: ', 'fvcn'), 'after'=>'')); ?>
+		<?php fvcn_post_tag_list(0, ['before'=>__('Tags: ', 'fvcn'), 'after'=>'']); ?>
 	</span>
 	|
 	<span class="fvcn-post-rating">

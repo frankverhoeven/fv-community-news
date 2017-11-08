@@ -40,7 +40,7 @@ class FvCommunityNews_Admin_Dashboard
 	 */
 	public function registerWidgets()
 	{
-		add_action('wp_dashboard_setup', array(new FvCommunityNews_Admin_Dashboard_Widget_RecentPosts(), 'register'));
+		add_action('wp_dashboard_setup', [new FvCommunityNews_Admin_Dashboard_Widget_RecentPosts(), 'register']);
 		
 		do_action('fvcn_register_dashboard_widgets');
 		
@@ -85,10 +85,10 @@ class FvCommunityNews_Admin_Dashboard_Widget_RecentPosts implements FvCommunityN
 	 */
 	public function __construct()
 	{
-		add_action('fvcn_admin_enqueue_scripts',			array($this, 'enqueueScripts'));
-		add_action('fvcn_admin_head',						array($this, 'dashboardHead'));
+		add_action('fvcn_admin_enqueue_scripts',			[$this, 'enqueueScripts']);
+		add_action('fvcn_admin_head',						[$this, 'dashboardHead']);
 		
-		add_action('wp_ajax_fvcn-dashboard-widget-rp-ajax',	array($this, 'ajaxResponse'));
+		add_action('wp_ajax_fvcn-dashboard-widget-rp-ajax',	[$this, 'ajaxResponse']);
 		
 		$this->response();
 	}
@@ -104,18 +104,18 @@ class FvCommunityNews_Admin_Dashboard_Widget_RecentPosts implements FvCommunityN
 		wp_enqueue_script(
 			'fvcn-dashboard-widget-rp-js',
 			FvCommunityNews_Registry::get('adminUrl') . 'js/dashboard.js',
-			array('jquery'),
+			['jquery'],
 			'20120721'
 		);
 		
 		wp_localize_script(
 			'fvcn-dashboard-widget-rp-js',
 			'FvCommunityNewsAdminDashboardOptions',
-			array(
+			[
 				'ajaxurl'	=> esc_url( admin_url('admin-ajax.php') ),
 				'action'	=> 'fvcn-dashboard-widget-rp-ajax',
 				'nonce'		=> wp_create_nonce('fvcn-dashboard')
-			)
+            ]
 		);
 		
 		do_action('fvcn_enqueue_dashboard_widget_recent_posts_scripts');
@@ -239,14 +239,14 @@ class FvCommunityNews_Admin_Dashboard_Widget_RecentPosts implements FvCommunityN
 		}
 		
 		if (false === $success) {
-			$response = array(
+			$response = [
 				'success'	=> false,
 				'message'	=> $message
-			);
+            ];
 		} else {
-			$response = array(
+			$response = [
 				'success'	=> true
-			);
+            ];
 		}
 		
 		echo json_encode( $response );
@@ -291,8 +291,8 @@ class FvCommunityNews_Admin_Dashboard_Widget_RecentPosts implements FvCommunityN
 			wp_add_dashboard_widget(
 				'fvcn-dashboard-recent-posts',
 				__('Recent Community News', 'fvcn'),
-				array($this, 'widget'),
-				array($this, 'control')
+				[$this, 'widget'],
+				[$this, 'control']
 			);
 		}
 		
@@ -307,10 +307,10 @@ class FvCommunityNews_Admin_Dashboard_Widget_RecentPosts implements FvCommunityN
 	 */
 	public function widget()
 	{
-		$options = array(
+		$options = [
 			'posts_per_page'	=> fvcn_get_option('_fvcn_dashboard_rp_num'),
 			'post_status'		=> fvcn_get_public_post_status() . ',' . fvcn_get_pending_post_status()
-		);
+        ];
 		
 		if (fvcn_has_posts($options)) :
 			$alt = 'odd alt'; ?>
@@ -333,7 +333,7 @@ class FvCommunityNews_Admin_Dashboard_Widget_RecentPosts implements FvCommunityN
 					<div id="fvcn-post-<?php fvcn_post_id(); ?>" class="<?php echo $class; ?>">
 						<?php
 						if (fvcn_has_post_thumbnail()) {
-							fvcn_post_thumbnail(0, array(50, 50));
+							fvcn_post_thumbnail(0, [50, 50]);
 						} else {
 							fvcn_post_author_avatar(0, 50);
 						}
@@ -353,22 +353,22 @@ class FvCommunityNews_Admin_Dashboard_Widget_RecentPosts implements FvCommunityN
 							
 							<p class="fvcn-row-actions">
 								<?php
-								$publish_uri = esc_url( wp_nonce_url( add_query_arg(array(
+								$publish_uri = esc_url( wp_nonce_url( add_query_arg([
 									'post_id'	=> fvcn_get_post_id(),
 									'action'	=> 'fvcn_toggle_post_publish_status'
-								), 'index.php'), 'fvcn-publish-post_' . fvcn_get_post_id()));
-								$edit_uri = esc_url( add_query_arg(array(
+                                ], 'index.php'), 'fvcn-publish-post_' . fvcn_get_post_id()));
+								$edit_uri = esc_url( add_query_arg([
 									'post'		=> fvcn_get_post_id(),
 									'action'	=> 'edit'
-								), 'post.php'));
-								$spam_uri = esc_url( wp_nonce_url( add_query_arg(array(
+                                ], 'post.php'));
+								$spam_uri = esc_url( wp_nonce_url( add_query_arg([
 									'post_id'	=> fvcn_get_post_id(),
 									'action'	=> 'fvcn_toggle_post_spam_status'
-								), 'index.php'), 'fvcn-spam-post_' . fvcn_get_post_id()));
-								$trash_uri = esc_url( wp_nonce_url( add_query_arg(array(
+                                ], 'index.php'), 'fvcn-spam-post_' . fvcn_get_post_id()));
+								$trash_uri = esc_url( wp_nonce_url( add_query_arg([
 									'post'		=> fvcn_get_post_id(),
 									'action'	=> 'trash'
-								), 'post.php'), 'trash-' . fvcn_get_post_type() . '_' . fvcn_get_post_id()));
+                                ], 'post.php'), 'trash-' . fvcn_get_post_type() . '_' . fvcn_get_post_id()));
 								?>
 								<span class="publish"><a href="<?php echo $publish_uri; ?>"><?php _e('Publish', 'fvcn'); ?></a></span>
 								<span class="unpublish"><a href="<?php echo $publish_uri; ?>"><?php _e('Unpublish', 'fvcn'); ?></a></span>

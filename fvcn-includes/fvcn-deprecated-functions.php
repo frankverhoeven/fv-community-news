@@ -48,7 +48,7 @@ function fvCommunityNewsGetSubmissions($num=5, $format='<li><strong><a href="%su
 {
 	trigger_error('The function "fvCommunityNewsGetSubmissions()" is deprecated!', E_USER_WARNING);
 	
-	if (fvcn_has_posts(array('posts_per_page'=>$num))) {
+	if (fvcn_has_posts(['posts_per_page'=>$num])) {
 		$posts = '<ul>';
 		
 		while (fvcn_posts()) {
@@ -63,7 +63,7 @@ function fvCommunityNewsGetSubmissions($num=5, $format='<li><strong><a href="%su
 			$post = str_replace('%submission_date%',			fvcn_get_post_date(),			$post);
 			
 			if (fvcn_has_post_thumbnail()) {
-				$post = str_replace('%submission_image%',		fvcn_get_post_thumbnail(0, array(45, 45)),	$post);
+				$post = str_replace('%submission_image%',		fvcn_get_post_thumbnail(0, [45, 45]),	$post);
 			} else {
 				$post = str_replace('%submission_image%',		'',	$post);
 			}

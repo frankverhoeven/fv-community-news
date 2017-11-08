@@ -128,10 +128,10 @@ function fvcn_get_query_template($type, $templates)
  */
 function fvcn_theme_get_single_post_template()
 {
-	return fvcn_get_query_template('single_post', array(
+	return fvcn_get_query_template('single_post', [
 		'single-' . fvcn_get_post_type() . '.php',
 		'single-fvcn.php'
-	));
+    ]);
 }
 
 
@@ -143,10 +143,10 @@ function fvcn_theme_get_single_post_template()
  */
 function fvcn_theme_get_post_archive_template()
 {
-	return fvcn_get_query_template('post_archive', array(
+	return fvcn_get_query_template('post_archive', [
 		'archive-' . fvcn_get_post_type() . '.php',
 		'archive-fvcn.php'
-	));
+    ]);
 }
 
 
@@ -158,10 +158,10 @@ function fvcn_theme_get_post_archive_template()
  */
 function fvcn_theme_get_post_tag_archive_template()
 {
-	return fvcn_get_query_template('post_tag', array(
+	return fvcn_get_query_template('post_tag', [
 		'taxonomy-' . fvcn_get_post_tag_id() . '.php',
 		'taxonomy-fvcn.php'
-	));
+    ]);
 }
 
 

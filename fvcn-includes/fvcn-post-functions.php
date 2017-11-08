@@ -25,7 +25,7 @@ if (!defined('ABSPATH')) {
  */
 function fvcn_insert_post(array $post_data, array $post_meta)
 {
-	$default_post = array(
+	$default_post = [
 		'post_author'	=> 0,
 		'post_title'	=> '',
 		'post_content'	=> '',
@@ -33,7 +33,7 @@ function fvcn_insert_post(array $post_data, array $post_meta)
 		'post_type'		=> fvcn_get_post_type(),
 		'post_password'	=> '',
 		'tax_input'		=> ''
-	);
+    ];
 	$post_data = wp_parse_args($post_data, $default_post);
 	
 	$postId = wp_insert_post($post_data);
@@ -44,14 +44,14 @@ function fvcn_insert_post(array $post_data, array $post_meta)
 	}
 	
 	
-	$default_meta = array(
+	$default_meta = [
 		'_fvcn_anonymous_author_name'	=> '',
 		'_fvcn_anonymous_author_email'	=> '',
 		'_fvcn_post_url'				=> '',
 		'_fvcn_post_rating'				=> 0,
 		'_fvcn_author_ip'				=> fvcn_get_current_author_ip(),
 		'_fvcn_author_au'				=> fvcn_get_current_author_ua()
-	);
+    ];
 	
 	$post_meta = wp_parse_args($post_meta, $default_meta);
 	
@@ -108,21 +108,21 @@ function fvcn_new_post_handler()
 	}
 	
 	
-	$postData	= array(
+	$postData	= [
 		'author'			=> 0,
 		'post_author_name'	=> '',
 		'post_author_email'	=> '',
 		'post_link'			=> '',
 		'post_tags'			=> '',
 		'post_status'		=> fvcn_get_pending_post_status()
-	);
+    ];
 	$validator	= new FvCommunityNews_Validate();
 	
 	// Timeout
-	apply_filters('fvcn_post_form_time_key', $validator->setValidators(array(
+	apply_filters('fvcn_post_form_time_key', $validator->setValidators([
 		'FvCommunityNews_Validate_NotEmpty',
 		'FvCommunityNews_Validate_Timeout'
-	)));
+    ]));
 	
 	if (!$validator->isValid($_POST['fvcn_post_form_time_key'])) {
 		fvcn_add_error('fvcn_post_form', sprintf(__('<strong>ERROR</strong>: %s', 'fvcn'), $validator->getMessage()));
@@ -130,12 +130,12 @@ function fvcn_new_post_handler()
 	
 	if (fvcn_is_anonymous()) {
 		// Author Name
-		apply_filters('fvcn_post_author_name_validators', $validator->setValidators(array(
+		apply_filters('fvcn_post_author_name_validators', $validator->setValidators([
 			'FvCommunityNews_Validate_NotEmpty',
 			'FvCommunityNews_Validate_Name',
 			new FvCommunityNews_Validate_MinLength(2),
 			new FvCommunityNews_Validate_MaxLength(40)
-		)));
+        ]));
 		
 		if ($validator->isValid($_POST['fvcn_post_form_author_name'])) {
 			$postData['post_author_name'] = $_POST['fvcn_post_form_author_name'];
@@ -144,12 +144,12 @@ function fvcn_new_post_handler()
 		}
 		
 		// Author Email
-		apply_filters('fvcn_post_author_email_validators', $validator->setValidators(array(
+		apply_filters('fvcn_post_author_email_validators', $validator->setValidators([
 			'FvCommunityNews_Validate_NotEmpty',
 			'FvCommunityNews_Validate_Email',
 			new FvCommunityNews_Validate_MinLength(10),
 			new FvCommunityNews_Validate_MaxLength(60)
-		)));
+        ]));
 		
 		if ($validator->isValid($_POST['fvcn_post_form_author_email'])) {
 			$postData['post_author_email'] = $_POST['fvcn_post_form_author_email'];
@@ -172,11 +172,11 @@ function fvcn_new_post_handler()
 	}
 	
 	// Title
-	apply_filters('fvcn_post_title_validators', $validator->setValidators(array(
+	apply_filters('fvcn_post_title_validators', $validator->setValidators([
 		'FvCommunityNews_Validate_NotEmpty',
 		new FvCommunityNews_Validate_MinLength(8),
 		new FvCommunityNews_Validate_MaxLength(70)
-	)));
+    ]));
 	
 	if ($validator->isValid($_POST['fvcn_post_form_title'])) {
 		$postData['post_title'] = $_POST['fvcn_post_form_title'];
@@ -186,11 +186,11 @@ function fvcn_new_post_handler()
 	
 	// Link
 	if (fvcn_is_post_form_link_required()) {
-		apply_filters('fvcn_post_link_validators', $validator->setValidators(array(
+		apply_filters('fvcn_post_link_validators', $validator->setValidators([
 			'FvCommunityNews_Validate_NotEmpty',
 			'FvCommunityNews_Validate_Url',
 			new FvCommunityNews_Validate_MinLength(6)
-		)));
+        ]));
 		
 		if (false === strpos($_POST['fvcn_post_form_link'], 'http://')) {
 			$_POST['fvcn_post_form_link'] = 'http://' . $_POST['fvcn_post_form_link'];
@@ -201,13 +201,13 @@ function fvcn_new_post_handler()
 			fvcn_add_error('fvcn_post_form_link', sprintf(__('<strong>ERROR</strong>: %s', 'fvcn'), $validator->getMessage()));
 		}
 	} else {
-		$validator->setValidators(array('FvCommunityNews_Validate_NotEmpty'));
+		$validator->setValidators(['FvCommunityNews_Validate_NotEmpty']);
 		
 		if ($validator->isValid($_POST['fvcn_post_form_link'])) {
-			apply_filters('fvcn_post_link_validators', $validator->setValidators(array(
+			apply_filters('fvcn_post_link_validators', $validator->setValidators([
 				'FvCommunityNews_Validate_Url',
 				new FvCommunityNews_Validate_MinLength(6)
-			)));
+            ]));
 			
 			if (false === strpos($_POST['fvcn_post_form_link'], 'http://')) {
 				$_POST['fvcn_post_form_link'] = 'http://' . $_POST['fvcn_post_form_link'];
@@ -221,10 +221,10 @@ function fvcn_new_post_handler()
 	}
 	
 	// Content
-	apply_filters('fvcn_post_content_validators', $validator->setValidators(array(
+	apply_filters('fvcn_post_content_validators', $validator->setValidators([
 		'FvCommunityNews_Validate_NotEmpty',
 		new FvCommunityNews_Validate_MinLength(80)
-	)));
+    ]));
 	
 	if ($validator->isValid($_POST['fvcn_post_form_content'])) {
 		$postData['post_content'] = $_POST['fvcn_post_form_content'];
@@ -234,34 +234,34 @@ function fvcn_new_post_handler()
 	
 	// Tags
 	if (fvcn_is_post_form_tags_required()) {
-		apply_filters('fvcn_post_tags_validators', $validator->setValidators(array(
+		apply_filters('fvcn_post_tags_validators', $validator->setValidators([
 			'FvCommunityNews_Validate_NotEmpty',
 			'FvCommunityNews_Validate_Tags',
 			new FvCommunityNews_Validate_MinLength(2)
-		)));
+        ]));
 		
 		if ($validator->isValid($_POST['fvcn_post_form_tags'])) {
 			if (false !== strpos($_POST['fvcn_post_form_tags'], ',')) {
 				$_POST['fvcn_post_form_tags'] = explode(',', $_POST['fvcn_post_form_tags']);
 			}
-			$postData['post_tags'] = array(fvcn_get_post_tag_id() => $_POST['fvcn_post_form_tags']);
+			$postData['post_tags'] = [fvcn_get_post_tag_id() => $_POST['fvcn_post_form_tags']];
 		} else {
 			fvcn_add_error('fvcn_post_form_tags', sprintf(__('<strong>ERROR</strong>: %s', 'fvcn'), $validator->getMessage()));
 		}
 	} else {
-		$validator->setValidators(array('FvCommunityNews_Validate_NotEmpty'));
+		$validator->setValidators(['FvCommunityNews_Validate_NotEmpty']);
 		
 		if ($validator->isValid($_POST['fvcn_post_form_link'])) {
-			apply_filters('fvcn_post_tags_validators', $validator->setValidators(array(
+			apply_filters('fvcn_post_tags_validators', $validator->setValidators([
 				'FvCommunityNews_Validate_Tags',
 				new FvCommunityNews_Validate_MinLength(2)
-			)));
+            ]));
 			
 			if ($validator->isValid($_POST['fvcn_post_form_tags'])) {
 				if (false !== strpos($_POST['fvcn_post_form_tags'], ',')) {
 					$_POST['fvcn_post_form_tags'] = explode(',', $_POST['fvcn_post_form_tags']);
 				}
-				$postData['post_tags'] = array(fvcn_get_post_tag_id() => $_POST['fvcn_post_form_tags']);
+				$postData['post_tags'] = [fvcn_get_post_tag_id() => $_POST['fvcn_post_form_tags']];
 			} else {
 				fvcn_add_error('fvcn_post_form_tags', sprintf(__('<strong>ERROR</strong>: %s', 'fvcn'), $validator->getMessage()));
 			}
@@ -270,9 +270,9 @@ function fvcn_new_post_handler()
 	
 	// Thumbnail
 	if (fvcn_is_post_form_thumbnail_required()) {
-		apply_filters('fvcn_post_title_validators', $validator->setValidators(array(
+		apply_filters('fvcn_post_title_validators', $validator->setValidators([
 			'FvCommunityNews_Validate_ImageUpload'
-		)));
+        ]));
 		
 		if ($validator->isValid($_FILES['fvcn_post_form_thumbnail'])) {
 			add_action('fvcn_insert_post', 'fvcn_insert_post_thumbnail');
@@ -280,9 +280,9 @@ function fvcn_new_post_handler()
 			fvcn_add_error('fvcn_post_form_thumbnail', sprintf(__('<strong>ERROR</strong>: %s', 'fvcn'), $validator->getMessage()));
 		}
 	} else if (!empty($_FILES['fvcn_post_form_thumbnail']['tmp_name'])) {
-		apply_filters('fvcn_post_title_validators', $validator->setValidators(array(
+		apply_filters('fvcn_post_title_validators', $validator->setValidators([
 			'FvCommunityNews_Validate_ImageUpload'
-		)));
+        ]));
 		
 		if ($validator->isValid($_FILES['fvcn_post_form_thumbnail'])) {
 			add_action('fvcn_insert_post', 'fvcn_insert_post_thumbnail');
@@ -296,19 +296,19 @@ function fvcn_new_post_handler()
 	
 	
 	if (!fvcn_has_errors()) {
-		$post_data = apply_filters('fvcn_new_post_data_pre_insert', array(
+		$post_data = apply_filters('fvcn_new_post_data_pre_insert', [
 			'post_author'	=> $postData['author'],
 			'post_title'	=> $postData['post_title'],
 			'post_content'	=> $postData['post_content'],
 			'tax_input'		=> $postData['post_tags'],
 			'post_status'	=> $postData['post_status'],
 			'post_type'		=> fvcn_get_post_type()
-		));
-		$post_meta = apply_filters('fvcn_new_post_meta_pre_insert', array(
+        ]);
+		$post_meta = apply_filters('fvcn_new_post_meta_pre_insert', [
 			'_fvcn_anonymous_author_name'	=> $postData['post_author_name'],
 			'_fvcn_anonymous_author_email'	=> $postData['post_author_email'],
 			'_fvcn_post_url'				=> $postData['post_link']
-		));
+        ]);
 		
 		do_action('fvcn_new_post_pre_insert', $post_data, $post_meta);
 		
@@ -316,9 +316,9 @@ function fvcn_new_post_handler()
 		
 		if ('template_redirect' == current_filter()) {
 			if (fvcn_get_public_post_status() == fvcn_get_post_status($postId)) {
-				wp_redirect( add_query_arg(array('fvcn_added'=>$postId), fvcn_get_post_permalink($postId)) );
+				wp_redirect( add_query_arg(['fvcn_added'=>$postId], fvcn_get_post_permalink($postId)) );
 			} else {
-				wp_redirect( add_query_arg(array('fvcn_added'=>$postId), home_url('/')) );
+				wp_redirect( add_query_arg(['fvcn_added'=>$postId], home_url('/')) );
 			}
 		} else {
 			return $postId;
@@ -422,10 +422,10 @@ function fvcn_spam_post($postId)
  */
 function fvcn_post_rating_handler()
 {
-	$actions = array(
+	$actions = [
 		'increase',
 		'decrease'
-	);
+    ];
 	
 	if (!isset($_REQUEST['fvcn_post_rating_action'], $_REQUEST['post_id']) || !in_array($_REQUEST['fvcn_post_rating_action'], $actions)) {
 		return;
@@ -468,7 +468,7 @@ class FvCommunityNews_PostMapper
 	 */
 	protected function _changePostStatus($postId, $status)
 	{
-		$post = array();
+		$post = [];
 		$post['ID'] = $postId;
 		$post['post_status'] = $status;
 		

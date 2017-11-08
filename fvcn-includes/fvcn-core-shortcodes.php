@@ -24,7 +24,7 @@ class FvCommunityNews_Shortcodes
 	/**
 	 * @var array
 	 */
-	private $_codes = array();
+	private $_codes = [];
 	
 	/**
 	 * __construct()
@@ -46,11 +46,11 @@ class FvCommunityNews_Shortcodes
 	 */
 	private function _addCodes()
 	{
-		$codes = array(
-			'fvcn-recent-posts'	=> array($this, 'displayRecentPosts'),
-			'fvcn-post-form'	=> array($this, 'displayPostForm'),
-			'fvcn-tag-cloud'	=> array($this, 'displayTagCloud')
-		);
+		$codes = [
+			'fvcn-recent-posts'	=> [$this, 'displayRecentPosts'],
+			'fvcn-post-form'	=> [$this, 'displayPostForm'],
+			'fvcn-tag-cloud'	=> [$this, 'displayTagCloud']
+        ];
 		
 		$codes = apply_filters('fvcn_shortcodes', $codes);
 		
@@ -151,11 +151,11 @@ class FvCommunityNews_Shortcodes
 	 * @version 20120315
 	 * @return string
 	 */
-	public function displayRecentPosts($attr=array())
+	public function displayRecentPosts($attr= [])
 	{
 		$this->_obStart();
 		
-		$options = array('posts_per_page' => 10);
+		$options = ['posts_per_page' => 10];
 		
 		if (fvcn_has_posts($options)) {
 			fvcn_get_template_part('fvcn/loop', 'posts');

@@ -40,10 +40,10 @@ class FvCommunityNews_Widget_ListPosts extends WP_Widget {
 	 *	@uses apply_filters()
 	 */
 	public function __construct() {
-		$options = apply_filters('fvcn_list_posts_widget_options', array(
+		$options = apply_filters('fvcn_list_posts_widget_options', [
 			'classname'		=> 'fvcn_list_posts_widget',
 			'description'	=> __('A list of the most recent community news.', 'fvcn')
-		));
+        ]);
 		
 		parent::__construct(false, __('FV Community News Posts', 'fvcn'), $options);
 	}
@@ -68,9 +68,9 @@ class FvCommunityNews_Widget_ListPosts extends WP_Widget {
 		$registry->widgetShowThumbnail	= !empty( $instance['thumbnail'] ) ? true : false;
 		$registry->widgetShowViewAll	= !empty( $instance['view_all']  ) ? true : false;
 		
-		$options = array(
+		$options = [
 			'posts_per_page'	=> $num_posts
-		);
+        ];
 		
 		if (fvcn_has_posts($options)) {
 			
@@ -178,10 +178,10 @@ class FvCommunityNews_Widget_Form extends WP_Widget {
 	 *	@uses apply_filters()
 	 */
 	public function __construct() {
-		$options = apply_filters('fvcn_form_widget_options', array(
+		$options = apply_filters('fvcn_form_widget_options', [
 			'classname'		=> 'fvcn_form_widget',
 			'description'	=> __('A form to add community news.', 'fvcn')
-		));
+        ]);
 		
 		parent::__construct(false, __('FV Community News Form', 'fvcn'), $options);
 	}
@@ -287,10 +287,10 @@ class FvCommunityNews_Widget_TagCloud extends WP_Widget {
 	 *	@uses apply_filters()
 	 */
 	public function __construct() {
-		$options = apply_filters('fvcn_form_widget_options', array(
+		$options = apply_filters('fvcn_form_widget_options', [
 			'classname'		=> 'fvcn_tag_cloud',
 			'description'	=> __('A tag cloud with tags from community news.', 'fvcn')
-		));
+        ]);
 		
 		parent::__construct(false, __('FV Community News Tag Cloud', 'fvcn'), $options);
 	}

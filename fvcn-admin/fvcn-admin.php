@@ -70,12 +70,12 @@ class FvCommunityNews_Admin
 	 */
 	private function _setupActions()
 	{
-		add_action('admin_init',			array($this, 'init'));
-		add_action('admin_head',			array($this, 'adminHead'));
-		add_action('admin_menu',			array($this, 'adminMenu'));
-		add_action('admin_enqueue_scripts',	array($this, 'enqueueScripts'));
+		add_action('admin_init',			[$this, 'init']);
+		add_action('admin_head',			[$this, 'adminHead']);
+		add_action('admin_menu',			[$this, 'adminMenu']);
+		add_action('admin_enqueue_scripts',	[$this, 'enqueueScripts']);
 	
-		add_action('fvcn_admin_init',		array($this, 'factory'));
+		add_action('fvcn_admin_init',		[$this, 'factory']);
 		
 		return $this;
 	}

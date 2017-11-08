@@ -17,9 +17,9 @@ class FV_Loader_AutoLoader implements FV_Loader_Autoloader_Interface
      * Registered namespaces.
      * @var array
      */
-    protected $_namespaces = array(
+    protected $_namespaces = [
         'FV' => '../'
-    );
+    ];
 
     /**
      * Constructor. Optional register namespaces.
@@ -44,7 +44,7 @@ class FV_Loader_AutoLoader implements FV_Loader_Autoloader_Interface
      */
     public function register()
     {
-        spl_autoload_register(array($this, 'autoload'));
+        spl_autoload_register([$this, 'autoload']);
         return $this;
     }
 
@@ -117,7 +117,7 @@ class FV_Loader_AutoLoader implements FV_Loader_Autoloader_Interface
             }
         }
 
-        $filename .= '/' . str_replace(array('_', '\\'), DIRECTORY_SEPARATOR, $className);
+        $filename .= '/' . str_replace(['_', '\\'], DIRECTORY_SEPARATOR, $className);
 
         return $filename;
     }

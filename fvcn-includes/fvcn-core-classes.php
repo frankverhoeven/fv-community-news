@@ -24,12 +24,12 @@ class FvCommunityNews_Container
 	/**
 	 * @var array
 	 */
-	protected $_options = array();
+	protected $_options = [];
 
 	/**
 	 * @var array
 	 */
-	protected $_objects = array();
+	protected $_objects = [];
 
 	/**
 	 * @var FvCommunityNews_Container
@@ -42,7 +42,7 @@ class FvCommunityNews_Container
 	 * @version 20120709
 	 * @param array $options
 	 */
-	public function __construct(array $options=array())
+	public function __construct(array $options= [])
 	{
 		$this->_options = $options;
 	}
@@ -209,7 +209,7 @@ class FvCommunityNews_Registry
 	/**
 	 * @var array
 	 */
-	private $_options = array();
+	private $_options = [];
 
 	/**
 	 * @var object

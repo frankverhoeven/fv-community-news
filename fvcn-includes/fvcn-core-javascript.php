@@ -24,7 +24,7 @@ class FvCommunityNews_Javascript
 	/**
 	 * @var array
 	 */
-	protected $_jsParams = array();
+	protected $_jsParams = [];
 	
 	/**
 	 * __construct()
@@ -34,18 +34,18 @@ class FvCommunityNews_Javascript
 	 */
 	public function __construct()
 	{
-		$this->_jsParams = array(
+		$this->_jsParams = [
 			'ajaxurl'	=> esc_url( admin_url('admin-ajax.php') ),
 			'nonce'		=> wp_create_nonce('fvcn-ajax'),
 			'action'	=> 'fvcn-ajax',
 			'thumbnail'	=> fvcn_is_post_form_thumbnail_enabled() ? '1' : '0',
-			'locale'	=> array(
+			'locale'	=> [
 				'loading'	=> __('Loading', 'fvcn')
-			)
-		);
+            ]
+        ];
 		
-		add_action('wp_ajax_fvcn-ajax',			array($this, 'response'));
-		add_action('wp_ajax_nopriv_fvcn-ajax',	array($this, 'response'));
+		add_action('wp_ajax_fvcn-ajax',			[$this, 'response']);
+		add_action('wp_ajax_nopriv_fvcn-ajax',	[$this, 'response']);
 	}
 	
 	/**
@@ -60,7 +60,7 @@ class FvCommunityNews_Javascript
 		wp_deregister_script('jquery-form');
 		wp_register_script('jquery-form', FvCommunityNews_Registry::get('pluginUrl') . 'fvcn-includes/js/jquery-form.js');
 		
-		wp_enqueue_script('fvcn-js', FvCommunityNews_Registry::get('pluginUrl') . 'fvcn-includes/js/fvcn-js.js', array('jquery', 'jquery-form'));
+		wp_enqueue_script('fvcn-js', FvCommunityNews_Registry::get('pluginUrl') . 'fvcn-includes/js/fvcn-js.js', ['jquery', 'jquery-form']);
 		
 		wp_localize_script('fvcn-js', 'FvCommunityNewsJavascript', $this->_jsParams);
 		
@@ -76,15 +76,15 @@ class FvCommunityNews_Javascript
 		$postId = fvcn_new_post_handler();
 		
 		if (fvcn_has_errors()) {
-			$errors = array();
+			$errors = [];
 			foreach (FvCommunityNews_Container::getInstance()->getWpError()->get_error_codes() as $code) {
 				$errors[ $code ] = FvCommunityNews_Container::getInstance()->getWpError()->get_error_message($code);
 			}
 			
-			$response = array(
+			$response = [
 				'success' => 'false',
 				'errors'  => $errors
-			);
+            ];
 		} else {
 			if (fvcn_get_public_post_status() == fvcn_get_post_status($postId)) {
 				$permalink = fvcn_get_post_permalink($postId);
@@ -94,11 +94,11 @@ class FvCommunityNews_Javascript
 				$message   = __('Your post has been added and is pending review.', 'fvcn');
 			}
 			
-			$response = array(
+			$response = [
 				'success'	=> 'true',
 				'permalink'	=> $permalink,
 				'message'	=> $message
-			);
+            ];
 		}
 		
 		die( json_encode($response) );
@@ -114,6 +114,6 @@ class FvCommunityNews_Javascript
  */
 function fvcn_javascript()
 {
-	add_action('fvcn_enqueue_scripts', array(FvCommunityNews_Container::getInstance()->getJavascript(), 'enqueueScripts'));
+	add_action('fvcn_enqueue_scripts', [FvCommunityNews_Container::getInstance()->getJavascript(), 'enqueueScripts']);
 }
 

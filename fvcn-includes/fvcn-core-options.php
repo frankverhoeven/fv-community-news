@@ -20,12 +20,12 @@ class FvCommunityNews_Options
 	/**
 	 * @var array
 	 */
-	protected $_defaultOptions	= array();
+	protected $_defaultOptions	= [];
 
 	/**
 	 * @var array
 	 */
-	protected $_options			= array();
+	protected $_options			= [];
 
 	/**
 	 * __construct()
@@ -46,7 +46,7 @@ class FvCommunityNews_Options
 	 */
 	protected function _setDefaultOptions()
 	{
-		$this->_defaultOptions = apply_filters('fvcn_get_default_options', array(
+		$this->_defaultOptions = apply_filters('fvcn_get_default_options', [
 			'_fvcn_version'								=> FvCommunityNews::getInstance()->version,
 
 			'_fvcn_admin_moderation'					=> false,
@@ -75,7 +75,7 @@ class FvCommunityNews_Options
 			'_fvcn_sync_key'							=> false,
 
 			'_fvcn_dashboard_rp_num'					=> 5
-		));
+        ]);
 
 		return $this;
 	}

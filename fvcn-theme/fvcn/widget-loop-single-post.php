@@ -18,7 +18,7 @@
 	<div class="fvcn-post-content">
 		<?php if (fvcn_has_post_thumbnail() && fvcn_show_widget_thumbnail()) : ?>
 			<div class="fvcn-post-thumbnail">
-				<?php fvcn_post_thumbnail(0, array(50, 50)); ?>
+				<?php fvcn_post_thumbnail(0, [50, 50]); ?>
 			</div>
 		<?php endif; ?>
 		
