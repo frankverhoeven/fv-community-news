@@ -21,7 +21,7 @@ abstract class FV_Config_Abstract implements Iterator
 
   private $myArray;
 
-  public function __construct( $givenArray ) {
+  public function __construct( $givenArray) {
     $this->myArray = $givenArray;
   }
   function rewind() {

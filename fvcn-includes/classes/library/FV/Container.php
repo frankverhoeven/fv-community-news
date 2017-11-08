@@ -7,26 +7,26 @@
  */
 abstract class FV_Container extends FV_Singleton
 {
-	/**
+    /**
      * Object options.
-	 * @var array
-	 */
-	protected $_options = [];
+     * @var array
+     */
+    protected $_options = [];
 
-	/**
+    /**
      * Saved objects.
-	 * @var array
-	 */
-	protected $_objects = [];
+     * @var array
+     */
+    protected $_objects = [];
 
-	/**
-	 * Constructor. Optional set options.
-	 *
-	 * @param array $options
+    /**
+     * Constructor. Optional set options.
+     *
+     * @param array $options
      * @return void
-	 */
-	public function __construct(array $options= [])
-	{
-		$this->_options = $options;
-	}
+     */
+    public function __construct(array $options= [])
+    {
+        $this->_options = $options;
+    }
 }

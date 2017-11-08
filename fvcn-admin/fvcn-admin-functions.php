@@ -5,13 +5,13 @@
  *
  * Admin Area
  *
- * @package		FV Community News
- * @subpackage	Admin Functions
- * @author		Frank Verhoeven <hi@frankverhoeven.me>
+ * @package FV Community News
+ * @subpackage Admin Functions
+ * @author Frank Verhoeven <hi@frankverhoeven.me>
  */
 
 if (!defined('ABSPATH')) {
-	exit;
+    exit;
 }
 
 
@@ -26,25 +26,25 @@ if (!defined('ABSPATH')) {
  */
 function fvcn_form_option($option, $slug=false)
 {
-	echo fvcn_get_form_option($option, $slug);
+    echo fvcn_get_form_option($option, $slug);
 }
-	
-	/**
-	 * fvcn_get_form_option()
-	 *
-	 * @version 20120524
-	 * @param string $option
-	 * @param bool $slug
-	 * @return mixed
-	 */
-	function fvcn_get_form_option($option, $slug=false)
-	{
-		$value = fvcn_get_option($option);
-		
-		if (true === $slug) {
-			$value = apply_filters('editable_slug', $value);
-		}
-		
-		return apply_filters('fvcn_get_form_option', esc_attr($value));
-	}
+
+    /**
+     * fvcn_get_form_option()
+     *
+     * @version 20120524
+     * @param string $option
+     * @param bool $slug
+     * @return mixed
+     */
+    function fvcn_get_form_option($option, $slug=false)
+    {
+        $value = fvcn_get_option($option);
+
+        if (true === $slug) {
+            $value = apply_filters('editable_slug', $value);
+        }
+
+        return apply_filters('fvcn_get_form_option', esc_attr($value));
+    }
 

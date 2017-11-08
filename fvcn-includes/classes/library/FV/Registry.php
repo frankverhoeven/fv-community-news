@@ -72,7 +72,7 @@ class FV_Registry extends FV_Singleton
      */
     public function __isset($key)
     {
-        return isset( $this->_registry[ (string) $key ] );
+        return isset( $this->_registry[ (string) $key ]);
     }
 
     /**
@@ -83,7 +83,7 @@ class FV_Registry extends FV_Singleton
      */
     public function __unset($key)
     {
-        unset( $this->_registry[ (string) $key ] );
+        unset( $this->_registry[ (string) $key ]);
     }
 
     /**

@@ -59,7 +59,7 @@ class FV_Loader_AutoLoader implements FV_Loader_Autoloader_Interface
     public function registerNamespace($namespace, $location)
     {
         if (!is_dir($location)) {
-            throw new Exception( 'Directory "' . $location . ' for namespace "' . $namespace . '" does not exist' );
+            throw new Exception( 'Directory "' . $location . ' for namespace "' . $namespace . '" does not exist');
         }
 
         $this->_namespaces[ $namespace ] = $location;

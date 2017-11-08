@@ -5,13 +5,13 @@
  *
  * Theme
  *
- * @package		FV Community News
- * @subpackage	Theme
- * @author		Frank Verhoeven <hi@frankverhoeven.me>
+ * @package FV Community News
+ * @subpackage Theme
+ * @author Frank Verhoeven <hi@frankverhoeven.me>
  */
 
 if (!defined('ABSPATH')) {
-	exit;
+    exit;
 }
 
 
@@ -21,32 +21,32 @@ if (!defined('ABSPATH')) {
  */
 class FvCommunityNews_Theme
 {
-	/**
-	 * @var bool
-	 */
-	protected $_compatActive = true;
-	
-	/**
-	 * __construct()
-	 *
-	 * @version 20120719
-	 * @return void
-	 */
-	public function __construct()
-	{
-		
-	}
-	
-	/**
-	 * isCompatActive()
-	 *
-	 * @version 20120719
-	 * @return bool
-	 */
-	public function isCompatActive()
-	{
-		return $this->_compatActive;
-	}
+    /**
+     * @var bool
+     */
+    protected $_compatActive = true;
+
+    /**
+     * __construct()
+     *
+     * @version 20120719
+     * @return void
+     */
+    public function __construct()
+    {
+
+    }
+
+    /**
+     * isCompatActive()
+     *
+     * @version 20120719
+     * @return bool
+     */
+    public function isCompatActive()
+    {
+        return $this->_compatActive;
+    }
 }
 
 
@@ -58,7 +58,7 @@ class FvCommunityNews_Theme
  */
 function fvcn_get_theme_dir()
 {
-	return apply_filters('fvcn_get_theme_dir', FvCommunityNews_Registry::get('themeDir'));
+    return apply_filters('fvcn_get_theme_dir', FvCommunityNews_Registry::get('themeDir'));
 }
 
 
@@ -70,7 +70,7 @@ function fvcn_get_theme_dir()
  */
 function fvcn_get_theme_url()
 {
-	return apply_filters('fvcn_get_theme_url', FvCommunityNews_Registry::get('themeUrl'));
+    return apply_filters('fvcn_get_theme_url', FvCommunityNews_Registry::get('themeUrl'));
 }
 
 
@@ -84,17 +84,17 @@ function fvcn_get_theme_url()
  */
 function fvcn_get_template_part($slug, $name=null)
 {
-	if (null === $name) {
-		$file = $slug . '.php';
-	} else {
-		$file = $slug . '-' . $name . '.php';
-	}
-	
-	if (fvcn_theme_is_compat_active() || !file_exists(get_stylesheet_directory() . '/' . $file)) {
-		load_template(fvcn_get_theme_dir() . '/' . $file, false);
-	} else {
-		get_template_part($slug, $name);
-	}
+    if (null === $name) {
+        $file = $slug . '.php';
+    } else {
+        $file = $slug . '-' . $name . '.php';
+    }
+
+    if (fvcn_theme_is_compat_active() || !file_exists(get_stylesheet_directory() . '/' . $file)) {
+        load_template(fvcn_get_theme_dir() . '/' . $file, false);
+    } else {
+        get_template_part($slug, $name);
+    }
 }
 
 
@@ -108,15 +108,15 @@ function fvcn_get_template_part($slug, $name=null)
  */
 function fvcn_get_query_template($type, $templates)
 {
-	$templates = apply_filters('fvcn_get_' . $type . '_template', $templates);
-	
-	if ('' == ($template = locate_template($templates))) {
-		FvCommunityNews_Registry::set('themeCompatActive', true);
-	} else {
-		FvCommunityNews_Registry::set('themeCompatActive', false);
-	}
-	
-	return apply_filters('fvcn_' . $type . '_template', $template);
+    $templates = apply_filters('fvcn_get_' . $type . '_template', $templates);
+
+    if ('' == ($template = locate_template($templates))) {
+        FvCommunityNews_Registry::set('themeCompatActive', true);
+    } else {
+        FvCommunityNews_Registry::set('themeCompatActive', false);
+    }
+
+    return apply_filters('fvcn_' . $type . '_template', $template);
 }
 
 
@@ -128,9 +128,9 @@ function fvcn_get_query_template($type, $templates)
  */
 function fvcn_theme_get_single_post_template()
 {
-	return fvcn_get_query_template('single_post', [
-		'single-' . fvcn_get_post_type() . '.php',
-		'single-fvcn.php'
+    return fvcn_get_query_template('single_post', [
+        'single-' . fvcn_get_post_type() . '.php',
+        'single-fvcn.php'
     ]);
 }
 
@@ -143,9 +143,9 @@ function fvcn_theme_get_single_post_template()
  */
 function fvcn_theme_get_post_archive_template()
 {
-	return fvcn_get_query_template('post_archive', [
-		'archive-' . fvcn_get_post_type() . '.php',
-		'archive-fvcn.php'
+    return fvcn_get_query_template('post_archive', [
+        'archive-' . fvcn_get_post_type() . '.php',
+        'archive-fvcn.php'
     ]);
 }
 
@@ -158,9 +158,9 @@ function fvcn_theme_get_post_archive_template()
  */
 function fvcn_theme_get_post_tag_archive_template()
 {
-	return fvcn_get_query_template('post_tag', [
-		'taxonomy-' . fvcn_get_post_tag_id() . '.php',
-		'taxonomy-fvcn.php'
+    return fvcn_get_query_template('post_tag', [
+        'taxonomy-' . fvcn_get_post_tag_id() . '.php',
+        'taxonomy-fvcn.php'
     ]);
 }
 
@@ -173,13 +173,13 @@ function fvcn_theme_get_post_tag_archive_template()
  */
 function fvcn_theme_enqueue_css()
 {
-	if (!fvcn_theme_is_compat_active() && file_exists(get_stylesheet_directory() . '/fvcn/css/fvcn-theme.css')) {
-		$uri = get_stylesheet_directory_uri();
-	} else {
-		$uri = fvcn_get_theme_url();
-	}
-	
-	wp_enqueue_style('fvcn-theme', $uri . '/fvcn/css/fvcn-theme.css', '', fvcn_get_version(), 'all');
+    if (!fvcn_theme_is_compat_active() && file_exists(get_stylesheet_directory() . '/fvcn/css/fvcn-theme.css')) {
+        $uri = get_stylesheet_directory_uri();
+    } else {
+        $uri = fvcn_get_theme_url();
+    }
+
+    wp_enqueue_style('fvcn-theme', $uri . '/fvcn/css/fvcn-theme.css', '', fvcn_get_version(), 'all');
 }
 
 
@@ -191,13 +191,13 @@ function fvcn_theme_enqueue_css()
  */
 function fvcn_theme_is_compat_active()
 {
-	$active = true;
-	
-	if (false === FvCommunityNews_Registry::get('themeCompatActive')) {
-		$active = false;
-	}
-	
-	return apply_filters('fvcn_theme_is_compat_active', $active);
+    $active = true;
+
+    if (false === FvCommunityNews_Registry::get('themeCompatActive')) {
+        $active = false;
+    }
+
+    return apply_filters('fvcn_theme_is_compat_active', $active);
 }
 
 
@@ -210,25 +210,25 @@ function fvcn_theme_is_compat_active()
  */
 function fvcn_theme_compat_template_include($template)
 {
-	if (!is_fvcn()) {
-		return $template;
-	}
-	
-	if (fvcn_is_single_post()) {
-		$newTemplate = fvcn_theme_get_single_post_template();
-	} elseif (fvcn_is_post_archive()) {
-		$newTemplate = fvcn_theme_get_post_archive_template();
-	} elseif (fvcn_is_post_tag_archive()) {
-		$newTemplate = fvcn_theme_get_post_tag_archive_template();
-	}
-	
-	if (fvcn_theme_is_compat_active()) {
-		add_filter('the_content', 'fvcn_theme_compat_replace_the_content');
-	} else {
-		$template = $newTemplate;
-	}
-	
-	return apply_filters('fvcn_theme_compat_template_include', $template);
+    if (!is_fvcn()) {
+        return $template;
+    }
+
+    if (fvcn_is_single_post()) {
+        $newTemplate = fvcn_theme_get_single_post_template();
+    } elseif (fvcn_is_post_archive()) {
+        $newTemplate = fvcn_theme_get_post_archive_template();
+    } elseif (fvcn_is_post_tag_archive()) {
+        $newTemplate = fvcn_theme_get_post_tag_archive_template();
+    }
+
+    if (fvcn_theme_is_compat_active()) {
+        add_filter('the_content', 'fvcn_theme_compat_replace_the_content');
+    } else {
+        $template = $newTemplate;
+    }
+
+    return apply_filters('fvcn_theme_compat_template_include', $template);
 }
 
 
@@ -241,28 +241,28 @@ function fvcn_theme_compat_template_include($template)
  */
 function fvcn_theme_compat_replace_the_content($content)
 {
-	if (fvcn_theme_is_compat_active()) {
-		if (fvcn_is_single_post()) {
-			ob_start();
-			
-			fvcn_get_template_part('fvcn/content', 'single-post');
-			$newContent = ob_get_contents();
-			
-			ob_end_clean();
-		} elseif (fvcn_is_post_archive() || fvcn_is_post_tag_archive()) {
-			ob_start();
-			
-			fvcn_get_template_part('fvcn/content', 'archive-post');
-			$newContent = ob_get_contents();
-			
-			ob_end_clean();
-		}
-		
-		if (isset($newContent)) {
-			$content = apply_filters('fvcn_theme_compat_replace_the_content', $newContent, $content);
-		}
-	}
-	
-	return $content;
+    if (fvcn_theme_is_compat_active()) {
+        if (fvcn_is_single_post()) {
+            ob_start();
+
+            fvcn_get_template_part('fvcn/content', 'single-post');
+            $newContent = ob_get_contents();
+
+            ob_end_clean();
+        } elseif (fvcn_is_post_archive() || fvcn_is_post_tag_archive()) {
+            ob_start();
+
+            fvcn_get_template_part('fvcn/content', 'archive-post');
+            $newContent = ob_get_contents();
+
+            ob_end_clean();
+        }
+
+        if (isset($newContent)) {
+            $content = apply_filters('fvcn_theme_compat_replace_the_content', $newContent, $content);
+        }
+    }
+
+    return $content;
 }
 

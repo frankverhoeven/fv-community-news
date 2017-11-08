@@ -3,7 +3,7 @@
 Contributors:       frankverhoeven
 Donate link:        https://www.paypal.me/FrankVerhoeven
 Tags:               Community News, Community, News, Widget, Custom Post, Custom Posting, Post, Form, Akismet, Ajax
-Requires at least:  3.3
+Requires at least:  4.8
 Tested up to:       4.8.3
 Stable tag:         3.0.2
 

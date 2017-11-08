@@ -1,17 +1,17 @@
 <?php
 
 /**
- *	loop-posts.php
+ * loop-posts.php
  *
- *	@version	20120716
- *	@package	FV Community News
- *	@subpackage	Theme
+ * @version    20120716
+ * @package    FV Community News
+ * @subpackage Theme
  */
 
 ?>
 
 <?php while (fvcn_posts()) : fvcn_the_post(); ?>
-	
-	<?php fvcn_get_template_part('fvcn/loop', 'single-post'); ?>
-	
+
+    <?php fvcn_get_template_part('fvcn/loop', 'single-post'); ?>
+
 <?php endwhile; ?>
