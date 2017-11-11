@@ -80,8 +80,7 @@ class TagCloud extends WP_Widget
      * form()
      *
      * @param array $instance
-     * @return void
-     * @version 20120411
+         * @version 20120411
      */
     public function form($instance)
     {

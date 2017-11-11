@@ -1,10 +1,8 @@
-@charset "UTF-8";
-
 /**
  * FV Community News Styles
  *
- * @version    20120716
- * @author    Frank Verhoeven <hi@frankverhoeven.me>
+ * @author Frank Verhoeven <hi@frankverhoeven.me>
+ * @version 20171111
  */
 
 .fvcn-post-thumbnail {
@@ -44,13 +42,11 @@
  *
  */
 .fvcn-template-notice {
-    border-width: 1px;
-    border-style: solid;
     padding: .1em .4em;
     margin: 5px 0 !important;
     border-radius: 4px;
     background-color: #ffffe0;
-    border-color: #e6db55;
+    border: 1px solid #e6db55;
     color: #000;
     clear: both;
     box-shadow: 0 1px 1px #fff inset;
@@ -97,7 +93,7 @@
 }
 
 .fvcn-post-form-ajax-loader .fvcn-post-form-ajax-progress-bar-inner {
-    width: 0%;
+    width: 0;
     padding: 0 !important;
     height: 4px !important;
     background: #1982d1;
@@ -110,15 +106,3 @@
 .widget .fvcn-post-form textarea {
     width: 100%;
 }
-
-
-
-
-
-
-
-
-
-
-
-

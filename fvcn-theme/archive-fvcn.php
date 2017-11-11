@@ -19,7 +19,7 @@ get_header(); ?>
             <h1 class="page-title"><?php _e('Community News Archive', 'fvcn'); ?></h1>
         </header>
 
-        <?php twentyeleven_content_nav( 'nav-above'); ?>
+        <?php twentyeleven_content_nav('nav-above'); ?>
 
         <?php while (have_posts()) : the_post(); ?>
 
@@ -49,7 +49,7 @@ get_header(); ?>
             </article>
         <?php endwhile; ?>
 
-        <?php twentyeleven_content_nav( 'nav-below'); ?>
+        <?php twentyeleven_content_nav('nav-below'); ?>
 
     <?php else : ?>
 

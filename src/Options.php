@@ -9,38 +9,26 @@ namespace FvCommunityNews;
  */
 class Options
 {
+    /**
+     * @var array
+     */
+    private $options;
 	/**
 	 * @var array
 	 */
-	protected $defaultOptions = [];
-
-	/**
-	 * @var array
-	 */
-	protected $options = [];
+	private $defaults;
 
     /**
      * __construct()
      *
-     * @version 20171103
+     * @param array $defaults
+     * @version 20171111
      */
-	public function __construct()
+	public function __construct(array $defaults)
 	{
-		$this->setDefaultOptions();
-	}
-
-	/**
-	 * setDefaultOptions()
-	 *
-     * @return $this
-     * @version 20171103
-	 */
-	protected function setDefaultOptions()
-	{
-		$this->defaultOptions = [];
-
-		return $this;
-	}
+	    $this->options = [];
+        $this->defaults = apply_filters('fvcn_set_default_options', $defaults);
+    }
 
 	/**
 	 * getDefaultOptions()
@@ -50,7 +38,7 @@ class Options
 	 */
 	public function getDefaultOptions()
 	{
-		return $this->defaultOptions;
+		return $this->defaults;
 	}
 
 	/**
@@ -62,11 +50,11 @@ class Options
 	 */
 	public function getDefaultOption($key)
 	{
-		if (!isset($this->defaultOptions[ $key ])) {
+		if (!isset($this->defaults[ $key ])) {
 			return null;
 		}
 
-		return $this->defaultOptions[ $key ];
+		return $this->defaults[ $key ];
 	}
 
 	/**
@@ -77,7 +65,7 @@ class Options
 	 */
 	public function addOptions()
 	{
-		foreach ($this->getDefaultOptions() as $key=>$value) {
+		foreach ($this->getDefaultOptions() as $key => $value) {
 			$this->addOption($key, $value);
 		}
 
@@ -124,12 +112,11 @@ class Options
 	 * @return mixed
      * @version 20171103
 	 */
-	public function getOption($key, $default=null)
+	public function getOption($key, $default = null)
 	{
 		if (isset($this->options[ $key ])) {
 			return $this->options[ $key ];
 		}
-
 		if (null === $default) {
 			return $this->options[ $key ] = get_option($key, $this->getDefaultOption($key));
 		}
@@ -145,7 +132,7 @@ class Options
 	 */
 	public function deleteOptions()
 	{
-		foreach ($this->getDefaultOptions() as $key=>$value) {
+		foreach ($this->getDefaultOptions() as $key => $value) {
 			$this->deleteOption($key);
 		}
 
@@ -166,4 +153,64 @@ class Options
 
 		return $this;
 	}
+
+
+    /**
+     * fvcnGetDefaultOptions()
+     *
+     * @version 20120710
+     * @return array
+     */
+    public static function fvcnGetDefaultOptions()
+    {
+        return Container::getInstance()->getOptions()->getDefaultOptions();
+    }
+
+    /**
+     * fvcnGetDefaultOption()
+     *
+     * @version 20120710
+     * @param string $key
+     * @return mixed
+     */
+    public static function fvcnGetDefaultOption($key)
+    {
+        return Container::getInstance()->getOptions()->getDefaultOption($key);
+    }
+
+    /**
+     * fvcnGetOption()
+     *
+     * @version 20120710
+     * @param string $key
+     * @return mixed
+     */
+    public static function fvcnGetOption($key)
+    {
+        return Container::getInstance()->getOptions()->getOption($key);
+    }
+
+    /**
+     * fvcnAddOptions()
+     *
+     * @version 20120710
+     */
+    public static function fvcnAddOptions()
+    {
+        Container::getInstance()->getOptions()->addOptions();
+
+        do_action('fvcn_add_options');
+    }
+
+    /**
+     * fvcnDeleteOptions()
+     *
+     * @version 20120710
+     */
+    public static function fvcnDeleteOptions()
+    {
+        Container::getInstance()->getOptions()->deleteOptions();
+
+        do_action('fvcn_delete_options');
+    }
 }

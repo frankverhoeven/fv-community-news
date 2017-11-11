@@ -10,6 +10,10 @@
  * @author Frank Verhoeven <hi@frankverhoeven.me>
  */
 
+use FvCommunityNews\Akismet\Akismet;
+use FvCommunityNews\Container;
+use FvCommunityNews\Options;
+use FvCommunityNews\Post\PostType;
 use FvCommunityNews\Widget\Form as FormWidget;
 use FvCommunityNews\Widget\ListPosts as ListPostsWidget;
 use FvCommunityNews\Widget\TagCloud as TagCloudWidget;
@@ -34,15 +38,13 @@ add_filter('template_include', 'fvcn_template_include', 10);
  * fvcn_init
  */
 add_action('fvcn_init', 'fvcn_load_textdomain', 2);
-add_action('fvcn_init', 'fvcn_register_post_type', 10);
-add_action('fvcn_init', 'fvcn_register_post_statuses', 12);
-add_action('fvcn_init', 'fvcn_register_taxonomy', 14);
-add_action('fvcn_init', 'fvcn_register_shortcodes', 16);
-add_action('fvcn_init', 'fvcn_javascript', 18);
+add_action('fvcn_init', [PostType::class, 'register'], 10);
 add_action('fvcn_init', 'fvcn_ready', 999);
+add_action('fvcn_init', function() {
+    add_action('fvcn_enqueue_scripts', [Container::getInstance()->getJavascript(), 'enqueueScripts']);
+});
 
-
-add_action('fvcn_ready', 'fvcn_akismet');
+add_action('fvcn_ready', [Akismet::class, 'fvcn_akismet']);
 
 
 /**
@@ -60,19 +62,9 @@ add_action('fvcn_enqueue_scripts', 'fvcn_theme_enqueue_css', 10);
 /**
  * fvcn_(de)activation
  */
-add_action('fvcn_activation', 'fvcn_install');
 add_action('fvcn_deactivation', 'flush_rewrite_rules');
-add_action('fvcn_uninstall', 'fvcn_delete_options');
+add_action('fvcn_uninstall', [Options::class, 'fvcnDeleteOptions']);
 
-
-/**
- * fvcn_sync
- */
-add_action('fvcn_insert_post', 'fvcn_sync_submit_post', 999);
-add_action('fvcn_publish_post', 'fvcn_sync_submit_post', 999);
-add_action('fvcn_increase_post_view_count', 'fvcn_sync_increase_post_view_count', 999);
-add_action('fvcn_post_rating_increase', 'fvcn_sync_increase_post_rating', 999);
-add_action('fvcn_post_rating_decrease', 'fvcn_sync_decrease_post_rating', 999);
 
 
 add_action('template_redirect', 'fvcn_new_post_handler');
@@ -156,7 +148,9 @@ add_filter('wp_insert_post_data', 'fvcn_fix_post_author', 30, 2);
  * fvcn_admin
  */
 if (is_admin()) {
-    add_action('fvcn_init', 'fvcn_admin');
+    add_action('fvcn_init', function() {
+        \FvCommunityNews\Container::getInstance()->getAdmin();
+    });
 }
 
 
@@ -164,7 +158,6 @@ if (is_admin()) {
  * fvcn_activation()
  *
  * @version 20120229
- * @return void
  */
 function fvcn_activation()
 {
@@ -176,7 +169,6 @@ function fvcn_activation()
  * fvcn_deactivation()
  *
  * @version 20120229
- * @return void
  */
 function fvcn_deactivation()
 {
@@ -187,7 +179,6 @@ function fvcn_deactivation()
  * fvcn_uninstall()
  *
  * @version 20120229
- * @return void
  */
 function fvcn_uninstall()
 {
@@ -198,7 +189,6 @@ function fvcn_uninstall()
  * fvcn_loaded()
  *
  * @version 20120229
- * @return void
  */
 function fvcn_loaded()
 {
@@ -209,7 +199,6 @@ function fvcn_loaded()
  * fvcn_init()
  *
  * @version 20120229
- * @return void
  */
 function fvcn_init()
 {
@@ -220,7 +209,6 @@ function fvcn_init()
  * fvcn_widgets_init()
  *
  * @version 20120305
- * @return void
  */
 function fvcn_widgets_init()
 {
@@ -231,7 +219,6 @@ function fvcn_widgets_init()
  * fvcn_load_textdomain()
  *
  * @version 20120229
- * @return void
  */
 function fvcn_load_textdomain()
 {
@@ -242,7 +229,6 @@ function fvcn_load_textdomain()
  * fvcn_register_post_type()
  *
  * @version 20120229
- * @return void
  */
 function fvcn_register_post_type()
 {
@@ -253,7 +239,6 @@ function fvcn_register_post_type()
  * fvcn_register_post_statuses()
  *
  * @version 20120308
- * @return void
  */
 function fvcn_register_post_statuses()
 {
@@ -264,7 +249,6 @@ function fvcn_register_post_statuses()
  * fvcn_register_taxonomy()
  *
  * @version 20120229
- * @return void
  */
 function fvcn_register_taxonomy()
 {
@@ -275,7 +259,6 @@ function fvcn_register_taxonomy()
  * fvcn_enqueue_scripts()
  *
  * @version 20120314
- * @return void
  */
 function fvcn_enqueue_scripts()
 {
@@ -286,7 +269,6 @@ function fvcn_enqueue_scripts()
  * fvcn_ready()
  *
  * @version 20120229
- * @return void
  */
 function fvcn_ready()
 {

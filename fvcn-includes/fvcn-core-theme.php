@@ -1,54 +1,7 @@
 <?php
 
-/**
- * fvcn-core-theme.php
- *
- * Theme
- *
- * @package FV Community News
- * @subpackage Theme
- * @author Frank Verhoeven <hi@frankverhoeven.me>
- */
-
-if (!defined('ABSPATH')) {
-    exit;
-}
-
-
-/**
- * FvCommunityNews_Theme
- *
- */
-class FvCommunityNews_Theme
-{
-    /**
-     * @var bool
-     */
-    protected $_compatActive = true;
-
-    /**
-     * __construct()
-     *
-     * @version 20120719
-     * @return void
-     */
-    public function __construct()
-    {
-
-    }
-
-    /**
-     * isCompatActive()
-     *
-     * @version 20120719
-     * @return bool
-     */
-    public function isCompatActive()
-    {
-        return $this->_compatActive;
-    }
-}
-
+use FvCommunityNews\Post\PostType;
+use FvCommunityNews\Registry;
 
 /**
  * fvcn_get_theme_dir()
@@ -58,7 +11,7 @@ class FvCommunityNews_Theme
  */
 function fvcn_get_theme_dir()
 {
-    return apply_filters('fvcn_get_theme_dir', FvCommunityNews_Registry::get('themeDir'));
+    return apply_filters('fvcn_get_theme_dir', Registry::get('themeDir'));
 }
 
 
@@ -70,7 +23,7 @@ function fvcn_get_theme_dir()
  */
 function fvcn_get_theme_url()
 {
-    return apply_filters('fvcn_get_theme_url', FvCommunityNews_Registry::get('themeUrl'));
+    return apply_filters('fvcn_get_theme_url', Registry::get('themeUrl'));
 }
 
 
@@ -80,7 +33,6 @@ function fvcn_get_theme_url()
  * @version 20120716
  * @param string $slug
  * @param string $name
- * @return void
  */
 function fvcn_get_template_part($slug, $name=null)
 {
@@ -111,9 +63,9 @@ function fvcn_get_query_template($type, $templates)
     $templates = apply_filters('fvcn_get_' . $type . '_template', $templates);
 
     if ('' == ($template = locate_template($templates))) {
-        FvCommunityNews_Registry::set('themeCompatActive', true);
+        Registry::set('themeCompatActive', true);
     } else {
-        FvCommunityNews_Registry::set('themeCompatActive', false);
+        Registry::set('themeCompatActive', false);
     }
 
     return apply_filters('fvcn_' . $type . '_template', $template);
@@ -129,7 +81,7 @@ function fvcn_get_query_template($type, $templates)
 function fvcn_theme_get_single_post_template()
 {
     return fvcn_get_query_template('single_post', [
-        'single-' . fvcn_get_post_type() . '.php',
+        'single-' . PostType::POST_TYPE_KEY . '.php',
         'single-fvcn.php'
     ]);
 }
@@ -144,7 +96,7 @@ function fvcn_theme_get_single_post_template()
 function fvcn_theme_get_post_archive_template()
 {
     return fvcn_get_query_template('post_archive', [
-        'archive-' . fvcn_get_post_type() . '.php',
+        'archive-' . PostType::POST_TYPE_KEY . '.php',
         'archive-fvcn.php'
     ]);
 }
@@ -169,7 +121,6 @@ function fvcn_theme_get_post_tag_archive_template()
  * fvcn_enqueue_theme_css()
  *
  * @version 20120717
- * @return void
  */
 function fvcn_theme_enqueue_css()
 {
@@ -193,7 +144,7 @@ function fvcn_theme_is_compat_active()
 {
     $active = true;
 
-    if (false === FvCommunityNews_Registry::get('themeCompatActive')) {
+    if (false === Registry::get('themeCompatActive')) {
         $active = false;
     }
 

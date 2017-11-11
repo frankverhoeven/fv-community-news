@@ -1,0 +1,45 @@
+/**
+ * post-moderation.js
+ *
+ * Improve the moderation panel, required because of WordPress limitations.
+ *
+ * @version        20120730
+ * @package FV Community News
+ * @subpackage Admin Post Moderation
+ * @author Frank Verhoeven <hi@frankverhoeven.me>
+ */
+(function($, options)
+    {
+        $(document).ready(function(e) {
+            // Reposition the 'Remove All Spam' button
+            $('#fvcn-remove-all-spam-submit').appendTo($('#fvcn-remove-all-spam-submit').parent());
+
+            // Add bulk actions
+            var actions;
+            var status = $('#_fvcn_post_status').val();
+
+            if (options.ps.all === status) {
+                actions = '<option value="fvcn-bulk-publish">' + options.locale.publish + '</option>'
+                    + '<option value="fvcn-bulk-unpublish">' + options.locale.unpublish + '</option>'
+                    + '<option value="fvcn-bulk-spam">' + options.locale.spam + '</option>';
+            }
+            else if (options.ps.public === status) {
+                actions = '<option value="fvcn-bulk-unpublish">' + options.locale.unpublish + '</option>'
+                    + '<option value="fvcn-bulk-spam">' + options.locale.spam + '</option>';
+            }
+            else if (options.ps.pending === status) {
+                actions = '<option value="fvcn-bulk-publish">' + options.locale.publish + '</option>'
+                            + '<option value="fvcn-bulk-spam">' + options.locale.spam + '</option>';
+            }
+            else if (options.ps.trash === status) {
+                actions = '<option value="fvcn-bulk-spam">' + options.locale.spam + '</option>';
+            }
+            else if (options.ps.spam === status) {
+                actions = '<option value="fvcn-bulk-publish">' + options.locale.publish + '</option>';
+            }
+
+            $('select[name="action"]').append(actions);
+            $('select[name="action2"]').append(actions);
+        });
+    }
+)(jQuery, FvCommunityNewsAdminPostModeration);

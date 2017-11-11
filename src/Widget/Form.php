@@ -88,8 +88,7 @@ class Form extends WP_Widget
      * form()
      *
      * @param array $instance
-     * @return void
-     * @version 20120306
+         * @version 20120306
      */
     public function form($instance)
     {
