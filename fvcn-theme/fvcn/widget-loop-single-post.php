@@ -11,9 +11,7 @@
 ?>
 
 <li id="fvcn-post-<?php fvcn_post_id(); ?>" class="fvcn-post">
-    <header>
-        <h4><a href="<?php fvcn_post_permalink(); ?>"><?php fvcn_post_title(); ?></a></h4>
-    </header>
+    <h4><a href="<?php fvcn_has_post_link() ? fvcn_post_link() : fvcn_post_permalink(); ?>"><?php fvcn_post_title(); ?></a></h4>
 
     <div class="fvcn-post-content">
         <?php if (fvcn_has_post_thumbnail() && fvcn_show_widget_thumbnail()) : ?>

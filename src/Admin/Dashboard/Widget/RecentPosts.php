@@ -75,12 +75,16 @@ class RecentPosts
                 clear: both;
                 padding: 10px;
                 border-top: 1px solid #dfdfdf;
+                background: #fafafa;
             }
             #fvcn-dashboard-recent-posts-list .fvcn-post:first-child {
                 border-top: none;
             }
+            #fvcn-dashboard-recent-posts-list .fvcn-post .fvcn-post-title {
+                color: #666;
+            }
             #fvcn-dashboard-recent-posts-list .fvcn-post.pending {
-                background-color: #ffffe0;
+                background-color: #fef7f1;
             }
             #fvcn-dashboard-recent-posts-list .fvcn-post .avatar,
             #fvcn-dashboard-recent-posts-list .fvcn-post .wp-post-image {
@@ -120,7 +124,10 @@ class RecentPosts
                 display: none;
             }
             #fvcn-dashboard-view-links {
-                margin: 10px 10px;
+                float: none;
+                border-top: 1px solid #eee;
+                padding: 8px 12px 4px;
+                margin: 0;
             }
         </style>
         <?php
@@ -132,14 +139,14 @@ class RecentPosts
      * response()
      *
      * @version 20120729
-         */
+     */
     public function response()
     {
         if (!isset($_GET['action'], $_GET['post_id']) || false === strpos($_GET['action'], 'fvcn')) {
             return;
         }
 
-        $this->_updatePostStatus($_GET['post_id'], $_GET['action']);
+        $this->updatePostStatus($_GET['post_id'], $_GET['action']);
     }
 
     /**
@@ -162,7 +169,7 @@ class RecentPosts
         }
 
         if (false === $message) {
-            $success = $this->_updatePostStatus($_POST['post_id'], $_POST['fvcn_action']);
+            $success = $this->updatePostStatus($_POST['post_id'], $_POST['fvcn_action']);
 
             if (false === $success) {
                 $message = __('Invallid action', 'fvcn');
@@ -186,14 +193,14 @@ class RecentPosts
     }
 
     /**
-     * _updatePostStatus()
+     * updatePostStatus()
      *
      * @version 20120729
      * @param $postId
      * @param string $action
      * @return bool
      */
-    protected function _updatePostStatus($postId, $action)
+    protected function updatePostStatus($postId, $action)
     {
         switch ($action) {
             case 'fvcn_toggle_post_spam_status' :
@@ -261,7 +268,7 @@ class RecentPosts
                     $class .= $alt;
                     ?>
 
-                    <div id="fvcn-post-<?php fvcn_post_id(); ?>" class="<?php echo $class; ?>">
+                    <div id="fvcn-post-<?php fvcn_post_id(); ?>" class="<?= $class; ?>">
                         <?php
                         if (fvcn_has_post_thumbnail()) {
                             fvcn_post_thumbnail(0, [50, 50]);
@@ -277,6 +284,11 @@ class RecentPosts
                                 <?php else : ?>
                                     <?php fvcn_post_title(); ?>
                                 <?php endif; ?>
+
+                                <?php _e('by', 'fvcn'); ?>
+
+                                <?php fvcn_post_author(); ?>
+
                                 <a href="<?php fvcn_post_permalink(); ?>">#</a>
                             </h4>
 
@@ -301,11 +313,11 @@ class RecentPosts
                                     'action' => 'trash'
                                 ], 'post.php'), 'trash-' . PostType::POST_TYPE_KEY . '_' . fvcn_get_post_id()));
                                 ?>
-                                <span class="publish"><a href="<?php echo $publish_uri; ?>"><?php _e('Publish', 'fvcn'); ?></a></span>
-                                <span class="unpublish"><a href="<?php echo $publish_uri; ?>"><?php _e('Unpublish', 'fvcn'); ?></a></span>
-                                <span class="edit"> | <a href="<?php echo $edit_uri; ?>"><?php _e('Edit', 'fvcn'); ?></a></span>
-                                <span class="spam"> | <a href="<?php echo $spam_uri; ?>"><?php _e('Spam', 'fvcn'); ?></a></span>
-                                <span class="trash"> | <a href="<?php echo $trash_uri; ?>"><?php _e('Trash', 'fvcn'); ?></a></span>
+                                <span class="publish"><a href="<?= $publish_uri; ?>"><?php _e('Publish', 'fvcn'); ?></a></span>
+                                <span class="unpublish"><a href="<?= $publish_uri; ?>"><?php _e('Unpublish', 'fvcn'); ?></a></span>
+                                <span class="edit"> | <a href="<?= $edit_uri; ?>"><?php _e('Edit', 'fvcn'); ?></a></span>
+                                <span class="spam"> | <a href="<?= $spam_uri; ?>"><?php _e('Spam', 'fvcn'); ?></a></span>
+                                <span class="trash"> | <a href="<?= $trash_uri; ?>"><?php _e('Trash', 'fvcn'); ?></a></span>
                             </p>
                         </div>
                     </div>
@@ -318,6 +330,7 @@ class RecentPosts
             <p id="fvcn-dashboard-view-links">
                 <a href="edit.php?post_type=<?= PostType::POST_TYPE_KEY ?>"><?php _e('View All', 'fvcn'); ?></a>
             </p>
+
         <?php else : ?>
 
             <p><?php _e('No posts found, yet.', 'fvcn'); ?></p>
@@ -339,7 +352,7 @@ class RecentPosts
         ?>
         <p>
             <label for="_fvcn_dashboard_rp_num"><?php _e('Number of posts to show:', 'fvcn'); ?></label>
-            <input type="text" name="_fvcn_dashboard_rp_num" id="_fvcn_dashboard_rp_num" value="<?php echo fvcn_form_option('_fvcn_dashboard_rp_num'); ?>" size="3">
+            <input type="text" name="_fvcn_dashboard_rp_num" id="_fvcn_dashboard_rp_num" value="<?= fvcn_form_option('_fvcn_dashboard_rp_num'); ?>" size="3">
             <small><?php _e('(1 - 30)', 'fvcn'); ?></small>
         </p>
 

@@ -421,7 +421,7 @@ function fvcn_has_post_thumbnail($postId = 0)
     $id = fvcn_get_post_id($postId);
 
     // Double thumbnail display fix.
-    if ('the_content' != current_filter() || false === Registry::get('nativeThumbnailSupport')) {
+    if ('the_content' != current_filter() || false === Registry::get('nativeThumbnailSupport') || is_archive()) {
         return has_post_thumbnail($id);
     } else {
         return false;
@@ -437,7 +437,8 @@ function fvcn_has_post_thumbnail($postId = 0)
  * @param string|array $size
  * @param string|array $attributes
  */
-function fvcn_post_thumbnail($postId = 0, $size='thumbnail', $attributes= []) {
+function fvcn_post_thumbnail($postId = 0, $size = 'thumbnail', $attributes = [])
+{
     echo fvcn_get_post_thumbnail($postId, $size, $attributes);
 }
 
@@ -450,7 +451,8 @@ function fvcn_post_thumbnail($postId = 0, $size='thumbnail', $attributes= []) {
      * @param string|array $attributes
      * @return string
      */
-    function fvcn_get_post_thumbnail($postId = 0, $size='thumbnail', $attributes= []) {
+    function fvcn_get_post_thumbnail($postId = 0, $size = 'thumbnail', $attributes= [])
+    {
         $id = fvcn_get_post_id($postId);
 
         return apply_filters('fvcn_get_post_thumbnail', get_the_post_thumbnail($id, $size, $attributes), $id);
@@ -1175,16 +1177,14 @@ function fvcn_post_tag_list($postId = 0, $args='')
 /**
  * fvcn_post_form_fields()
  *
- * @version 20120307
+ * @version 20171123
  */
 function fvcn_post_form_fields()
 {
 ?>
 
-    <input type="hidden" name="fvcn_post_form_action" id="fvcn_post_form_action" value="fvcn-new-post" />
+    <input type="hidden" name="fvcn_post_form_action" id="fvcn_post_form_action" value="fvcn-new-post">
     <?php wp_nonce_field('fvcn-new-post', 'fvcn_post_form_nonce'); ?>
-    <?php $value = base64_encode(time()); ?>
-    <input type="hidden" name="fvcn_post_form_time_key" id="fvcn_post_form_time_key" value="<?php echo $value; ?>" />
 
 <?php
 }

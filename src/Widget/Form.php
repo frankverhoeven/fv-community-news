@@ -12,11 +12,11 @@ use WP_Widget;
 class Form extends WP_Widget
 {
     /**
-     * register_widget()
+     * register()
      *
      * @version 20120306
      */
-    public static function register_widget()
+    public static function register()
     {
         register_widget(self::class);
     }
@@ -96,8 +96,8 @@ class Form extends WP_Widget
         ?>
 
         <p>
-            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'fvcn'); ?></label>
-            <input type="text" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" value="<?php echo $title; ?>" class="widefat">
+            <label for="<?= $this->get_field_id('title'); ?>"><?php _e('Title:', 'fvcn'); ?></label>
+            <input type="text" id="<?= $this->get_field_id('title'); ?>" name="<?= $this->get_field_name('title'); ?>" value="<?= $title; ?>" class="widefat">
         </p>
 
         <?php

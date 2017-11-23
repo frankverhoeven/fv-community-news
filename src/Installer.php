@@ -10,41 +10,41 @@ namespace FvCommunityNews;
 class Installer
 {
     /**
-     * @var Options
+     * @var Config
      */
-    protected $options;
+    protected $config;
 
     /**
      * __construct()
      *
-     * @param Options $options
-     * @version 20171111
+     * @param Config $config
+     * @version 20171112
      */
-    public function __construct(Options $options)
+    public function __construct(Config $config)
     {
-        $this->options = $options;
+        $this->config = $config;
     }
 
     /**
      * isInstall()
      *
-     * @version 20120716
      * @return bool
+     * @version 20171112
      */
     public function isInstall()
     {
-        return (false === $this->options->getOption('_fvcn_version', false));
+        return (false === $this->config->get('_fvcn_version', false));
     }
 
     /**
      * isUpdate()
      *
-     * @version 20120716
      * @return bool
+     * @version 20171112
      */
     public function isUpdate()
     {
-        return (1 == version_compare($this->options->getDefaultOption('_fvcn_version'), $this->options->getOption('_fvcn_version')));
+        return (1 == version_compare(Version::getCurrentVersion(), $this->config['_fvcn_version']));
     }
 
     /**
@@ -69,21 +69,23 @@ class Installer
     public function update()
     {
         $this->addOptions();
-
-        $this->options->updateOption('_fvcn_version', $this->options->getDefaultOption('_fvcn_version'));
+        $this->config->set('_fvcn_version', Version::getCurrentVersion());
 
         return $this;
     }
 
     /**
-     * addOptions()
+     * Add options to the database
      *
-     * @version 20120716
      * @return Installer
+     * @version 20171112
      */
     public function addOptions()
     {
-        $this->options->addOptions();
+        foreach ($this->config as $key => $value) {
+            $this->config->add($key, $value);
+        }
+
         return $this;
     }
 
@@ -91,17 +93,17 @@ class Installer
      * Check if an update is available.
      *
      * @return bool
-     * @version 20171111
+     * @version 20171112
      */
     public function hasUpdate()
     {
-        $lastCheck = $this->options->getOption('_fvcn_previous_has_update', false);
+        $lastCheck = $this->config->get('_fvcn_previous_has_update', false);
         if (!$lastCheck || (time() - $lastCheck) > 432000) { // Only check once every five days
             $latest = Version::getLatestVersion();
-            $this->options->updateOption('_fvcn_previous_has_update', time());
+            $this->config->set('_fvcn_previous_has_update', time());
 
             if (null !== $latest) {
-                return (1 == version_compare($latest, $this->options->getOption('_fvcn_version')));
+                return (1 == version_compare($latest, $this->config['_fvcn_version']));
             }
         }
 

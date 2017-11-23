@@ -5,7 +5,7 @@
  *
  * The form for submitting community news.
  *
- * @version    20120316
+ * @version    20171112
  * @package    FV Community News
  * @subpackage Theme
  */
@@ -40,8 +40,8 @@
 
             <?php do_action('fvcn_post_form_before_author_name'); ?>
             <div class="fvcn-post-form-author-name">
-                <label for="fvcn_post_form_author_name"><?php fvcn_post_form_author_name_label(); ?></label><br />
-                <input type="text" name="fvcn_post_form_author_name" id="fvcn_post_form_author_name" value="<?php fvcn_post_form_author_name(); ?>" />
+                <label for="fvcn_post_form_author_name"><?php fvcn_post_form_author_name_label(); ?></label>
+                <input type="text" name="fvcn_post_form_author_name" id="fvcn_post_form_author_name" value="<?php fvcn_post_form_author_name(); ?>">
                 <div class="fvcn-error">
                     <?php fvcn_post_form_field_error('fvcn_post_form_author_name'); ?>
                 </div>
@@ -50,8 +50,8 @@
 
             <?php do_action('fvcn_post_form_before_author_email'); ?>
             <div class="fvcn-post-form-author-email">
-                <label for="fvcn_post_form_author_email"><?php fvcn_post_form_author_email_label(); ?></label><br />
-                <input type="text" name="fvcn_post_form_author_email" id="fvcn_post_form_author_email" value="<?php fvcn_post_form_author_email(); ?>" />
+                <label for="fvcn_post_form_author_email"><?php fvcn_post_form_author_email_label(); ?></label>
+                <input type="text" name="fvcn_post_form_author_email" id="fvcn_post_form_author_email" value="<?php fvcn_post_form_author_email(); ?>">
                 <div class="fvcn-error">
                     <?php fvcn_post_form_field_error('fvcn_post_form_author_email'); ?>
                 </div>
@@ -68,8 +68,8 @@
 
         <?php do_action('fvcn_post_form_before_title'); ?>
         <div class="fvcn-post-form-title">
-            <label for="fvcn_post_form_title"><?php fvcn_post_form_title_label(); ?></label><br />
-            <input type="text" name="fvcn_post_form_title" id="fvcn_post_form_title" value="<?php fvcn_post_form_title(); ?>" />
+            <label for="fvcn_post_form_title"><?php fvcn_post_form_title_label(); ?></label>
+            <input type="text" name="fvcn_post_form_title" id="fvcn_post_form_title" value="<?php fvcn_post_form_title(); ?>">
             <div class="fvcn-error">
                 <?php fvcn_post_form_field_error('fvcn_post_form_title'); ?>
             </div>
@@ -78,8 +78,8 @@
 
         <?php do_action('fvcn_post_form_before_link'); ?>
         <div class="fvcn-post-form-link">
-            <label for="fvcn_post_form_link"><?php fvcn_post_form_link_label(); ?></label><br />
-            <input type="text" name="fvcn_post_form_link" id="fvcn_post_form_link" value="<?php fvcn_post_form_link(); ?>" />
+            <label for="fvcn_post_form_link"><?php fvcn_post_form_link_label(); ?></label>
+            <input type="text" name="fvcn_post_form_link" id="fvcn_post_form_link" value="<?php fvcn_post_form_link(); ?>">
             <div class="fvcn-error">
                 <?php fvcn_post_form_field_error('fvcn_post_form_link'); ?>
             </div>
@@ -88,7 +88,7 @@
 
         <?php do_action('fvcn_post_form_before_content'); ?>
         <div class="fvcn-post-form-content">
-            <label for="fvcn_post_form_content"><?php fvcn_post_form_content_label(); ?></label><br />
+            <label for="fvcn_post_form_content"><?php fvcn_post_form_content_label(); ?></label>
             <textarea name="fvcn_post_form_content" id="fvcn_post_form_content" rows="3"><?php fvcn_post_form_content(); ?></textarea>
             <div class="fvcn-error">
                 <?php fvcn_post_form_field_error('fvcn_post_form_content'); ?>
@@ -98,8 +98,8 @@
 
         <?php do_action('fvcn_post_form_before_tags'); ?>
         <div class="fvcn-post-form-tags">
-            <label for="fvcn_post_form_tags"><?php fvcn_post_form_tags_label(); ?></label><br />
-            <input type="text" name="fvcn_post_form_tags" id="fvcn_post_form_tags" value="<?php fvcn_post_form_tags(); ?>" />
+            <label for="fvcn_post_form_tags"><?php fvcn_post_form_tags_label(); ?></label>
+            <input type="text" name="fvcn_post_form_tags" id="fvcn_post_form_tags" value="<?php fvcn_post_form_tags(); ?>">
             <div class="fvcn-error">
                 <?php fvcn_post_form_field_error('fvcn_post_form_tags'); ?>
             </div>
@@ -110,19 +110,20 @@
 
             <?php do_action('fvcn_post_form_before_thumbnail'); ?>
             <div class="fvcn-post-form-thumbnail">
-                <label for="fvcn_post_form_thumbnail"><?php fvcn_post_form_thumbnail_label(); ?></label><br />
-                <input type="file" name="fvcn_post_form_thumbnail" id="fvcn_post_form_thumbnail" value="" />
-            <div class="fvcn-error">
-                <?php fvcn_post_form_field_error('fvcn_post_form_thumbnail'); ?>
-            </div>
+                <label for="fvcn_post_form_thumbnail"><?php fvcn_post_form_thumbnail_label(); ?></label>
+                <input type="file" name="fvcn_post_form_thumbnail" id="fvcn_post_form_thumbnail" value="">
+                <div class="fvcn-error">
+                    <?php fvcn_post_form_field_error('fvcn_post_form_thumbnail'); ?>
+                </div>
             </div>
             <?php do_action('fvcn_post_form_after_thumbnail'); ?>
 
         <?php endif; ?>
 
         <?php do_action('fvcn_post_form_before_submit'); ?>
+        <br>
         <div class="fvcn-post-form-submit">
-            <input type="submit" name="fvcn_post_form_submit" id="fvcn_post_form_submit" value="<?php _e('Submit', 'fvcn'); ?>" />
+            <input type="submit" name="fvcn_post_form_submit" id="fvcn_post_form_submit" value="<?php _e('Submit', 'fvcn'); ?>">
         </div>
         <?php do_action('fvcn_post_form_after_submit'); ?>
 

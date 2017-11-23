@@ -2,7 +2,7 @@
  * FV Community News Styles
  *
  * @author Frank Verhoeven <hi@frankverhoeven.me>
- * @version 20171111
+ * @version 20171112
  */
 
 .fvcn-post-thumbnail {
@@ -42,7 +42,7 @@
  *
  */
 .fvcn-template-notice {
-    padding: .1em .4em;
+    padding: .1em .4em !important;
     margin: 5px 0 !important;
     border-radius: 4px;
     background-color: #ffffe0;
@@ -63,6 +63,7 @@
     font-size: .8em !important;
     padding: 0 !important;
     margin: 0 !important;
+    border: none !important;
 }
 
 
@@ -101,8 +102,8 @@
     float: none !important;
 }
 
-.widget .fvcn-post-form input[type="text"],
-.widget .fvcn-post-form input[type="file"],
-.widget .fvcn-post-form textarea {
+.fvcn_form_widget .fvcn-post-form input[type="text"],
+.fvcn_form_widget .fvcn-post-form input[type="file"],
+.fvcn_form_widget .fvcn-post-form textarea {
     width: 100%;
 }

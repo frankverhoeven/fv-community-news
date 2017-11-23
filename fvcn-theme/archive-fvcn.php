@@ -19,8 +19,6 @@ get_header(); ?>
             <h1 class="page-title"><?php _e('Community News Archive', 'fvcn'); ?></h1>
         </header>
 
-        <?php twentyeleven_content_nav('nav-above'); ?>
-
         <?php while (have_posts()) : the_post(); ?>
 
             <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
@@ -48,8 +46,6 @@ get_header(); ?>
                 </div>
             </article>
         <?php endwhile; ?>
-
-        <?php twentyeleven_content_nav('nav-below'); ?>
 
     <?php else : ?>
 

@@ -108,16 +108,6 @@ function fvcn_new_post_handler()
     ];
     $validator = new ValidatorChain();
 
-    // Timeout
-    apply_filters('fvcn_post_form_time_key', $validator->setValidators([
-        'FvCommunityNews\Validator\NotEmpty',
-        'FvCommunityNews\Validator\Timeout'
-    ]));
-
-    if (!$validator->isValid($_POST['fvcn_post_form_time_key'])) {
-        fvcn_add_error('fvcn_post_form', sprintf(__('<strong>ERROR</strong>: %s', 'fvcn'), $validator->getMessage()));
-    }
-
     if (fvcn_is_anonymous()) {
         // Author Name
         apply_filters('fvcn_post_author_name_validators', $validator->setValidators([
@@ -210,7 +200,7 @@ function fvcn_new_post_handler()
     // Content
     apply_filters('fvcn_post_content_validators', $validator->setValidators([
         'FvCommunityNews\Validator\NotEmpty',
-        new MinLength(80)
+        new MinLength(20)
     ]));
 
     if ($validator->isValid($_POST['fvcn_post_form_content'])) {
@@ -258,7 +248,7 @@ function fvcn_new_post_handler()
     // Thumbnail
     if (fvcn_is_post_form_thumbnail_required()) {
         apply_filters('fvcn_post_title_validators', $validator->setValidators([
-            'FvCommunityNews\Validator\ImageUpload'
+            'FvCommunityNews\Validator\Image'
         ]));
 
         if ($validator->isValid($_FILES['fvcn_post_form_thumbnail'])) {
@@ -268,7 +258,7 @@ function fvcn_new_post_handler()
         }
     } else if (!empty($_FILES['fvcn_post_form_thumbnail']['tmp_name'])) {
         apply_filters('fvcn_post_title_validators', $validator->setValidators([
-            'FvCommunityNews\Validator\ImageUpload'
+            'FvCommunityNews\Validator\Image'
         ]));
 
         if ($validator->isValid($_FILES['fvcn_post_form_thumbnail'])) {
@@ -508,7 +498,7 @@ class FvCommunityNews_PostMapper
      *
      * @version 20120722
      * @param int $postId
-         */
+     */
     public function increasePostRating($postId)
     {
         do_action('fvcn_increase_post_rating', $postId);
@@ -521,7 +511,7 @@ class FvCommunityNews_PostMapper
      *
      * @version 20120722
      * @param int $postId
-         */
+     */
     public function decreasePostRating($postId)
     {
         do_action('fvcn_decrease_post_rating', $postId);
@@ -534,7 +524,7 @@ class FvCommunityNews_PostMapper
      *
      * @version 20120724
      * @param int $postId
-         */
+     */
     public function increasePostViewCount($postId)
     {
         do_action('fvcn_increase_post_view_count', $postId);

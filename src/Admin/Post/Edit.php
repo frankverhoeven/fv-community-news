@@ -33,7 +33,7 @@ class Edit
      * registerMetaboxPostInfo()
      *
      * @version 20120721
-         */
+     */
     public function registerMetaboxPostInfo()
     {
         if (empty($_GET['action']) || 'edit' != $_GET['action'] || get_post_type() != $this->postType) {
@@ -53,13 +53,13 @@ class Edit
     }
 
     /**
-     * post_info_metabox_save()
+     * saveMetaboxPostInfo()
      *
      * @version 20120721
      * @param int $postId
      * @return int
      */
-    public function saveMetaboxPostInfo($postId=0)
+    public function saveMetaboxPostInfo($postId = 0)
     {
         if (empty($postId)) {
             return $postId;
@@ -76,10 +76,6 @@ class Edit
         if (!current_user_can('edit_posts')) {
             return $postId;
         }
-        if (!isset($_REQUEST['action']) || 'edit' != $_REQUEST['action']) {
-            return $postId;
-        }
-
 
         if (isset($_POST['fvcn_anonymous_author_name']))
             update_post_meta($postId, '_fvcn_anonymous_author_name', $_POST['fvcn_anonymous_author_name']);
@@ -87,7 +83,6 @@ class Edit
             update_post_meta($postId, '_fvcn_anonymous_author_email', $_POST['fvcn_anonymous_author_email']);
         if (isset($_POST['fvcn_post_url']))
             update_post_meta($postId, '_fvcn_post_url', apply_filters('fvcn_new_post_pre_url', esc_url(strip_tags($_POST['fvcn_post_url']))));
-
 
         do_action('fvcn_save_metabox_post_info', $postId);
 
@@ -98,43 +93,35 @@ class Edit
      * metaboxPostInfo()
      *
      * @version 20120721
-         */
+     */
     public function metaboxPostInfo()
     {
         $id = get_the_ID();
 
         if (fvcn_is_post_anonymous($id)) : ?>
-
-            <p><strong><?php _e('Author Name', 'fvcn'); ?></strong></p>
             <p>
-                <label for="fvcn_post_form_author_name" class="screen-reader-text"><?php _e('Name', 'fvcn'); ?></label>
-                <input type="text" name="fvcn_post_form_author_name" id="fvcn_post_form_author_name" value="<?php echo get_post_meta($id, '_fvcn_anonymous_author_name', true); ?>" size="30">
+                <label for="fvcn_post_form_author_name"><?php _e('Author Name', 'fvcn'); ?></label>
+                <input type="text" name="fvcn_post_form_author_name" id="fvcn_post_form_author_name" value="<?= get_post_meta($id, '_fvcn_anonymous_author_name', true); ?>" style="width: 100%;">
             </p>
-
-            <p><strong><?php _e('Author Email', 'fvcn'); ?></strong></p>
             <p>
-                <label for="fvcn_post_form_author_email" class="screen-reader-text"><?php _e('Email', 'fvcn'); ?></label>
-                <input type="text" name="fvcn_post_form_author_email" id="fvcn_post_form_author_email" value="<?php echo get_post_meta($id, '_fvcn_anonymous_author_email', true); ?>" size="30">
+                <label for="fvcn_post_form_author_email"><?php _e('Author Email', 'fvcn'); ?></label>
+                <input type="text" name="fvcn_post_form_author_email" id="fvcn_post_form_author_email" value="<?= get_post_meta($id, '_fvcn_anonymous_author_email', true); ?>" style="width: 100%;">
             </p>
-
         <?php endif; ?>
 
-        <p><strong><?php _e('Author IP Address', 'fvcn'); ?></strong></p>
         <p>
-            <label for="fvcn_post_author_ip" class="screen-reader-text"><?php _e('IP Address', 'fvcn'); ?></label>
-            <input type="text" name="fvcn_post_author_ip" id="fvcn_post_author_ip" value="<?php echo get_post_meta($id, '_fvcn_author_ip', true); ?>" size="30" disabled>
+            <label for="fvcn_post_url"><?php _e('Link', 'fvcn'); ?></label>
+            <input type="text" name="fvcn_post_url" id="fvcn_post_url" value="<?= get_post_meta($id, '_fvcn_post_url', true); ?>" style="width: 100%;">
         </p>
-
-        <p><strong><?php _e('Post Link', 'fvcn'); ?></strong></p>
+        <!--
         <p>
-            <label for="fvcn_post_url" class="screen-reader-text"><?php _e('Post URL', 'fvcn'); ?></label>
-            <input type="text" name="fvcn_post_url" id="fvcn_post_url" value="<?php echo get_post_meta($id, '_fvcn_post_url', true); ?>" size="30">
+            <label for="fvcn_post_author_ip"><?php _e('Author IP Address', 'fvcn'); ?></label>
+            <input type="text" name="fvcn_post_author_ip" id="fvcn_post_author_ip" value="<?= get_post_meta($id, '_fvcn_author_ip', true); ?>" style="width: 100%;" disabled>
         </p>
-
-        <p><strong><?php _e('Post Rating', 'fvcn'); ?></strong></p>
+        -->
         <p>
-            <label for="fvcn_post_rating" class="screen-reader-text"><?php _e('IP Address', 'fvcn'); ?></label>
-            <input type="text" name="fvcn_post_rating" id="fvcn_post_rating" value="<?php echo get_post_meta($id, '_fvcn_post_rating', true); ?>" size="30" disabled>
+            <label for="fvcn_post_rating"><?php _e('Rating', 'fvcn'); ?></label>
+            <input type="text" name="fvcn_post_rating" id="fvcn_post_rating" value="<?= get_post_meta($id, '_fvcn_post_rating', true); ?>" style="width: 100%;" disabled>
         </p>
 
         <?php

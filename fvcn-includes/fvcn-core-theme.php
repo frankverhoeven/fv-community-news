@@ -34,7 +34,7 @@ function fvcn_get_theme_url()
  * @param string $slug
  * @param string $name
  */
-function fvcn_get_template_part($slug, $name=null)
+function fvcn_get_template_part($slug, $name = null)
 {
     if (null === $name) {
         $file = $slug . '.php';
@@ -42,7 +42,7 @@ function fvcn_get_template_part($slug, $name=null)
         $file = $slug . '-' . $name . '.php';
     }
 
-    if (fvcn_theme_is_compat_active() || !file_exists(get_stylesheet_directory() . '/' . $file)) {
+    if (!file_exists(get_stylesheet_directory() . '/' . $file)) {
         load_template(fvcn_get_theme_dir() . '/' . $file, false);
     } else {
         get_template_part($slug, $name);

@@ -125,7 +125,7 @@ function fvcn_send_notification_mail($postId)
  * @param string $option
  * @param bool $slug
  */
-function fvcn_form_option($option, $slug=false)
+function fvcn_form_option($option, $slug = false)
 {
     echo fvcn_get_form_option($option, $slug);
 }
@@ -138,7 +138,7 @@ function fvcn_form_option($option, $slug=false)
  * @param bool $slug
  * @return mixed
  */
-function fvcn_get_form_option($option, $slug=false)
+function fvcn_get_form_option($option, $slug = false)
 {
     $value = Options::fvcnGetOption($option);
 

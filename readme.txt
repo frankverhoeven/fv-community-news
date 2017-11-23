@@ -4,8 +4,8 @@ Contributors:       frankverhoeven
 Donate link:        https://www.paypal.me/FrankVerhoeven
 Tags:               Community News, Community, News, Widget, Custom Post, Custom Posting, Post, Form, Akismet, Ajax
 Requires at least:  4.8
-Tested up to:       4.8.3
-Stable tag:         3.0.2
+Tested up to:       4.9
+Stable tag:         3.1
 
 Give the visitors of your site the ability to submit their news to you, and list it in a nice news feed.
 
@@ -13,12 +13,12 @@ Give the visitors of your site the ability to submit their news to you, and list
 
 == Description ==
 
-Many blogs out there can only produce a couple articles a week while their visitors
-ask for loads more. It sometimes is a good idea to add related articles from other
-blogs to your sidebar. Adding them manually takes lots of time we don't have. With
-this Community News plugin you allow your visitors to add to your blog. Complete with
-moderation panel and a settings page, you can sit back while you have full control
-about the look and articles that being posted.
+Many blogs out there can only produce a couple of articles a week, while their visitors
+ask for loads more. It is a good idea to add related articles from other blogs to your site.
+Adding them manually, however, takes lots of time we don't have. With this Community News
+plugin you allow your visitors to add articles to your blog. Complete with moderation panel
+and a settings page, you can sit back while you have full control about the look and articles
+that are being posted.
 
 
 = Features =
@@ -47,8 +47,8 @@ This section describes how to install the plugin and get it up & running.
 
 In order to successfully use this plugin, you will need the following:
 
-* PHP 5 or higher
-* WordPress 3.3 or higher
+* PHP 5.6 or higher (PHP 7 recommended)
+* WordPress 4.8 or higher
 
 
 = Installation Steps =
@@ -84,7 +84,7 @@ It is possible to seamlessly integrate the plugin with your current theme. To do
 follow the next steps:
 
 1. Copy the contents of `/fv-community-news/fvcn-theme/` to the directory of your current theme.
-1. Modify the files you just copied to match your theme. By default the files are setup for the default WordPress theme (Twenty Eleven).
+1. Modify the files you just copied to match your theme. By default the files are setup for the default WordPress theme (Twenty Seventeen).
 
 And thats all! The plugin will automatically detect the new files and use those instead
 of the default files.
@@ -106,7 +106,8 @@ If you're still using version 1.x, you will have to update to version 2 first.
 3. Moderate the latest posts right on your dashboard.
 4. General settings page.
 5. Customise the form.
-6. The post form on DivitoDesign.com
+6. Widget displaying recent posts.
+7. Widget displaying the form.
 
 
 
@@ -115,16 +116,27 @@ If you're still using version 1.x, you will have to update to version 2 first.
 Below is a list of frequently asked questions.
 
 
-= The plugin always gives a timeout error =
+Q: I have a great idea for this plugin, could I make a suggestion?
+A: Sure you can! [Let me know about it](https://frankverhoeven.me/forums/forum/fv-community-news/feature-requests/).
 
-You probably have a caching plugin installed. The easiest way to fix this is by creating
-a page for the post form and exclude it from the cache.
+Q: What to do if I found a bug?
+A: Please report the bug to me as soon as possible. This way I can solve the problem and make the plugin better for everyone.
+Visit the forums at [https://frankverhoeven.me/forums/forum/fv-community-news/bug-reports/](https://frankverhoeven.me/forums/forum/fv-community-news/bug-reports/).
 
 
 
 == Changelog ==
 
 For more details on changes, please visit the [WordPress Trac](http://plugins.trac.wordpress.org/log/fv-community-news/ "FV Community News on WordPress Trac").
+
+
+= 3.1 =
+
+* Fix: WordPress 4.9 compatibility
+* Fix: Post info can be edited again
+* Improvement: Code cleanup
+* Improvement: Various bug fixes and enhancements
+* Improvement: Relaxed the very strict form validators
 
 
 = 3.0.3 =
@@ -152,5 +164,3 @@ For more details on changes, please visit the [WordPress Trac](http://plugins.tr
 compatible with version 2.x or 1.x!
 
 * Conversion to the custom post type.
-
-

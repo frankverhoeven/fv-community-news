@@ -13,7 +13,7 @@ class Settings
      * fvcn_register_admin_settings()
      *
      * @version 20120524
-                     */
+                 */
     public function __construct()
     {
         // General
@@ -36,10 +36,10 @@ class Settings
         add_settings_field('_fvcn_base_slug', __('Base Slug', 'fvcn'), [$this, 'post_base_slug'], 'fvcn-settings', 'fvcn_settings_permalinks');
         register_setting('fvcn-settings', '_fvcn_base_slug', 'esc_sql');
 
-        add_settings_field('_fvcn_post_slug', __('Post Slug', 'fvcn'), [$this, 'post_slug', 'fvcn-settings'], 'fvcn_settings_permalinks');
+        add_settings_field('_fvcn_post_slug', __('Post Slug', 'fvcn'), [$this, 'post_slug'], 'fvcn-settings', 'fvcn_settings_permalinks');
         register_setting('fvcn-settings', '_fvcn_post_slug', 'esc_sql');
 
-        add_settings_field('_fvcn_post_tag_slug', __('Tag Slug', 'fvcn'), [$this, 'post_tag_slug', 'fvcn-settings'], 'fvcn_settings_permalinks');
+        add_settings_field('_fvcn_post_tag_slug', __('Tag Slug', 'fvcn'), [$this, 'post_tag_slug'], 'fvcn-settings', 'fvcn_settings_permalinks');
         register_setting('fvcn-settings', '_fvcn_post_tag_slug', 'esc_sql');
 
         add_settings_field('_fvcn_post_archive_slug', __('Archive Slug', 'fvcn'), [$this, 'post_archive_slug'], 'fvcn-settings', 'fvcn_settings_permalinks');
@@ -54,7 +54,7 @@ class Settings
      * fvcn_admin_settings()
      *
      * @version 20120324
-             */
+         */
     public function fvcn_admin_settings()
     {
         flush_rewrite_rules();
@@ -81,7 +81,7 @@ class Settings
      * general_section()
      *
      * @version 20120322
-         */
+     */
     public function general_section()
     {
         ?>
@@ -94,7 +94,7 @@ class Settings
      * moderation()
      *
      * @version 20120322
-         */
+     */
     public function moderation()
     {
         ?>
@@ -113,7 +113,7 @@ class Settings
      * mail()
      *
      * @version 20120322
-         */
+     */
     public function mail()
     {
         ?>
@@ -132,7 +132,7 @@ class Settings
      * is_anonymous_allowed()
      *
      * @version 20120322
-         */
+     */
     public function is_anonymous_allowed()
     {
         ?>
@@ -148,7 +148,7 @@ class Settings
      * permalinks_section()
      *
      * @version 20120322
-         */
+     */
     public function permalinks_section()
     {
         ?>
@@ -161,7 +161,7 @@ class Settings
      * post_base_slug()
      *
      * @version 20120524
-         */
+     */
     public function post_base_slug()
     {
         ?>
@@ -176,7 +176,7 @@ class Settings
      * post_slug()
      *
      * @version 20120524
-         */
+     */
     public function post_slug()
     {
         ?>
@@ -191,7 +191,7 @@ class Settings
      * post_tag_slug()
      *
      * @version 20120524
-         */
+     */
     public function post_tag_slug()
     {
         ?>
@@ -206,7 +206,7 @@ class Settings
      * post_archive_slug()
      *
      * @version 20120524
-         */
+     */
     public function post_archive_slug()
     {
         ?>
