@@ -182,7 +182,7 @@ class Akismet
      *
      * @version 20120711
      * @param array $params
-         */
+     */
     public function submitSpam(array $params)
     {
         $this->makeApiCall('/1.1/submit-spam', $params);
@@ -193,7 +193,7 @@ class Akismet
      *
      * @version 20120711
      * @param array $params
-         */
+     */
     public function submitHam(array $params)
     {
         $this->makeApiCall('/1.1/submit-ham', $params);

@@ -23,38 +23,62 @@ class AdminFactory
      * @var Settings
      */
     private $settings;
+    /**
+     * @var Edit
+     */
+    private $edit;
+    /**
+     * @var Dashboard
+     */
+    private $dashboard;
+    /**
+     * @var Moderation
+     */
+    private $moderation;
 
     /**
      * getDashboard()
      *
      * @return Dashboard
-     * @version 20171111
+     * @version 20171123
      */
     public function getDashboard()
     {
-        return new Dashboard();
+        if (null === $this->dashboard) {
+            $this->dashboard = new Dashboard();
+        }
+
+        return $this->dashboard;
     }
 
     /**
      * getPostModeration()
      *
      * @return Moderation
-     * @version 20171111
+     * @version 20171123
      */
     public function getPostModeration()
     {
-        return new Moderation();
+        if (null === $this->moderation) {
+            $this->moderation = new Moderation();
+        }
+
+        return $this->moderation;
     }
 
     /**
      * getPostEdit()
      *
      * @return Edit
-     * @version 20171111
+     * @version 20171123
      */
     public function getPostEdit()
     {
-        return new Edit();
+        if (null === $this->edit) {
+            $this->edit = new Edit();
+        }
+
+        return $this->edit;
     }
 
     /**

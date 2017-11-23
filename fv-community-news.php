@@ -3,7 +3,7 @@
 /**
  * Plugin Name: FV Community News
  * Plugin URI:  https://frankverhoeven.me/wordpress-plugin-fv-community-news/
- * Description: Allow visitors of your site to post articles.
+ * Description: Allow visitors of your site to submit articles.
  * Version:     3.1
  * Author:      Frank Verhoeven
  * Author URI:  https://frankverhoeven.me/
@@ -26,6 +26,14 @@ final class FvCommunityNews
      * @var string
      */
     const VERSION = '3.1';
+    /**
+     * @var string
+     */
+    const DIR = __DIR__;
+    /**
+     * @var string
+     */
+    const FILE = __FILE__;
 
     /**
      * __construct()
@@ -43,40 +51,10 @@ final class FvCommunityNews
     public function start()
     {
         $this->loadFiles()
-             ->setupVariables()
-             ->setupActions();
+             ->setupVariables();
 
-        $app = new Application();
+        $app = new Application(include __DIR__ . '/config/default.config.php');
         $app->run();
-    }
-
-    /**
-     * setupVariables()
-     *
-     * @version 20120710
-     * @return FvCommunityNews
-     */
-    private function setupVariables()
-    {
-        $pluginDir = plugin_dir_path(__FILE__);
-        $pluginUrl = plugin_dir_url(__FILE__);
-        $baseSlug = Options::fvcnGetOption('_fvcn_base_slug');
-
-        Registry::setInstance(new Registry([
-            'pluginDir' => $pluginDir,
-            'pluginUrl' => $pluginUrl,
-
-            'themeDir' => $pluginDir . 'fvcn-theme',
-            'themeUrl' => $pluginUrl . 'fvcn-theme',
-
-            'langDir' => $pluginDir . 'fvcn-languages',
-
-            'postSlug' => $baseSlug . '/' . Options::fvcnGetOption('_fvcn_post_slug'),
-            'postTagSlug' => $baseSlug . '/' . Options::fvcnGetOption('_fvcn_post_tag_slug'),
-            'postArchiveSlug'=> $baseSlug . '/' . Options::fvcnGetOption('_fvcn_post_archive_slug'),
-        ]));
-
-        return $this;
     }
 
     /**
@@ -94,67 +72,51 @@ final class FvCommunityNews
         $autoloader->register();
 
         $files = [
-            'fvcn-includes/fvcn-core-hooks.php',
-            'fvcn-includes/fvcn-core-theme.php',
-            'fvcn-includes/fvcn-common-functions.php',
-            'fvcn-includes/fvcn-post-functions.php',
+            '/fvcn-includes/fvcn-core-theme.php',
+            '/fvcn-includes/fvcn-common-functions.php',
+            '/fvcn-includes/fvcn-post-functions.php',
 
-            'src/Template/common-functions.php',
-            'src/Template/options-functions.php',
-            'src/Template/post-functions.php',
-            'src/Template/tag-functions.php',
-            'src/Template/user-functions.php',
+            '/src/Template/common-functions.php',
+            '/src/Template/options-functions.php',
+            '/src/Template/post-functions.php',
+            '/src/Template/tag-functions.php',
+            '/src/Template/user-functions.php',
         ];
 
-        $dir = plugin_dir_path(__FILE__);
         foreach ($files as $file) {
-            $autoloader->loadFile($dir . $file);
+            $autoloader->loadFile(__DIR__ . $file);
         }
 
         return $this;
     }
 
     /**
-     * setupActions()
+     * setupVariables()
+     *
+     * @todo: remove
      *
      * @version 20120710
      * @return FvCommunityNews
      */
-    private function setupActions()
+    private function setupVariables()
     {
-        register_activation_hook(__FILE__, 'fvcn_activation');
-        register_deactivation_hook(__FILE__, 'fvcn_deactivation');
+        $pluginDir = plugin_dir_path(__FILE__);
+        $pluginUrl = plugin_dir_url(__FILE__);
+        $baseSlug = Options::fvcnGetOption('_fvcn_base_slug');
 
-        add_action('fvcn_load_text_domain', [$this, 'loadTextdomain'], 5);
+        Registry::setInstance(new Registry([
+            'pluginDir' => $pluginDir,
+            'pluginUrl' => $pluginUrl,
+
+            'themeDir' => $pluginDir . 'fvcn-theme',
+            'themeUrl' => $pluginUrl . 'fvcn-theme',
+
+            'postSlug' => $baseSlug . '/' . Options::fvcnGetOption('_fvcn_post_slug'),
+            'postTagSlug' => $baseSlug . '/' . Options::fvcnGetOption('_fvcn_post_tag_slug'),
+            'postArchiveSlug'=> $baseSlug . '/' . Options::fvcnGetOption('_fvcn_post_archive_slug'),
+        ]));
 
         return $this;
-    }
-
-    /**
-     * loadTextdomain()
-     *
-     * @version 20120710
-     * @return bool
-     */
-    public function loadTextdomain()
-    {
-        $locale = apply_filters('fvcn_locale', get_locale());
-
-        $mofile = sprintf('fvcn-%s.mo', $locale);
-
-        $mofile_local = Registry::get('langDir') . '/' . $mofile;
-        $mofile_global = WP_LANG_DIR . '/fv-community-news/' . $mofile;
-
-        // /wp-content/plugins/fv-community-news/fvcn-languages/
-        if (file_exists($mofile_local)) {
-            return load_textdomain('fvcn', $mofile_local);
-
-        // /wp-content/languages/fv-community-news/
-        } elseif (file_exists($mofile_global)) {
-            return load_textdomain('fvcn', $mofile_global);
-        }
-
-        return false;
     }
 }
 
@@ -174,8 +136,7 @@ try {
     error_log('fvcn: ' . $e->getMessage() . PHP_EOL . $e->getTraceAsString());
 }
 
+
 /**
- *
- *     Q.E.D. (Quod Erat Demonstrandum)
- *
+ *  Q.E.D. (Quod Erat Demonstrandum)
  */

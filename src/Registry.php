@@ -24,7 +24,7 @@ class Registry
      * @version 20120710
      * @param array $options
      */
-    public function __construct(array $options=null)
+    public function __construct(array $options = null)
     {
         if (!empty($options)) {
             $this->setOptions($options);
@@ -68,7 +68,7 @@ class Registry
      */
     public function setOptions(array $options)
     {
-        foreach ($options as $key=>$value) {
+        foreach ($options as $key => $value) {
             $this->$key = $value;
         }
 
@@ -81,7 +81,7 @@ class Registry
      * @version 20120710
      * @param Registry $instance
      */
-    public static function setInstance(Registry $instance=null)
+    public static function setInstance(Registry $instance = null)
     {
         if (null === self::$instance) {
             if (null === $instance) {

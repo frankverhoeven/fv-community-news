@@ -26,8 +26,6 @@ get_header(); ?>
             ?>
         </header>
 
-        <?php twentyeleven_content_nav('nav-above'); ?>
-
         <?php while (have_posts()) : the_post(); ?>
 
             <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
@@ -56,8 +54,6 @@ get_header(); ?>
             </article>
 
         <?php endwhile; ?>
-
-        <?php twentyeleven_content_nav('nav-below'); ?>
 
     <?php else : ?>
 

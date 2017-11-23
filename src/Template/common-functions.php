@@ -20,7 +20,7 @@ function fvcn_version()
      */
     function fvcn_get_version()
     {
-        return \FvCommunityNews\Options::fvcnGetOption('_fvcn_version');
+        return FvCommunityNews::VERSION;
     }
 
 /**
@@ -63,7 +63,7 @@ function fvcn_template_notices()
 
         <div class="fvcn-template-notice error">
             <span>
-                <?php echo implode("</span><br />\n<span>", $errors); ?>
+                <?= implode("</span><br>\n<span>", $errors); ?>
             </span>
         </div>
 
@@ -71,7 +71,7 @@ function fvcn_template_notices()
 
         <div class="fvcn-template-notice">
             <span>
-                <?php echo implode("</span><br />\n<span>", $messages); ?>
+                <?= implode("</span><br>\n<span>", $messages); ?>
             </span>
         </div>
 

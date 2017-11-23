@@ -105,4 +105,4 @@
         this.post.hide();
     };
 
-})(jQuery, DashboardOptions);
+})(jQuery, FvCommunityNewsAdminDashboardOptions);

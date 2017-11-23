@@ -2,8 +2,6 @@
 
 namespace FvCommunityNews\Post;
 
-use FvCommunityNews\Registry;
-
 /**
  * PostType
  *
@@ -20,21 +18,15 @@ class PostType
     const STATUS_SPAM    = 'spam';
     const STATUS_TRASH   = 'trash';
 
-    public static function register()
-    {
-        $postType = new self();
-        $postType->registerPostType()
-            ->registerPostStatuses()
-            ->registerTaxonomy();
-    }
-
     /**
      * registerPostType()
      *
-     * @version 20120710
+     * @param string $postSlug
+     * @param string $archiveSlug
      * @return PostType
+     * @version 20171112
      */
-    public function registerPostType()
+    public function registerPostType($postSlug, $archiveSlug)
     {
         $post = [
             'labels' => [
@@ -54,7 +46,7 @@ class PostType
                 'not_found_in_trash'=> __('No posts found in Trash','fvcn')
             ],
             'rewrite' => [
-                'slug' => Registry::get('postSlug'),
+                'slug' => $postSlug,
                 'with_front' => false
             ],
             'supports' => [
@@ -70,7 +62,7 @@ class PostType
             'rewrite' => $post['rewrite'],
             'supports' => $post['supports'],
             'description' => __('FV Community News Posts', 'fvcn'),
-            'has_archive' => Registry::get('postArchiveSlug'),
+            'has_archive' => $archiveSlug,
             'public' => true,
             'publicly_queryable' => true,
             'can_export' => true,
@@ -114,10 +106,11 @@ class PostType
     /**
      * registerTaxonomy()
      *
-     * @version 20120716
+     * @param string $tagSlug
      * @return PostType
+     * @version 20171112
      */
-    public function registerTaxonomy()
+    public function registerTaxonomy($tagSlug)
     {
         $tag = [
             'labels' => [
@@ -132,7 +125,7 @@ class PostType
                 'new_item_name' => __('New Tag Name', 'fvcn'),
             ],
             'rewrite' => [
-                'slug' => Registry::get('postTagSlug'),
+                'slug' => $tagSlug,
                 'with_front' => false
             ]
         ];

@@ -116,7 +116,7 @@ class Handler
      * registerSettings()
      *
      * @version 20120322
-         */
+     */
     public function registerSettings()
     {
         add_settings_section('fvcn_settingsakismet', __('Akismet', 'fvcn'), [$this, 'settingsCallbackSection'], 'fvcn-settings');
@@ -129,7 +129,7 @@ class Handler
      * settingsCallbackSection()
      *
      * @version 20120322
-         */
+     */
     public function settingsCallbackSection()
     {
         ?>
@@ -143,7 +143,7 @@ class Handler
      * settingsCallbackEnabled()
      *
      * @version 20120711
-         */
+     */
     public function settingsCallbackEnabled()
     {
         ?>

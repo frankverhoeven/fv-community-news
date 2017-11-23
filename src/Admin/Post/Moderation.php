@@ -16,7 +16,7 @@ class Moderation
     /**
      * @var string
      */
-    protected $postType = '';
+    private $postType;
 
     /**
      * __construct()
@@ -108,7 +108,7 @@ class Moderation
      * processBulkActions()
      *
      * @version 20120730
-         */
+     */
     protected function processBulkActions()
     {
         if (isset($_GET['fvcn-remove-all-spam-submit'], $_GET['_fvcn_bulk_action'])) {
@@ -174,7 +174,7 @@ class Moderation
      * _togglePost()
      *
      * @version 20120729
-         */
+     */
     protected function _togglePost()
     {
         if (!isset($_GET['post_id'], $_GET['action']) || false === strpos($_GET['action'], 'fvcn')) {
@@ -250,13 +250,13 @@ class Moderation
      * @version 20120805
      * @param string $column
      * @param int $postId
-         */
+     */
     public function columnData($column, $postId)
     {
         switch ($column) {
             case 'fvcn_post_details' :
                 if (fvcn_has_post_thumbnail($postId)) {
-                    fvcn_post_thumbnail($postId, [46, 46], 'class=fvcn-post-thumbnail');
+                    fvcn_post_thumbnail($postId, [90, 90], 'class=fvcn-post-thumbnail');
                 }
 
                 echo '<span class="fvcn-post-author-details">';
@@ -346,7 +346,7 @@ class Moderation
      * filterDropdown()
      *
      * @version 20120730
-         */
+     */
     public function filterDropdown()
     {
         if (!isset($_GET['post_type']) || $_GET['post_type'] != $this->postType) {
@@ -354,7 +354,7 @@ class Moderation
         }
 
         ?>
-        <input type="hidden" name="_fvcn_post_status" id="_fvcn_post_status" value="<?php echo isset($_GET['post_status']) ? esc_attr($_GET['post_status']) : 'all'; ?>">
+        <input type="hidden" name="_fvcn_post_status" id="_fvcn_post_status" value="<?= isset($_GET['post_status']) ? esc_attr($_GET['post_status']) : 'all'; ?>">
         <?php
         wp_nonce_field('fvcn-bulk-action', '_fvcn_bulk_action');
 
@@ -367,7 +367,7 @@ class Moderation
      * displayNotice()
      *
      * @version 20120730
-         */
+     */
     public function displayNotice()
     {
         if (!isset($_GET['fvcn-updated']) || isset($_GET['trashed'])) {
@@ -413,7 +413,7 @@ class Moderation
             ?>
             <div id="message" class="updated"><p>
 
-                    <?php echo $message; ?>
+                    <?= $message; ?>
 
                 </p></div>
             <?php

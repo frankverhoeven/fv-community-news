@@ -71,7 +71,7 @@ class Form
         register_setting('fvcn-form', '_fvcn_post_form_thumbnail_enabled', 'intval');
 
 
-        add_settings_field('_fvcn_post_form_thumbnail_label', __('Label', 'fvcn'), [$this, 'thumbnail_label', 'fvcn-form'], 'fvcn_form_thumbnail');
+        add_settings_field('_fvcn_post_form_thumbnail_label', __('Label', 'fvcn'), [$this, 'thumbnail_label'], 'fvcn-form', 'fvcn_form_thumbnail');
         register_setting('fvcn-form', '_fvcn_post_form_thumbnail_label', 'esc_sql');
 
         add_settings_field('_fvcn_post_form_thumbnail_required', __('Required', 'fvcn'), [$this, 'thumbnail_required'], 'fvcn-form', 'fvcn_form_thumbnail');
@@ -112,7 +112,7 @@ class Form
      * fvcn_admin_form_help()
      *
      * @version 20120728
-         */
+     */
     public function fvcn_admin_form_help()
     {
         $screen = get_current_screen();
@@ -139,7 +139,7 @@ class Form
      * author_section()
      *
      * @version 20120302
-         */
+     */
     public function author_name_section()
     {
         ?>
@@ -153,7 +153,7 @@ class Form
      * author_label()
      *
      * @version 20120524
-         */
+     */
     public function author_name_label()
     {
         ?>
@@ -168,7 +168,7 @@ class Form
      * author_section()
      *
      * @version 20120302
-         */
+     */
     public function author_email_section()
     {
         ?>
@@ -182,7 +182,7 @@ class Form
      * author_label()
      *
      * @version 20120524
-         */
+     */
     public function author_email_label()
     {
         ?>
@@ -197,7 +197,7 @@ class Form
      * title_section()
      *
      * @version 20120302
-         */
+     */
     public function title_section()
     {
         ?>
@@ -211,7 +211,7 @@ class Form
      * title_label()
      *
      * @version 20120524
-         */
+     */
     public function title_label()
     {
         ?>
@@ -226,7 +226,7 @@ class Form
      * link_section()
      *
      * @version 20120302
-         */
+     */
     public function link_section()
     {
         ?>
@@ -240,7 +240,7 @@ class Form
      * link_label()
      *
      * @version 20120524
-         */
+     */
     public function link_label()
     {
         ?>
@@ -254,7 +254,7 @@ class Form
      * link_required()
      *
      * @version 20120302
-         */
+     */
     public function link_required()
     {
         ?>
@@ -270,7 +270,7 @@ class Form
      * content_section()
      *
      * @version 20120302
-         */
+     */
     public function content_section()
     {
         ?>
@@ -284,7 +284,7 @@ class Form
      * content_label()
      *
      * @version 20120524
-         */
+     */
     public function content_label()
     {
         ?>
@@ -299,7 +299,7 @@ class Form
      * tags_section()
      *
      * @version 20120302
-         */
+     */
     public function tags_section()
     {
         ?>
@@ -313,7 +313,7 @@ class Form
      * tags_label()
      *
      * @version 20120524
-         */
+     */
     public function tags_label()
     {
         ?>
@@ -327,7 +327,7 @@ class Form
      * tags_required()
      *
      * @version 20120302
-         */
+     */
     public function tags_required()
     {
         ?>
@@ -343,7 +343,7 @@ class Form
      * thumbnail_section()
      *
      * @version 20120306
-         */
+     */
     public function thumbnail_section()
     {
         ?>
@@ -358,7 +358,7 @@ class Form
      * thumbnail_enabled()
      *
      * @version 20120306
-         */
+     */
     public function thumbnail_enabled()
     {
         ?>
@@ -373,7 +373,7 @@ class Form
      * thumbnail_label()
      *
      * @version 20120524
-         */
+     */
     public function thumbnail_label()
     {
         ?>
@@ -387,7 +387,7 @@ class Form
      * thumbnail_required()
      *
      * @version 20120306
-         */
+     */
     public function thumbnail_required()
     {
         ?>

@@ -113,12 +113,12 @@ function fvcn_current_user_name() {
      * fvcn_get_current_user_name()
      *
      * @version 20120307
-             * @return string
+     * @return string
      */
     function fvcn_get_current_user_name() {
-        global $userIdentity;
+        $currentUser = wp_get_current_user();
 
-        return apply_filters('fvcn_get_current_user_name', $userIdentity);
+        return apply_filters('fvcn_get_current_user_name', $currentUser->display_name);
     }
 
 

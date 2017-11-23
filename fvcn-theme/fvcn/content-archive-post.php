@@ -18,6 +18,13 @@
     <?php endif; ?>
 
     <?php fvcn_post_content(); ?>
+
+    <?php if (fvcn_has_post_link()) : ?>
+        <div class="fvcn-post-link">
+            <p><?php printf(__('Read full article: %s', 'fvcn'),
+                    '<a href="' . fvcn_get_post_link() . '">' . fvcn_get_post_title() . '</a>'); ?></p>
+        </div>
+    <?php endif; ?>
 </div>
 
 <footer class="fvcn-post-meta">

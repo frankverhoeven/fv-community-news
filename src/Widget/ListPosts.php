@@ -13,11 +13,11 @@ use WP_Widget;
 class ListPosts extends WP_Widget
 {
     /**
-     * register_widget()
+     * register()
      *
      * @version 20120305
      */
-    public static function register_widget()
+    public static function register()
     {
         register_widget(self::class);
     }
@@ -112,22 +112,22 @@ class ListPosts extends WP_Widget
         ?>
 
         <p>
-            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'fvcn'); ?></label>
-            <input type="text" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" value="<?php echo $title; ?>" class="widefat">
+            <label for="<?= $this->get_field_id('title'); ?>"><?php _e('Title:', 'fvcn'); ?></label>
+            <input type="text" id="<?= $this->get_field_id('title'); ?>" name="<?= $this->get_field_name('title'); ?>" value="<?= $title; ?>" class="widefat">
         </p>
         <p>
-            <label for="<?php echo $this->get_field_id('num_posts'); ?>"><?php _e('Number of posts to show:', 'fvcn'); ?></label>
-            <input type="text" id="<?php echo $this->get_field_id('num_posts'); ?>" name="<?php echo $this->get_field_name('num_posts'); ?>" value="<?php echo $num_posts; ?>" size="3">
+            <label for="<?= $this->get_field_id('num_posts'); ?>"><?php _e('Number of posts to show:', 'fvcn'); ?></label>
+            <input type="text" id="<?= $this->get_field_id('num_posts'); ?>" name="<?= $this->get_field_name('num_posts'); ?>" value="<?= $num_posts; ?>" size="3">
         </p>
         <p>
-            <label for="<?php echo $this->get_field_id('thumbnail'); ?>">
-                <input type="checkbox" id="<?php echo $this->get_field_id('thumbnail'); ?>" name="<?php echo $this->get_field_name('thumbnail'); ?>" <?php checked('on', $thumbnail); ?>>
+            <label for="<?= $this->get_field_id('thumbnail'); ?>">
+                <input type="checkbox" id="<?= $this->get_field_id('thumbnail'); ?>" name="<?= $this->get_field_name('thumbnail'); ?>" <?php checked('on', $thumbnail); ?>>
                 <?php _e('Show thumbnails', 'fvcn'); ?>
             </label>
         </p>
         <p>
-            <label for="<?php echo $this->get_field_id('view_all'); ?>">
-                <input type="checkbox" id="<?php echo $this->get_field_id('view_all'); ?>" name="<?php echo $this->get_field_name('view_all'); ?>" <?php checked('on', $view_all); ?>>
+            <label for="<?= $this->get_field_id('view_all'); ?>">
+                <input type="checkbox" id="<?= $this->get_field_id('view_all'); ?>" name="<?= $this->get_field_name('view_all'); ?>" <?php checked('on', $view_all); ?>>
                 <?php _e('Show "view all" link', 'fvcn'); ?>
             </label>
         </p>

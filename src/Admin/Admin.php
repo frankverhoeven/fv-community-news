@@ -15,8 +15,7 @@ class Admin
     /**
      * @var object
      */
-    public $posts = null;
-
+    public $posts;
     /**
      * @var AdminFactory
      */
@@ -26,37 +25,18 @@ class Admin
      * __construct()
      *
      * @param AdminFactory $factory
-     * @version 20171111
+     * @version 20171112
      */
     public function __construct(AdminFactory $factory)
     {
         $this->factory = $factory;
-
-        $this->setupVariables()
-             ->setupActions();
-    }
-
-    /**
-     * setupVariables()
-     *
-     * @version 20120721
-     * @return Admin
-     */
-    private function setupVariables()
-    {
-        $registry = Registry::getInstance();
-
-        $registry->adminDir = trailingslashit($registry->pluginDir . 'fvcn-admin');
-        $registry->adminUrl = trailingslashit($registry->pluginUrl . 'fvcn-admin');
-
-        return $this;
+        $this->setupActions();
     }
 
     /**
      * setupActions()
      *
      * @version 20120720
-     * @return Admin
      */
     private function setupActions()
     {
@@ -66,15 +46,12 @@ class Admin
         add_action('admin_enqueue_scripts', [$this, 'enqueueScripts']);
 
         add_action('fvcn_admin_init', [$this, 'factory']);
-
-        return $this;
     }
 
     /**
      * factory()
      *
      * @version 20120808
-     * @return Admin
      */
     public function factory()
     {
@@ -124,15 +101,13 @@ class Admin
         }
 
         do_action('fvcn_adminfactory', $pageId);
-
-        return $this;
     }
 
     /**
      * init()
      *
      * @version 20120129
-         */
+     */
     public function init()
     {
         do_action('fvcn_admin_init');
@@ -142,7 +117,7 @@ class Admin
      * adminHead()
      *
      * @version 20120721
-         */
+     */
     public function adminHead()
     {
         $menuIconUrl = Registry::get('pluginUrl') . 'public/images/menu.png';
@@ -151,7 +126,7 @@ class Admin
 
         ?>
         <style type="text/css">
-            #menu-posts-<?php echo $postClass; ?> .wp-menu-image {
+            #menu-posts-<?= $postClass; ?> .wp-menu-image {
                 background: url(<?= $menuIconUrl; ?>) no-repeat 0 0;
             }
             #menu-posts-<?= $postClass; ?>:hover .wp-menu-image,
@@ -168,7 +143,7 @@ class Admin
             only screen and (-webkit-min-device-pixel-ratio: 1.5),
             only screen and (min-devicepixel-ratio: 1.5),
             only screen and (min-resolution: 1.5dppx) {
-                #menu-posts-<?php echo $postClass; ?> .wp-menu-image {
+                #menu-posts-<?= $postClass; ?> .wp-menu-image {
                     background-image: url(<?= $menuIconUrl2x; ?>);
                     background-size: 36px 102px;
                 }
@@ -195,7 +170,7 @@ class Admin
      * enqueueScripts()
      *
      * @version 20120721
-         */
+     */
     public function enqueueScripts()
     {
         do_action('fvcn_admin_enqueue_scripts');
@@ -205,7 +180,7 @@ class Admin
      * adminMenu()
      *
      * @version 20120721
-         */
+     */
     public function adminMenu()
     {
         $adminFormPage = add_submenu_page(
