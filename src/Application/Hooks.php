@@ -26,8 +26,8 @@ class Hooks
     {
         $this->bootstrap = $bootstrap;
 
-        register_activation_hook(FvCommunityNews::FILE, 'fvcn_activation');
-        register_deactivation_hook(FvCommunityNews::FILE, 'fvcn_deactivation');
+        register_activation_hook(FvCommunityNews::FILE, [static::class, 'fvcn_activation']);
+        register_deactivation_hook(FvCommunityNews::FILE, [static::class, 'fvcn_deactivation']);
     }
 
     /**
