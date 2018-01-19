@@ -3,7 +3,6 @@
 namespace FvCommunityNews\Akismet;
 
 use Exception;
-use FvCommunityNews\Container;
 
 /**
  * Akismet
@@ -142,6 +141,7 @@ class Akismet
      * @param string $key
      * @param string $blog
      * @return bool
+     * @throws Exception
      */
     public function verifyKey($key=null, $blog=null)
     {
@@ -182,6 +182,7 @@ class Akismet
      *
      * @version 20120711
      * @param array $params
+     * @throws Exception
      */
     public function submitSpam(array $params)
     {
@@ -193,68 +194,10 @@ class Akismet
      *
      * @version 20120711
      * @param array $params
+     * @throws Exception
      */
     public function submitHam(array $params)
     {
         $this->makeApiCall('/1.1/submit-ham', $params);
-    }
-
-
-    /**
-     * fvcn_akismet_check_post()
-     *
-     * @version 20120711
-     * @param int $postId
-     */
-    public static function fvcn_akismet_check_post($postId)
-    {
-        try {
-            Container::getInstance()->getAkismetHandler()->checkPost($postId);
-        } catch (Exception $e) {}
-    }
-
-    /**
-     * fvcn_akismet_submit_post()
-     *
-     * @version 20120711
-     * @param int $postId
-     */
-    public static function fvcn_akismet_submit_post($postId)
-    {
-        try {
-            Container::getInstance()->getAkismetHandler()->submitPost($postId);
-        } catch (Exception $e) {}
-    }
-
-    /**
-     * fvcn_akismet_register_settings()
-     *
-     * @version 20120711
-     */
-    public static function fvcn_akismet_register_settings()
-    {
-        Container::getInstance()->getAkismetHandler()->registerSettings();
-    }
-
-    /**
-     * fvcn_akismet()
-     *
-     * @version 20171111
-     */
-    public static function fvcn_akismet()
-    {
-        if (!defined('AKISMET_VERSION')) {
-            return;
-        }
-
-        if (get_option('_fvcn_akismet_enabled', false)) {
-            add_action('fvcn_insert_post', [self::class, 'fvcn_akismet_check_post']);
-            add_action('fvcn_spam_post', [self::class, 'fvcn_akismet_submit_post']);
-            add_action('fvcn_publish_post', [self::class, 'fvcn_akismet_submit_post']);
-        }
-
-        if (is_admin()) {
-            add_action('fvcn_register_admin_settings', [self::class, 'fvcn_akismet_register_settings']);
-        }
     }
 }

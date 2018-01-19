@@ -2,6 +2,8 @@
 
 namespace FvCommunityNews\Akismet;
 
+use FvCommunityNews\Post\PostType;
+
 /**
  * Handler
  *
@@ -72,10 +74,12 @@ class Handler
      */
     public function checkPost($postId)
     {
-        if ($this->akismet->isSpam($this->_getParams($postId))) {
-            $this->currentPostId = $postId;
-            fvcn_spam_post($postId);
-        }
+        try {
+            if ($this->akismet->isSpam($this->_getParams($postId))) {
+                $this->currentPostId = $postId;
+                fvcn_spam_post($postId);
+            }
+        } catch (\Exception $e) {}
 
         return $this;
     }
@@ -93,18 +97,18 @@ class Handler
 
         if ('fvcn_spam_post' == $filter) {
             if ($this->currentPostId == $postId) {
-                return;
+                return $this;
             }
 
             $method = 'submitSpam';
         } elseif ('fvcn_publish_post' == $filter) {
             if (PostType::STATUS_SPAM != fvcn_get_post_status($postId)) {
-                return;
+                return $this;
             }
 
             $method = 'submitHam';
         } else {
-            return;
+            return $this;
         }
 
         $this->akismet->$method($this->_getParams($postId));
@@ -148,18 +152,17 @@ class Handler
     {
         ?>
 
-        <input type="checkbox" name="_fvcnakismet_enabled" id="_fvcnakismet_enabled" value="1" <?php checked(get_option('_fvcnakismet_enabled', false)); ?> />
+        <input type="checkbox" name="_fvcnakismet_enabled" id="_fvcnakismet_enabled" value="1" <?php checked(get_option('_fvcnakismet_enabled', false)); ?>>
         <label for="_fvcnakismet_enabled"><?php _e('Enable Akismet spam protection for community posts.', 'fvcn'); ?></label>
 
-        <?php if ($this->akismet->verifyKey()) : ?>
+        <?php if ($this->akismet->verifyKey()): ?>
 
-        <p class="description"><?php _e('Your current API key appears to be <strong>valid</strong>.', 'fvcn'); ?></p>
+            <p class="description"><?php _e('Your current API key appears to be <strong>valid</strong>.', 'fvcn'); ?></p>
 
-    <?php else : ?>
+        <?php else : ?>
 
-        <p class="description"><?php _e('Your current API key appears to be <strong>invalid</strong>.', 'fvcn'); ?></p>
+            <p class="description"><?php _e('Your current API key appears to be <strong>invalid</strong>.', 'fvcn'); ?></p>
 
-    <?php endif;
-
+        <?php endif;
     }
 }

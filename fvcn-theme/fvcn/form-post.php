@@ -12,19 +12,19 @@
 
 ?>
 
-<?php if (fvcn_is_post_added()) : ?>
+<?php if (fvcn_is_post_added()): ?>
 
 <?php do_action('fvcn_post_added_before'); ?>
 <div class="fvcn-post-added">
-    <?php if (fvcn_is_post_added_approved()) : ?>
+    <?php if (fvcn_is_post_added_approved()): ?>
         <p><?php _e('Your post has been added.', 'fvcn'); ?></p>
-    <?php else : ?>
+    <?php else: ?>
         <p><?php _e('Your post has been added and is pending review.', 'fvcn'); ?></p>
     <?php endif; ?>
 </div>
 <?php do_action('fvcn_post_added_after'); ?>
 
-<?php else : ?>
+<?php else: ?>
 
 <?php do_action('fvcn_post_form_before'); ?>
 
@@ -33,10 +33,10 @@
         <?php fvcn_post_form_field_error('fvcn_post_form'); ?>
     </div>
 
-    <form class="fvcn-post-form-new-post" method="post" action=""<?php if (fvcn_is_post_form_thumbnail_enabled()) : ?> enctype="multipart/form-data"<?php endif; ?>>
+    <form class="fvcn-post-form-new-post" method="post" action=""<?php if (fvcn_is_post_form_thumbnail_enabled()): ?> enctype="multipart/form-data"<?php endif; ?>>
         <?php do_action('fvcn_post_form_extras_top'); ?>
 
-        <?php if (fvcn_is_anonymous()) : ?>
+        <?php if (fvcn_is_anonymous()): ?>
 
             <?php do_action('fvcn_post_form_before_author_name'); ?>
             <div class="fvcn-post-form-author-name">
@@ -58,7 +58,7 @@
             </div>
             <?php do_action('fvcn_post_form_after_author_email'); ?>
 
-        <?php else : ?>
+        <?php else: ?>
 
             <div class="fvcn-post-form-author-logged-in">
                 <?php printf(__('Currently logged in as <a href="%1$s">%2$s</a>. <a href="%3$s">Log out</a>', 'fvcn'), admin_url('profile.php'), fvcn_get_current_user_name(), wp_logout_url(apply_filters('the_permalink', get_permalink(home_url('/'))))); ?>
@@ -106,7 +106,7 @@
         </div>
         <?php do_action('fvcn_post_form_after_tags'); ?>
 
-        <?php if (fvcn_is_post_form_thumbnail_enabled()) : ?>
+        <?php if (fvcn_is_post_form_thumbnail_enabled()): ?>
 
             <?php do_action('fvcn_post_form_before_thumbnail'); ?>
             <div class="fvcn-post-form-thumbnail">

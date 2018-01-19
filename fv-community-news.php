@@ -4,14 +4,13 @@
  * Plugin Name: FV Community News
  * Plugin URI:  https://frankverhoeven.me/wordpress-plugin-fv-community-news/
  * Description: Allow visitors of your site to submit articles.
- * Version:     3.1.1
+ * Version:     3.1.2
  * Author:      Frank Verhoeven
  * Author URI:  https://frankverhoeven.me/
  */
 
 use FvCommunityNews\Application\Application;
-use FvCommunityNews\Options;
-use FvCommunityNews\Registry;
+use FvCommunityNews\Container\Container;
 
 if (!defined('ABSPATH')) exit;
 
@@ -25,7 +24,7 @@ final class FvCommunityNews
     /**
      * @var string
      */
-    const VERSION = '3.1.1';
+    const VERSION = '3.1.2';
     /**
      * @var string
      */
@@ -34,24 +33,30 @@ final class FvCommunityNews
      * @var string
      */
     const FILE = __FILE__;
+    /**
+     * @var Container
+     */
+    public static $container;
 
     /**
      * __construct()
      *
-     * @version 20120709
+     * @version 20180119
      */
     public function __construct()
-    {}
+    {
+        register_activation_hook(__FILE__, [static::class, 'activation']);
+        register_deactivation_hook(__FILE__, [static::class, 'deactivation']);
+    }
 
     /**
      * start()
      *
-     * @version 20120710
+     * @version 20180119
      */
     public function start()
     {
-        $this->loadFiles()
-             ->setupVariables();
+        $this->loadFiles();
 
         $app = new Application(include __DIR__ . '/config/default.config.php');
         $app->run();
@@ -60,11 +65,10 @@ final class FvCommunityNews
     /**
      * loadFiles()
      *
-     * @version 20120716
-     * @return FvCommunityNews
-     * @throws Exception
+     * @version 20180119
+     * @return void
      */
-    private function loadFiles()
+    private function loadFiles(): void
     {
         include_once __DIR__ . '/src/Autoloader.php';
 
@@ -86,37 +90,37 @@ final class FvCommunityNews
         foreach ($files as $file) {
             $autoloader->loadFile(__DIR__ . $file);
         }
-
-        return $this;
     }
 
     /**
-     * setupVariables()
+     * Activation Hook
      *
-     * @todo: remove
-     *
-     * @version 20120710
-     * @return FvCommunityNews
+     * @return void
      */
-    private function setupVariables()
+    public static function activation(): void
     {
-        $pluginDir = plugin_dir_path(__FILE__);
-        $pluginUrl = plugin_dir_url(__FILE__);
-        $baseSlug = Options::fvcnGetOption('_fvcn_base_slug');
+        do_action('fvcn_activation');
+        register_uninstall_hook(__FILE__, [static::class, 'uninstall']);
+    }
 
-        Registry::setInstance(new Registry([
-            'pluginDir' => $pluginDir,
-            'pluginUrl' => $pluginUrl,
+    /**
+     * Deactivation Hook
+     *
+     * @return void
+     */
+    public static function deactivation(): void
+    {
+        do_action('fvcn_deactivation');
+    }
 
-            'themeDir' => $pluginDir . 'fvcn-theme',
-            'themeUrl' => $pluginUrl . 'fvcn-theme',
-
-            'postSlug' => $baseSlug . '/' . Options::fvcnGetOption('_fvcn_post_slug'),
-            'postTagSlug' => $baseSlug . '/' . Options::fvcnGetOption('_fvcn_post_tag_slug'),
-            'postArchiveSlug'=> $baseSlug . '/' . Options::fvcnGetOption('_fvcn_post_archive_slug'),
-        ]));
-
-        return $this;
+    /**
+     * Uninstall Hook
+     *
+     * @return void
+     */
+    public static function uninstall(): void
+    {
+        do_action('fvcn_uninstall');
     }
 }
 

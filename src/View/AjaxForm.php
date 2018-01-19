@@ -2,9 +2,7 @@
 
 namespace FvCommunityNews\View;
 
-use FvCommunityNews\Container;
 use FvCommunityNews\Post\PostType;
-use FvCommunityNews\Registry;
 
 /**
  * AjaxForm
@@ -47,11 +45,13 @@ class AjaxForm
      */
     public function enqueueScripts()
     {
+        $registry = \FvCommunityNews::$container->get('Registry');
+
         // Replace the outdated version of jQuery Form that is shipped with WordPress
         wp_deregister_script('jquery-form');
-        wp_register_script('jquery-form', Registry::get('pluginUrl') . 'public/js/jquery-form.js');
+        wp_register_script('jquery-form', $registry['pluginUrl'] . 'public/js/jquery-form.js');
 
-        wp_enqueue_script('fvcn-js', Registry::get('pluginUrl') . 'public/js/fvcn-js.js', ['jquery', 'jquery-form']);
+        wp_enqueue_script('fvcn-js', $registry['pluginUrl'] . 'public/js/fvcn-js.js', ['jquery', 'jquery-form']);
 
         wp_localize_script('fvcn-js', 'FvCommunityNewsJavascript', $this->jsParams);
 
@@ -68,8 +68,8 @@ class AjaxForm
 
         if (fvcn_has_errors()) {
             $errors = [];
-            foreach (Container::getInstance()->getWpError()->get_error_codes() as $code) {
-                $errors[ $code ] = Container::getInstance()->getWpError()->get_error_message($code);
+            foreach (\FvCommunityNews::$container->get(\WP_Error::class)->get_error_codes() as $code) {
+                $errors[ $code ] = \FvCommunityNews::$container->get(\WP_Error::class)->get_error_message($code);
             }
 
             $response = [

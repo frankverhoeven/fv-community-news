@@ -2,6 +2,8 @@
 
 namespace FvCommunityNews;
 
+use FvCommunityNews\Config\AbstractConfig as Config;
+
 /**
  * Installer
  *
@@ -98,7 +100,7 @@ class Installer
     public function hasUpdate()
     {
         $lastCheck = $this->config->get('_fvcn_previous_has_update', false);
-        if (!$lastCheck || (time() - $lastCheck) > 432000) { // Only check once every five days
+        if (!$lastCheck || (time() - $lastCheck) > 86400) { // Only check once every 24 hours
             $latest = Version::getLatestVersion();
             $this->config->set('_fvcn_previous_has_update', time());
 

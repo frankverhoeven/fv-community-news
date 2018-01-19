@@ -1,8 +1,5 @@
 <?php
 
-use FvCommunityNews\Container;
-use FvCommunityNews\Registry;
-
 /**
  * fvcn_version()
  *
@@ -24,17 +21,6 @@ function fvcn_version()
     }
 
 /**
- * fvcn_head()
- *
- * @version 20171111
- */
-function fvcn_head()
-{
-    echo '<meta name="generator" content="FV Community News">' . "\n";
-    do_action('fvcn_head');
-}
-
-/**
  * fvcn_template_notices()
  *
  * @version 20120713
@@ -47,10 +33,11 @@ function fvcn_template_notices()
 
     $errors = $messages = [];
 
-    foreach (Container::getInstance()->getWpError()->get_error_codes() as $code) {
-        $severity = Container::getInstance()->getWpError()->get_error_data($code);
+    $wpError = FvCommunityNews::$container->get(WP_Error::class);
+    foreach ($wpError->get_error_codes() as $code) {
+        $severity = $wpError->get_error_data($code);
 
-        foreach (Container::getInstance()->getWpError()->get_error_messages($code) as $error) {
+        foreach ($wpError->get_error_messages($code) as $error) {
             if ('message' == $severity) {
                 $messages[] = $error;
             } else {
@@ -105,9 +92,10 @@ function is_fvcn()
  * @version 20120710
  * @return bool
  */
-function fvcn_show_widget_thumbnail()
+function fvcn_show_widget_thumbnail(): bool
 {
-    return Registry::getInstance()->widgetShowThumbnail;
+    $registry = \FvCommunityNews::$container->get('Registry');
+    return $registry['widgetShowThumbnail'];
 }
 
 /**
@@ -116,7 +104,8 @@ function fvcn_show_widget_thumbnail()
  * @version 20120710
  * @return bool
  */
-function fvcn_show_widget_view_all()
+function fvcn_show_widget_view_all(): bool
 {
-    return Registry::getInstance()->widgetShowViewAll;
+    $registry = \FvCommunityNews::$container->get('Registry');
+    return $registry['widgetShowViewAll'];
 }

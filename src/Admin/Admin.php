@@ -2,8 +2,13 @@
 
 namespace FvCommunityNews\Admin;
 
+use FvCommunityNews\Admin\Dashboard\Dashboard;
+use FvCommunityNews\Admin\Post\Edit;
+use FvCommunityNews\Admin\Post\Moderation;
+use FvCommunityNews\Admin\Settings\Form;
+use FvCommunityNews\Admin\Settings\Settings;
+use FvCommunityNews\Container\Container;
 use FvCommunityNews\Post\PostType;
-use FvCommunityNews\Registry;
 
 /**
  * Admin
@@ -17,19 +22,19 @@ class Admin
      */
     public $posts;
     /**
-     * @var AdminFactory
+     * @var Container
      */
-    protected $factory;
+    protected $container;
 
     /**
      * __construct()
      *
-     * @param AdminFactory $factory
+     * @param Container $container
      * @version 20171112
      */
-    public function __construct(AdminFactory $factory)
+    public function __construct(Container $container)
     {
-        $this->factory = $factory;
+        $this->container = $container;
         $this->setupActions();
     }
 
@@ -72,31 +77,31 @@ class Admin
         switch ($pageId) {
             case 'dashboard' :
             case 'admin-ajax' :
-                $this->factory->getDashboard();
+                $this->container->get(Dashboard::class);
                 break;
 
             case 'edit-' . $postType :
-                $this->factory->getPostModeration();
+                $this->container->get(Moderation::class);
                 break;
 
             case 'post' :
             case 'post-new-' . $postType :
-                $this->factory->getPostEdit();
+                $this->container->get(Edit::class);
                 break;
 
             case 'admin-fvcn-settings' :
             case 'edit-' . $postType . '-fvcn-settings' :
-                $this->factory->getSettings();
+                $this->container->get(Settings::class);
                 break;
 
             case 'admin-fvcn-form' :
             case 'edit-' . $postType . '-fvcn-form' :
-                $this->factory->getForm();
+                $this->container->get(Form::class);
                 break;
 
             case 'options' :
-                $this->factory->getSettings();
-                $this->factory->getForm();
+                $this->container->get(Settings::class);
+                $this->container->get(Form::class);
                 break;
         }
 
@@ -120,8 +125,9 @@ class Admin
      */
     public function adminHead()
     {
-        $menuIconUrl = Registry::get('pluginUrl') . 'public/images/menu.png';
-        $menuIconUrl2x = Registry::get('pluginUrl') . 'public/images/menu@2x.png';
+        $registry = \FvCommunityNews::$container->get('Registry');
+        $menuIconUrl = $registry['pluginUrl'] . 'public/images/menu.png';
+        $menuIconUrl2x = $registry['pluginUrl'] . 'public/images/menu@2x.png';
         $postClass = sanitize_html_class(PostType::POST_TYPE_KEY);
 
         ?>
@@ -139,10 +145,10 @@ class Admin
             }
 
             @media only screen and (-moz-min-device-pixel-ratio: 1.5),
-            only screen and (-o-min-device-pixel-ratio: 3/2),
-            only screen and (-webkit-min-device-pixel-ratio: 1.5),
-            only screen and (min-devicepixel-ratio: 1.5),
-            only screen and (min-resolution: 1.5dppx) {
+                only screen and (-o-min-device-pixel-ratio: 3/2),
+                only screen and (-webkit-min-device-pixel-ratio: 1.5),
+                only screen and (min-devicepixel-ratio: 1.5),
+                only screen and (min-resolution: 1.5dppx) {
                 #menu-posts-<?= $postClass; ?> .wp-menu-image {
                     background-image: url(<?= $menuIconUrl2x; ?>);
                     background-size: 36px 102px;
@@ -189,9 +195,9 @@ class Admin
             __('Form', 'fvcn'),
             'manage_options',
             'fvcn-form',
-            [$this->factory->getForm(), 'fvcn_admin_form']
+            [$this->container->get(Form::class), 'fvcn_admin_form']
         );
-        add_action('load-' . $adminFormPage, [$this->factory->getForm(), 'fvcn_admin_form_help']);
+        add_action('load-' . $adminFormPage, [$this->container->get(Form::class), 'fvcn_admin_form_help']);
 
         add_submenu_page(
             'edit.php?post_type=' . PostType::POST_TYPE_KEY,
@@ -199,7 +205,7 @@ class Admin
             __('Settings', 'fvcn'),
             'manage_options',
             'fvcn-settings',
-            [$this->factory->getSettings(), 'fvcn_admin_settings']
+            [$this->container->get(Settings::class), 'fvcn_admin_settings']
         );
 
         do_action('fvcn_admin_menu');

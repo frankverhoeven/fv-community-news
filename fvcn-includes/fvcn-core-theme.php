@@ -1,7 +1,6 @@
 <?php
 
 use FvCommunityNews\Post\PostType;
-use FvCommunityNews\Registry;
 
 /**
  * fvcn_get_theme_dir()
@@ -9,9 +8,10 @@ use FvCommunityNews\Registry;
  * @version 20120531
  * @return string
  */
-function fvcn_get_theme_dir()
+function fvcn_get_theme_dir(): string
 {
-    return apply_filters('fvcn_get_theme_dir', Registry::get('themeDir'));
+    $reg = FvCommunityNews::$container->get('Registry');
+    return apply_filters('fvcn_get_theme_dir', $reg['themeDir']);
 }
 
 
@@ -21,9 +21,23 @@ function fvcn_get_theme_dir()
  * @version 20120531
  * @return string
  */
-function fvcn_get_theme_url()
+function fvcn_get_theme_url(): string
 {
-    return apply_filters('fvcn_get_theme_url', Registry::get('themeUrl'));
+    $reg = FvCommunityNews::$container->get('Registry');
+    return apply_filters('fvcn_get_theme_url', $reg['themeUrl']);
+}
+
+
+/**
+ * fvcn_template_include()
+ *
+ * @version 20120319
+ * @param string $template
+ * @return string
+ */
+function fvcn_template_include($template = ''): string
+{
+    return apply_filters('fvcn_template_include', $template);
 }
 
 
@@ -60,12 +74,13 @@ function fvcn_get_template_part($slug, $name = null)
  */
 function fvcn_get_query_template($type, $templates)
 {
+    $reg = FvCommunityNews::$container->get('Registry');
     $templates = apply_filters('fvcn_get_' . $type . '_template', $templates);
 
     if ('' == ($template = locate_template($templates))) {
-        Registry::set('themeCompatActive', true);
+        $reg['themeCompatActive'] = true;
     } else {
-        Registry::set('themeCompatActive', false);
+        $reg['themeCompatActive'] = false;
     }
 
     return apply_filters('fvcn_' . $type . '_template', $template);
@@ -118,23 +133,6 @@ function fvcn_theme_get_post_tag_archive_template()
 
 
 /**
- * fvcn_enqueue_theme_css()
- *
- * @version 20120717
- */
-function fvcn_theme_enqueue_css()
-{
-    if (!fvcn_theme_is_compat_active() && file_exists(get_stylesheet_directory() . '/fvcn/css/fvcn-theme.css')) {
-        $uri = get_stylesheet_directory_uri();
-    } else {
-        $uri = fvcn_get_theme_url();
-    }
-
-    wp_enqueue_style('fvcn-theme', $uri . '/fvcn/css/fvcn-theme.css', '', fvcn_get_version(), 'all');
-}
-
-
-/**
  * fvcn_theme_compat_active()
  *
  * @version 20120716
@@ -143,8 +141,9 @@ function fvcn_theme_enqueue_css()
 function fvcn_theme_is_compat_active()
 {
     $active = true;
+    $reg = FvCommunityNews::$container->get('Registry');
 
-    if (false === Registry::get('themeCompatActive')) {
+    if (false === $reg['themeCompatActive']) {
         $active = false;
     }
 
@@ -169,7 +168,7 @@ function fvcn_theme_compat_template_include($template)
         $newTemplate = fvcn_theme_get_single_post_template();
     } elseif (fvcn_is_post_archive()) {
         $newTemplate = fvcn_theme_get_post_archive_template();
-    } elseif (fvcn_is_post_tag_archive()) {
+    } else {
         $newTemplate = fvcn_theme_get_post_tag_archive_template();
     }
 

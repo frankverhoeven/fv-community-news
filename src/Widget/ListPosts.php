@@ -2,7 +2,6 @@
 
 namespace FvCommunityNews\Widget;
 
-use FvCommunityNews\Registry;
 use WP_Widget;
 
 /**
@@ -52,9 +51,9 @@ class ListPosts extends WP_Widget
         $title = apply_filters('fvcn_list_posts_widget_title', $instance['title']);
         $num_posts = !empty($instance['num_posts']) ? $instance['num_posts'] : '5';
 
-        $registry = Registry::getInstance();
-        $registry->widgetShowThumbnail = !empty($instance['thumbnail']) ? true : false;
-        $registry->widgetShowViewAll = !empty($instance['view_all']) ? true : false;
+        $registry = \FvCommunityNews::$container->get('Registry');
+        $registry['widgetShowThumbnail'] = !empty($instance['thumbnail']) ? true : false;
+        $registry['widgetShowViewAll'] = !empty($instance['view_all']) ? true : false;
 
         $options = [
             'posts_per_page' => $num_posts

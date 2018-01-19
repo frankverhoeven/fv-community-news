@@ -2,9 +2,8 @@
 
 namespace FvCommunityNews\Admin\Dashboard\Widget;
 
-use FvCommunityNews\Options;
+use FvCommunityNews\Config\AbstractConfig as Config;
 use FvCommunityNews\Post\PostType;
-use FvCommunityNews\Registry;
 
 /**
  * RecentPosts
@@ -14,12 +13,20 @@ use FvCommunityNews\Registry;
 class RecentPosts
 {
     /**
+     * @var Config
+     */
+    private $config;
+
+    /**
      * __construct()
      *
-     * @version 20120729
+     * @param Config $config
+     * @version 20180119
      */
-    public function __construct()
+    public function __construct(Config $config)
     {
+        $this->config = $config;
+
         add_action('fvcn_admin_enqueue_scripts', [$this, 'enqueueScripts']);
         add_action('fvcn_admin_head', [$this, 'dashboardHead']);
 
@@ -35,9 +42,11 @@ class RecentPosts
      */
     public function enqueueScripts()
     {
+        $registry = \FvCommunityNews::$container->get('Registry');
+
         wp_enqueue_script(
             'fvcn-dashboard-widget-rp-js',
-            Registry::get('pluginUrl') . 'public/js/dashboard.js',
+            $registry['pluginUrl'] . 'public/js/dashboard.js',
             ['jquery'],
             '20120721'
         );
@@ -246,7 +255,7 @@ class RecentPosts
     public function widget()
     {
         $options = [
-            'posts_per_page' => Options::fvcnGetOption('_fvcn_dashboard_rp_num'),
+            'posts_per_page' => $this->config['_fvcn_dashboard_rp_num'],
             'post_status' => PostType::STATUS_PUBLISH . ',' . PostType::STATUS_PENDING
         ];
 

@@ -1,36 +1,35 @@
 <?php
 
-namespace FvCommunityNews;
+namespace FvCommunityNews\Config;
 
 use ArrayAccess;
 use Countable;
 use Iterator;
 
 /**
- * Config
+ * AbstractConfig
  *
  * @author Frank Verhoeven <hi@frankverhoeven.me>
  */
-class Config implements Countable, Iterator, ArrayAccess
+abstract class AbstractConfig implements ArrayAccess, Countable, Iterator
 {
     /**
      * @var array
      */
-    private $config;
+    protected $config;
 
     /**
-     * __construct()
-     *
      * @param array $config
-     * @version 20171112
      */
-    public function __construct(array $config)
+    public function __construct(array $config = null)
     {
-        foreach ($config as $key => $value) {
-            if (is_array($value)) {
-                $this->config[$key] = new static($value);
-            } else {
-                $this->config[$key] = $value;
+        if (null !== $config) {
+            foreach ($config as $key => $value) {
+                if (is_array($value)) {
+                    $this->config[$key] = new static($value);
+                } else {
+                    $this->config[$key] = $value;
+                }
             }
         }
     }
@@ -41,85 +40,45 @@ class Config implements Countable, Iterator, ArrayAccess
      * @param string $key
      * @param mixed|null $default
      * @return mixed|null
-     * @version 20171112
      */
-    public function get($key, $default = null)
-    {
-        if (array_key_exists($key, $this->config)) {
-            $default = $this->config[$key];
-        }
-
-        return get_option($key, $default);
-    }
+    abstract public function get(string $key, $default = null);
 
     /**
      * Add a value to the config, skips if key exists.
      *
      * @param  string $key
      * @param  mixed  $value
-     * @version 20171112
      */
-    public function add($key, $value)
-    {
-        if (is_array($value)) {
-            $value = new static($value);
-        }
-
-        if (!array_key_exists($key, $this->config)) {
-            $this->config[$key] = $value;
-        }
-        add_option($key, $value);
-    }
+    abstract public function add(string $key, $value);
 
     /**
      * Set a value in the config.
      *
      * @param string $key
      * @param mixed $value
-     * @version 20171112
      */
-    public function set($key, $value)
-    {
-        if (is_array($value)) {
-            $value = new static($value);
-        }
-
-        $this->config[$key] = $value;
-        update_option($key, $value);
-    }
+    abstract public function set(string $key, $value);
 
     /**
      * Whether an option exists.
      *
      * @param string $key
      * @return bool
-     * @version 20171112
      */
-    public function has($key)
-    {
-        return isset($this->config[$key]);
-    }
+    abstract public function has(string $key): bool;
 
     /**
      * Delete an option
      *
      * @param string $key
-     * @version 20171112
      */
-    public function delete($key)
-    {
-        if (isset($this->config[$key])) {
-            unset($this->config[$key]);
-            delete_option($key);
-        }
-    }
+    abstract public function delete(string $key): void;
 
     /**
      * Whether a offset exists
      *
      * @param mixed $offset An offset to check for.
      * @return boolean true on success or false on failure.
-     * @version 20171112
      */
     public function offsetExists($offset)
     {
@@ -131,7 +90,6 @@ class Config implements Countable, Iterator, ArrayAccess
      *
      * @param mixed $offset The offset to retrieve.
      * @return mixed Can return all value types.
-     * @version 20171112
      */
     public function offsetGet($offset)
     {
@@ -143,7 +101,6 @@ class Config implements Countable, Iterator, ArrayAccess
      *
      * @param mixed $offset The offset to assign the value to.
      * @param mixed $value The value to set.
-     * @version 20171112
      */
     public function offsetSet($offset, $value)
     {
@@ -154,7 +111,6 @@ class Config implements Countable, Iterator, ArrayAccess
      * Offset to unset
      *
      * @param mixed $offset The offset to unset.
-     * @version 20171112
      */
     public function offsetUnset($offset)
     {
@@ -165,7 +121,6 @@ class Config implements Countable, Iterator, ArrayAccess
      * Return the current element
      *
      * @return mixed Can return any type.
-     * @version 20171112
      */
     public function current()
     {
@@ -176,7 +131,6 @@ class Config implements Countable, Iterator, ArrayAccess
      * Move forward to next element
      *
      * @return void Any returned value is ignored.
-     * @version 20171112
      */
     public function next()
     {
@@ -187,7 +141,6 @@ class Config implements Countable, Iterator, ArrayAccess
      * Return the key of the current element
      *
      * @return mixed scalar on success, or null on failure.
-     * @version 20171112
      */
     public function key()
     {
@@ -198,7 +151,6 @@ class Config implements Countable, Iterator, ArrayAccess
      * Checks if current position is valid
      *
      * @return boolean Returns true on success or false on failure.
-     * @version 20171112
      */
     public function valid()
     {
@@ -209,7 +161,6 @@ class Config implements Countable, Iterator, ArrayAccess
      * Rewind the Iterator to the first element
      *
      * @return void Any returned value is ignored.
-     * @version 20171112
      */
     public function rewind()
     {
@@ -220,7 +171,6 @@ class Config implements Countable, Iterator, ArrayAccess
      * Count elements of an object
      *
      * @return int The custom count as an integer.
-     * @version 20171112
      */
     public function count()
     {

@@ -3,7 +3,6 @@
 namespace FvCommunityNews\Admin\Post;
 
 use FvCommunityNews\Post\PostType;
-use FvCommunityNews\Registry;
 use FvCommunityNews_PostMapper;
 
 /**
@@ -63,9 +62,10 @@ class Moderation
      */
     public function enqueueScripts()
     {
+        $registry = \FvCommunityNews::$container->get('Registry');
         wp_enqueue_script(
             'fvcn-admin-post-moderation-js',
-            Registry::get('pluginUrl') . 'public/js/post-moderation.js',
+            $registry['pluginUrl'] . 'public/js/post-moderation.js',
             ['jquery'],
             '20120730'
         );

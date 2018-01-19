@@ -1,10 +1,6 @@
 <?php
 
-use FvCommunityNews\Container;
-use FvCommunityNews\Options;
 use FvCommunityNews\Post\PostType;
-use FvCommunityNews\Registry;
-
 
 /**
  * fvcn_post_slug()
@@ -24,7 +20,8 @@ function fvcn_post_slug()
      */
     function fvcn_get_post_slug()
     {
-        return apply_filters('fvcn_get_post_slug', Registry::get('postSlug'));
+        $registry = \FvCommunityNews::$container->get('Registry');
+        return apply_filters('fvcn_get_post_slug', $registry['postSlug']);
     }
 
 
@@ -47,9 +44,10 @@ function fvcn_has_posts($args='')
     $options = wp_parse_args($args, $defaults);
     $options = apply_filters('fvcn_has_posts_query', $options);
 
-    Registry::set('wpQuery', new WP_Query($options));
+    $registry = \FvCommunityNews::$container->get('Registry');
+    $registry['wpQuery'] = new WP_Query($options);
 
-    return apply_filters('fvcn_has_posts', Registry::get('wpQuery')->have_posts(), Registry::get('wpQuery'));
+    return apply_filters('fvcn_has_posts', $registry['wpQuery']->have_posts(), $registry['wpQuery']);
 }
 
 
@@ -61,7 +59,8 @@ function fvcn_has_posts($args='')
  */
 function fvcn_posts()
 {
-    $have_posts = Registry::get('wpQuery')->have_posts();
+    $registry = \FvCommunityNews::$container->get('Registry');
+    $have_posts = $registry['wpQuery']->have_posts();
 
     if (empty($have_posts)) {
         wp_reset_postdata();
@@ -79,7 +78,8 @@ function fvcn_posts()
  */
 function fvcn_the_post()
 {
-    return Registry::get('wpQuery')->the_post();
+    $registry = \FvCommunityNews::$container->get('Registry');
+    return $registry['wpQuery']->the_post();
 }
 
 
@@ -104,12 +104,13 @@ function fvcn_post_id($postId = 0)
     function fvcn_get_post_id($postId = 0)
     {
         global $wp_query, $post;
+        $registry = \FvCommunityNews::$container->get('Registry');
 
         if (!empty($postId) && is_numeric($postId)) {
             $id = $postId;
 
-        } elseif (!empty(Registry::get('wpQuery')->in_the_loop) && isset(Registry::get('wpQuery')->post->ID)) {
-            $id = Registry::get('wpQuery')->post->ID;
+        } elseif (!empty($registry['wpQuery']->in_the_loop) && isset($registry['wpQuery']->post->ID)) {
+            $id = $registry['wpQuery']->post->ID;
 
         } elseif (fvcn_is_single_post() && isset($wp_query->post->ID)) {
             $id = $wp_query->post->ID;
@@ -419,9 +420,10 @@ function fvcn_post_time($postId = 0, $format='', $gmt=false) {
 function fvcn_has_post_thumbnail($postId = 0)
 {
     $id = fvcn_get_post_id($postId);
+    $registry = \FvCommunityNews::$container->get('Registry');
 
     // Double thumbnail display fix.
-    if ('the_content' != current_filter() || false === Registry::get('nativeThumbnailSupport') || is_archive()) {
+    if ('the_content' != current_filter() || false === $registry['nativeThumbnailSupport'] || is_archive()) {
         return has_post_thumbnail($id);
     } else {
         return false;
@@ -454,7 +456,6 @@ function fvcn_post_thumbnail($postId = 0, $size = 'thumbnail', $attributes = [])
     function fvcn_get_post_thumbnail($postId = 0, $size = 'thumbnail', $attributes= [])
     {
         $id = fvcn_get_post_id($postId);
-
         return apply_filters('fvcn_get_post_thumbnail', get_the_post_thumbnail($id, $size, $attributes), $id);
     }
 
@@ -475,12 +476,11 @@ function fvcn_post_rating($postId = 0)
      *
      * @version 20120321
      * @param int $postId
-     * @return string
+     * @return int
      */
     function fvcn_get_post_rating($postId = 0)
     {
         $id = fvcn_get_post_id($postId);
-
         $rating = get_post_meta($id, '_fvcn_post_rating', true);
 
         if (!is_numeric($rating)) {
@@ -659,11 +659,11 @@ function fvcn_post_archive_link()
 /**
  * fvcn_is_post()
  *
- * @version 20120308
+ * @version 20180119
  * @param int $postId
  * @return bool
  */
-function fvcn_is_post($postId = 0)
+function fvcn_is_post($postId = 0): bool
 {
     $is_post = false;
 
@@ -671,7 +671,7 @@ function fvcn_is_post($postId = 0)
         $is_post = true;
     }
 
-    return (bool) apply_filters('fvcn_is_post', $is_post, $postId);
+    return apply_filters('fvcn_is_post', $is_post, $postId);
 }
 
 
@@ -1130,7 +1130,8 @@ function fvcn_post_tag_slug()
      */
     function fvcn_get_post_tag_slug()
     {
-        return apply_filters('fvcn_get_post_tag_slug', Registry::get('postTagSlug'));
+        $registry = \FvCommunityNews::$container->get('Registry');
+        return apply_filters('fvcn_get_post_tag_slug', $registry['postTagSlug']);
     }
 
 
@@ -1198,7 +1199,7 @@ function fvcn_post_form_fields()
  */
 function fvcn_post_form_field_error($field)
 {
-    $errors = Container::getInstance()->getWpError()->get_error_messages($field);
+    $errors = FvCommunityNews::$container->get(WP_Error::class)->get_error_messages($field);
 
     if (empty($errors)) {
         return;
@@ -1227,13 +1228,12 @@ function fvcn_post_form_author_name_label()
     /**
      * fvcn_get_post_form_author_name_label()
      *
-     * @version 20120524
+     * @version 20180119
      * @return string
      */
-    function fvcn_get_post_form_author_name_label()
+    function fvcn_get_post_form_author_name_label(): string
     {
-        $label = esc_attr(Options::fvcnGetOption('_fvcn_post_form_author_name_label'));
-
+        $label = esc_attr(FvCommunityNews::$container->get('Config')['_fvcn_post_form_author_name_label']);
         return apply_filters('fvcn_get_post_form_author_name_label', $label);
     }
 
@@ -1278,13 +1278,12 @@ function fvcn_post_form_author_email_label()
     /**
      * fvcn_get_post_form_author_email_label()
      *
-     * @version 20120524
+     * @version 20180119
      * @return string
      */
-    function fvcn_get_post_form_author_email_label()
+    function fvcn_get_post_form_author_email_label(): string
     {
-        $label = esc_attr(Options::fvcnGetOption('_fvcn_post_form_author_email_label'));
-
+        $label = esc_attr(FvCommunityNews::$container->get('Config')['_fvcn_post_form_author_email_label']);
         return apply_filters('fvcn_get_post_form_author_email_label', $label);
     }
 
@@ -1329,13 +1328,12 @@ function fvcn_post_form_title_label()
     /**
      * fvcn_get_post_form_title_label()
      *
-     * @version 20120524
+     * @version 20180119
      * @return string
      */
-    function fvcn_get_post_form_title_label()
+    function fvcn_get_post_form_title_label(): string
     {
-        $label = esc_attr(Options::fvcnGetOption('_fvcn_post_form_title_label'));
-
+        $label = esc_attr(FvCommunityNews::$container->get('Config')['_fvcn_post_form_title_label']);
         return apply_filters('fvcn_get_post_form_title_label', $label);
     }
 
@@ -1380,13 +1378,12 @@ function fvcn_post_form_link_label()
     /**
      * fvcn_get_post_form_link_label()
      *
-     * @version 20120524
+     * @version 20180119
      * @return string
      */
-    function fvcn_get_post_form_link_label()
+    function fvcn_get_post_form_link_label(): string
     {
-        $label = esc_attr(Options::fvcnGetOption('_fvcn_post_form_link_label'));
-
+        $label = esc_attr(FvCommunityNews::$container->get('Config')['_fvcn_post_form_link_label']);
         return apply_filters('fvcn_get_post_form_link_label', $label);
     }
 
@@ -1420,12 +1417,14 @@ function fvcn_post_form_link()
 /**
  * fvcn_is_post_form_link_required()
  *
- * @version 20120524
+ * @version 20180119
  * @return bool
  */
-function fvcn_is_post_form_link_required()
+function fvcn_is_post_form_link_required(): bool
 {
-    return apply_filters('fvcn_is_post_form_link_required', (bool) Options::fvcnGetOption('_fvcn_post_form_link_required'));
+    return apply_filters('fvcn_is_post_form_link_required',
+        FvCommunityNews::$container->get('Config')['_fvcn_post_form_link_required']
+    );
 }
 
 
@@ -1442,13 +1441,12 @@ function fvcn_post_form_content_label()
     /**
      * fvcn_get_post_form_content_label()
      *
-     * @version 20120524
+     * @version 20180119
      * @return string
      */
-    function fvcn_get_post_form_content_label()
+    function fvcn_get_post_form_content_label(): string
     {
-        $label = esc_attr(Options::fvcnGetOption('_fvcn_post_form_content_label'));
-
+        $label = esc_attr(FvCommunityNews::$container->get('Config')['_fvcn_post_form_content_label']);
         return apply_filters('fvcn_get_post_form_content_label', $label);
     }
 
@@ -1493,13 +1491,12 @@ function fvcn_post_form_tags_label()
     /**
      * fvcn_get_post_form_tags_label()
      *
-     * @version 20120524
+     * @version 20180119
      * @return string
      */
-    function fvcn_get_post_form_tags_label()
+    function fvcn_get_post_form_tags_label(): string
     {
-        $label = esc_attr(Options::fvcnGetOption('_fvcn_post_form_tags_label'));
-
+        $label = esc_attr(FvCommunityNews::$container->get('Config')['_fvcn_post_form_tags_label']);
         return apply_filters('fvcn_get_post_form_tags_label', $label);
     }
 
@@ -1533,12 +1530,14 @@ function fvcn_post_form_tags()
 /**
  * fvcn_is_post_form_tags_required()
  *
- * @version 20120524
+ * @version 20180119
  * @return bool
  */
-function fvcn_is_post_form_tags_required()
+function fvcn_is_post_form_tags_required(): bool
 {
-    return apply_filters('fvcn_is_post_form_tags_required', (bool) Options::fvcnGetOption('_fvcn_post_form_tags_required'));
+    return apply_filters('fvcn_is_post_form_tags_required',
+        FvCommunityNews::$container->get('Config')['_fvcn_post_form_tags_required']
+    );
 }
 
 
@@ -1555,36 +1554,39 @@ function fvcn_post_form_thumbnail_label()
     /**
      * fvcn_get_post_form_thumbnail_label()
      *
-     * @version 20120524
+     * @version 20180119
      * @return string
      */
-    function fvcn_get_post_form_thumbnail_label()
+    function fvcn_get_post_form_thumbnail_label(): string
     {
-        $label = esc_attr(Options::fvcnGetOption('_fvcn_post_form_thumbnail_label'));
-
+        $label = esc_attr(FvCommunityNews::$container->get('Config')['_fvcn_post_form_thumbnail_label']);
         return apply_filters('fvcn_get_post_form_thumbnail_label', $label);
     }
 
 /**
  * fvcn_is_post_form_thumbnail_enabled()
  *
- * @version 20120524
+ * @version 20180119
  * @return bool
  */
-function fvcn_is_post_form_thumbnail_enabled()
+function fvcn_is_post_form_thumbnail_enabled(): bool
 {
-    return apply_filters('fvcn_is_post_form_thumbnail_enabled', (bool) Options::fvcnGetOption('_fvcn_post_form_thumbnail_enabled'));
+    return apply_filters('fvcn_is_post_form_thumbnail_enabled',
+        FvCommunityNews::$container->get('Config')['_fvcn_post_form_thumbnail_enabled']
+    );
 }
 
 /**
  * fvcn_is_post_form_thumbnail_required()
  *
- * @version 20120524
+ * @version 20180119
  * @return bool
  */
-function fvcn_is_post_form_thumbnail_required()
+function fvcn_is_post_form_thumbnail_required(): bool
 {
-    return apply_filters('fvcn_is_post_form_thumbnail_required', (bool) Options::fvcnGetOption('_fvcn_post_form_thumbnail_required'));
+    return apply_filters('fvcn_is_post_form_thumbnail_required',
+        FvCommunityNews::$container->get('Config')['_fvcn_post_form_thumbnail_required']
+    );
 }
 
 
