@@ -9,8 +9,10 @@
  * Author URI:  https://frankverhoeven.me/
  */
 
-use FvCommunityNews\Application\Application;
+use FvCommunityNews\AutoLoader;
+use FvCommunityNews\Config\WordPress as Config;
 use FvCommunityNews\Container\Container;
+use FvCommunityNews\Hook\Collection as HookCollection;
 
 if (!defined('ABSPATH')) exit;
 
@@ -41,7 +43,6 @@ final class FvCommunityNews
     /**
      * __construct()
      *
-     * @version 20180119
      */
     public function __construct()
     {
@@ -50,29 +51,32 @@ final class FvCommunityNews
     }
 
     /**
-     * start()
+     * Start the application
      *
-     * @version 20180119
+     * @return void
      */
-    public function start()
+    public function start(): void
     {
         $this->loadFiles();
 
-        $app = new Application(include __DIR__ . '/config/default.config.php');
-        $app->run();
+        $services = include __DIR__ . '/config/services.config.php';
+        $services['Config'] = new Config(include __DIR__ . '/config/default.config.php');
+        static::$container = new Container($services);
+
+        $hooks = new HookCollection(static::$container);
+        $hooks->register();
     }
 
     /**
-     * loadFiles()
+     * Setup autoloader and load non-class files.
      *
-     * @version 20180119
      * @return void
      */
     private function loadFiles(): void
     {
         include_once __DIR__ . '/src/Autoloader.php';
 
-        $autoloader = new \FvCommunityNews\AutoLoader(['FvCommunityNews' => __DIR__ . '/src/']);
+        $autoloader = new AutoLoader(['FvCommunityNews' => __DIR__ . '/src/']);
         $autoloader->register();
 
         $files = [
