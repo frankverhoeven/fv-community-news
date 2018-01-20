@@ -12,6 +12,7 @@ use FvCommunityNews\Config\Memory as MemoryConfig;
 use FvCommunityNews\Container\InvokableFactory;
 use FvCommunityNews\Factory\Admin\Admin as AdminFactory;
 use FvCommunityNews\Factory\Admin\Dashboard\Dashboard as AdminDashboardFactory;
+use FvCommunityNews\Factory\Admin\Post\Moderation as AdminModerationFactory;
 use FvCommunityNews\Factory\Akismet\Akismet as AkismetFactory;
 use FvCommunityNews\Factory\Akismet\Handler as AkismetHandlerFactory;
 use FvCommunityNews\Factory\Hook\Akismet as AkismetHookFactory;
@@ -23,13 +24,16 @@ use FvCommunityNews\Hook\EnqueueScripts as EnqueueScriptsHook;
 use FvCommunityNews\Hook\Head as HeadHook;
 use FvCommunityNews\Hook\Init as InitHook;
 use FvCommunityNews\Hook\WidgetsInit as WidgetsInitHook;
+use FvCommunityNews\Post\Mapper as PostMapper;
 use FvCommunityNews\View\AjaxForm;
 
 return [
+    PostMapper::class => InvokableFactory::class,
+
     Admin::class                => AdminFactory::class,
     AdminDashboard::class       => AdminDashboardFactory::class,
     AdminEdit::class            => InvokableFactory::class,
-    AdminModeration::class      => InvokableFactory::class,
+    AdminModeration::class      => AdminModerationFactory::class,
     AdminForm::class            => InvokableFactory::class,
     AdminSettings::class        => InvokableFactory::class,
 

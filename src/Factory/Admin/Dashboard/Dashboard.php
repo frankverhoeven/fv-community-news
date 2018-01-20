@@ -2,8 +2,10 @@
 
 namespace FvCommunityNews\Factory\Admin\Dashboard;
 
+use FvCommunityNews\Admin\Dashboard\Dashboard as AdminDashboard;
 use FvCommunityNews\Container\Container;
 use FvCommunityNews\Container\FactoryInterface;
+use FvCommunityNews\Post\Mapper;
 
 /**
  * Dashboard
@@ -21,6 +23,9 @@ class Dashboard implements FactoryInterface
      */
     public function create(Container $container, string $requestedName)
     {
-        return new \FvCommunityNews\Admin\Dashboard\Dashboard($container->get('Config'));
+        return new AdminDashboard(
+            $container->get('Config'),
+            $container->get(Mapper::class)
+        );
     }
 }

@@ -1,19 +1,18 @@
 <?php
 
-namespace FvCommunityNews\Factory\Akismet;
+namespace FvCommunityNews\Factory\Admin\Post;
 
-use FvCommunityNews\Akismet\Akismet;
-use FvCommunityNews\Akismet\Handler as AkismetHandler;
+use FvCommunityNews\Admin\Post\Moderation as AdminModeration;
 use FvCommunityNews\Container\Container;
 use FvCommunityNews\Container\FactoryInterface;
 use FvCommunityNews\Post\Mapper;
 
 /**
- * Handler
+ * Moderation
  *
  * @author Frank Verhoeven <hi@frankverhoeven.me>
  */
-class Handler implements FactoryInterface
+class Moderation implements FactoryInterface
 {
     /**
      * Create new container object
@@ -24,8 +23,7 @@ class Handler implements FactoryInterface
      */
     public function create(Container $container, string $requestedName)
     {
-        return new AkismetHandler(
-            $container->get(Akismet::class),
+        return new AdminModeration(
             $container->get(Mapper::class)
         );
     }

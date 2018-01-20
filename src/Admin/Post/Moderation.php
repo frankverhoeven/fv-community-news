@@ -2,8 +2,8 @@
 
 namespace FvCommunityNews\Admin\Post;
 
+use FvCommunityNews\Post\Mapper as PostMapper;
 use FvCommunityNews\Post\PostType;
-use \FvCommunityNews\Post\Mapper;
 
 /**
  * Moderation
@@ -16,13 +16,17 @@ class Moderation
      * @var string
      */
     private $postType;
+    /**
+     * @var PostMapper
+     */
+    private $postMapper;
 
     /**
-     * __construct()
-     *
+     * @param PostMapper $postMapper
      */
-    public function __construct()
+    public function __construct(PostMapper $postMapper)
     {
+        $this->postMapper = $postMapper;
         $this->postType = PostType::POST_TYPE_KEY;
 
         $this->setupActions()
@@ -150,10 +154,8 @@ class Moderation
             }
 
             if (false !== $method) {
-                $postMapper = new \FvCommunityNews\Post\Mapper();
-
                 foreach ((array)$_GET['post'] as $postId) {
-                    $postMapper->$method($postId);
+                    $this->postMapper->$method($postId);
                 }
 
                 wp_redirect(
@@ -191,10 +193,10 @@ class Moderation
                 check_admin_referer('fvcn-spam-post_' . $postId);
 
                 if (fvcn_is_post_spam($postId)) {
-                    fvcn_publish_post($postId);
+                    $this->postMapper->publishPost($postId);
                     $updated = 'unspam';
                 } else {
-                    fvcn_spam_post($postId);
+                    $this->postMapper->spamPost($postId);
                     $updated = 'spam';
                 }
                 break;
@@ -203,10 +205,10 @@ class Moderation
                 check_admin_referer('fvcn-publish-post_' . $postId);
 
                 if (fvcn_is_post_published($postId)) {
-                    fvcn_unpublish_post($postId);
+                    $this->postMapper->unpublishPost($postId);
                     $updated = 'unpublish';
                 } else {
-                    fvcn_publish_post($postId);
+                    $this->postMapper->publishPost($postId);
                     $updated = 'publish';
                 }
                 break;
@@ -400,11 +402,9 @@ class Moderation
 
         if ($message) :
             ?>
-            <div id="message" class="updated"><p>
-
-                    <?= $message; ?>
-
-                </p></div>
+            <div id="message" class="updated">
+                <p><?= $message; ?></p>
+            </div>
             <?php
         endif;
     }

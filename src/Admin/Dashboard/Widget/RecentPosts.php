@@ -3,6 +3,7 @@
 namespace FvCommunityNews\Admin\Dashboard\Widget;
 
 use FvCommunityNews\Config\AbstractConfig as Config;
+use FvCommunityNews\Post\Mapper as PostMapper;
 use FvCommunityNews\Post\PostType;
 
 /**
@@ -16,15 +17,21 @@ class RecentPosts
      * @var Config
      */
     private $config;
+    /**
+     * @var PostMapper
+     */
+    private $postMapper;
 
     /**
      * __construct()
      *
      * @param Config $config
+     * @param PostMapper $postMapper
      */
-    public function __construct(Config $config)
+    public function __construct(Config $config, PostMapper $postMapper)
     {
         $this->config = $config;
+        $this->postMapper = $postMapper;
 
         add_action('fvcn_admin_enqueue_scripts', [$this, 'enqueueScripts']);
         add_action('fvcn_admin_head', [$this, 'dashboardHead']);
@@ -208,12 +215,12 @@ class RecentPosts
         switch ($action) {
             case 'fvcn_toggle_post_spam_status' :
                 check_admin_referer('fvcn-spam-post_' . $postId);
-                return fvcn_is_post_spam($postId) ? fvcn_publish_post($postId) : fvcn_spam_post($postId);
+                return fvcn_is_post_spam($postId) ? $this->postMapper->publishPost($postId) : $this->postMapper->spamPost($postId);
                 break;
 
             case 'fvcn_toggle_post_publish_status' :
                 check_admin_referer('fvcn-publish-post_' . $postId);
-                return fvcn_is_post_published($postId) ? fvcn_unpublish_post($postId) : fvcn_publish_post($postId);
+                return fvcn_is_post_published($postId) ? $this->postMapper->unpublishPost($postId) : $this->postMapper->publishPost($postId);
                 break;
 
             default:

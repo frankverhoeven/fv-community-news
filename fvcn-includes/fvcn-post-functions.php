@@ -346,45 +346,6 @@ function fvcn_increase_post_view_count($template)
 
 
 /**
- * fvcn_publish_post()
- *
- * @param int $postId
- * @return int
- */
-function fvcn_publish_post($postId)
-{
-    $postMapper = new \FvCommunityNews\Post\Mapper();
-    return $postMapper->publishPost($postId);
-}
-
-
-/**
- * fvcn_unpublish_post()
- *
- * @param int $postId
- * @return int
- */
-function fvcn_unpublish_post($postId)
-{
-    $postMapper = new \FvCommunityNews\Post\Mapper();
-    return $postMapper->unpublishPost($postId);
-}
-
-
-/**
- * fvcn_spam_post()
- *
- * @param int $postId
- * @return int
- */
-function fvcn_spam_post($postId)
-{
-    $postMapper = new \FvCommunityNews\Post\Mapper();
-    return $postMapper->spamPost($postId);
-}
-
-
-/**
  * fvcn_post_rating_handler()
  *
  */

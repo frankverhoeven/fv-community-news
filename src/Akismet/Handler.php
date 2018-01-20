@@ -2,6 +2,7 @@
 
 namespace FvCommunityNews\Akismet;
 
+use FvCommunityNews\Post\Mapper;
 use FvCommunityNews\Post\PostType;
 
 /**
@@ -14,21 +15,24 @@ class Handler
     /**
      * @var int
      */
-    protected $currentPostId;
-
+    private $currentPostId;
     /**
      * @var Akismet
      */
-    protected $akismet;
+    private $akismet;
+    /**
+     * @var Mapper
+     */
+    private $postMapper;
 
     /**
-     * __construct()
-     *
      * @param Akismet $akismet
+     * @param Mapper $postMapper
      */
-    public function __construct(Akismet $akismet)
+    public function __construct(Akismet $akismet, Mapper $postMapper)
     {
         $this->akismet = $akismet;
+        $this->postMapper = $postMapper;
     }
 
     /**
@@ -74,7 +78,7 @@ class Handler
         try {
             if ($this->akismet->isSpam($this->_getParams($postId))) {
                 $this->currentPostId = $postId;
-                fvcn_spam_post($postId);
+                $this->postMapper->spamPost($postId);
             }
         } catch (\Exception $e) {}
 
