@@ -5,7 +5,7 @@ Donate link:        https://www.paypal.me/FrankVerhoeven
 Tags:               Community News, Community, News, Widget, Custom Post, Custom Posting, Post, Form, Akismet, Ajax
 Requires at least:  4.8
 Tested up to:       4.9
-Stable tag:         3.1.1
+Stable tag:         3.1.2
 
 Give the visitors of your site the ability to submit their news to you, and list it in a nice news feed.
 
@@ -47,7 +47,7 @@ This section describes how to install the plugin and get it up & running.
 
 In order to successfully use this plugin, you will need the following:
 
-* PHP 5.6 or higher (PHP 7 recommended)
+* PHP 7.0 or higher
 * WordPress 4.8 or higher
 
 
@@ -117,17 +117,23 @@ Below is a list of frequently asked questions.
 
 
 Q: I have a great idea for this plugin, could I make a suggestion?
-A: Sure you can! [Let me know about it](https://frankverhoeven.me/forums/forum/fv-community-news/feature-requests/).
+A: Sure you can! [Let me know about it](https://frankverhoeven.me/wordpress-plugin-fv-community-news/).
 
 Q: What to do if I found a bug?
 A: Please report the bug to me as soon as possible. This way I can solve the problem and make the plugin better for everyone.
-Visit the forums at [https://frankverhoeven.me/forums/forum/fv-community-news/bug-reports/](https://frankverhoeven.me/forums/forum/fv-community-news/bug-reports/).
+Visit the post at [https://frankverhoeven.me/wordpress-plugin-fv-community-news/](https://frankverhoeven.me/wordpress-plugin-fv-community-news/).
 
 
 
 == Changelog ==
 
 For more details on changes, please visit the [WordPress Trac](http://plugins.trac.wordpress.org/log/fv-community-news/ "FV Community News on WordPress Trac").
+
+
+= 3.1.2 =
+
+* Change: Now requires PHP >= 7.0
+* Improvement: New DI method
 
 
 = 3.1.1 =
