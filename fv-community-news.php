@@ -81,7 +81,6 @@ final class FvCommunityNews
 
         $files = [
             '/fvcn-includes/fvcn-core-theme.php',
-            '/fvcn-includes/fvcn-common-functions.php',
             '/fvcn-includes/fvcn-post-functions.php',
 
             '/src/Template/common-functions.php',

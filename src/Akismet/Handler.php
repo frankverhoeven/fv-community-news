@@ -24,7 +24,6 @@ class Handler
     /**
      * __construct()
      *
-     * @version 20120711
      * @param Akismet $akismet
      */
     public function __construct(Akismet $akismet)
@@ -35,7 +34,6 @@ class Handler
     /**
      * _getParams()
      *
-     * @version 20120711
      * @param int $postId
      * @return array
      */
@@ -68,7 +66,6 @@ class Handler
     /**
      * checkPost()
      *
-     * @version 20120711
      * @param int $postId
      * @return Handler
      */
@@ -87,7 +84,6 @@ class Handler
     /**
      * submitPost()
      *
-     * @version 20120711
      * @param int $postId
      * @return Handler
      */
@@ -119,7 +115,6 @@ class Handler
     /**
      * registerSettings()
      *
-     * @version 20120322
      */
     public function registerSettings()
     {
@@ -132,7 +127,6 @@ class Handler
     /**
      * settingsCallbackSection()
      *
-     * @version 20120322
      */
     public function settingsCallbackSection()
     {
@@ -146,7 +140,6 @@ class Handler
     /**
      * settingsCallbackEnabled()
      *
-     * @version 20120711
      */
     public function settingsCallbackEnabled()
     {

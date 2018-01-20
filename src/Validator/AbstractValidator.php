@@ -18,7 +18,6 @@ abstract class AbstractValidator
     /**
      * setMessage()
      *
-     * @version 20120704
      * @param string $message
      * @return AbstractValidator
      */
@@ -31,7 +30,6 @@ abstract class AbstractValidator
     /**
      * getMessage()
      *
-     * @version 20120704
      * @return string
      */
     public function getMessage()

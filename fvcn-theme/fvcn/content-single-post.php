@@ -5,7 +5,6 @@
  *
  * Displays a single posts content'
  *
- * @version    20120716
  * @package    FV Community News
  * @subpackage Theme
  */

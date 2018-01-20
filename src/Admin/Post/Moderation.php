@@ -3,7 +3,7 @@
 namespace FvCommunityNews\Admin\Post;
 
 use FvCommunityNews\Post\PostType;
-use FvCommunityNews_PostMapper;
+use \FvCommunityNews\Post\Mapper;
 
 /**
  * Moderation
@@ -20,7 +20,6 @@ class Moderation
     /**
      * __construct()
      *
-     * @version 20120414
      */
     public function __construct()
     {
@@ -33,7 +32,6 @@ class Moderation
     /**
      * setupActions()
      *
-     * @version 20120308
      * @return Moderation
      */
     private function setupActions()
@@ -57,7 +55,6 @@ class Moderation
     /**
      * enqueueScripts()
      *
-     * @version 20120730
      * @return Moderation
      */
     public function enqueueScripts()
@@ -95,7 +92,6 @@ class Moderation
     /**
      * addContextualHelp()
      *
-     * @version 20120308
      * @return Moderation
      */
     public function addContextualHelp()
@@ -107,7 +103,6 @@ class Moderation
     /**
      * processBulkActions()
      *
-     * @version 20120730
      */
     protected function processBulkActions()
     {
@@ -155,7 +150,7 @@ class Moderation
             }
 
             if (false !== $method) {
-                $postMapper = new FvCommunityNews_PostMapper();
+                $postMapper = new \FvCommunityNews\Post\Mapper();
 
                 foreach ((array)$_GET['post'] as $postId) {
                     $postMapper->$method($postId);
@@ -173,7 +168,6 @@ class Moderation
     /**
      * _togglePost()
      *
-     * @version 20120729
      */
     protected function _togglePost()
     {
@@ -228,7 +222,6 @@ class Moderation
      * columnHeaders()
      *
      * @return mixed
-     * @version 20171111
      */
     public function columnHeaders()
     {
@@ -247,7 +240,6 @@ class Moderation
     /**
      * columnData()
      *
-     * @version 20120805
      * @param string $column
      * @param int $postId
      */
@@ -285,7 +277,6 @@ class Moderation
     /**
      * postRowActions()
      *
-     * @version 20120730
      * @param array $actions
      * @param object $post
      * @return array
@@ -345,7 +336,6 @@ class Moderation
     /**
      * filterDropdown()
      *
-     * @version 20120730
      */
     public function filterDropdown()
     {
@@ -366,7 +356,6 @@ class Moderation
     /**
      * displayNotice()
      *
-     * @version 20120730
      */
     public function displayNotice()
     {

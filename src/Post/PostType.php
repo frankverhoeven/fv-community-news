@@ -24,7 +24,6 @@ class PostType
      * @param string $postSlug
      * @param string $archiveSlug
      * @return PostType
-     * @version 20171112
      */
     public function registerPostType($postSlug, $archiveSlug)
     {
@@ -84,7 +83,6 @@ class PostType
     /**
      * registerPostStatuses()
      *
-     * @version 20120716
      * @return PostType
      */
     public function registerPostStatuses()
@@ -108,7 +106,6 @@ class PostType
      *
      * @param string $tagSlug
      * @return PostType
-     * @version 20171112
      */
     public function registerTaxonomy($tagSlug)
     {

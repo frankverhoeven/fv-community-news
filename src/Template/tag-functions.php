@@ -3,7 +3,6 @@
 /**
  * fvcn_tag_cloud()
  *
- * @version 20120716
  * @param string|array $args
  */
 function fvcn_tag_cloud($args='')

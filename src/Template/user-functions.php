@@ -5,7 +5,6 @@ use FvCommunityNews\Post\PostType;
 /**
  * fvcn_is_anonymous()
  *
- * @version 20120229
  * @return bool
  */
 function fvcn_is_anonymous() {
@@ -21,7 +20,6 @@ function fvcn_is_anonymous() {
 /**
  * fvcn_get_current_author_ip()
  *
- * @version 20120229
  * @return string
  */
 function fvcn_get_current_author_ip() {
@@ -33,7 +31,6 @@ function fvcn_get_current_author_ip() {
 /**
  * fvcn_get_current_author_ua()
  *
- * @version 20120229
  * @return string
  */
 function fvcn_get_current_author_ua() {
@@ -49,7 +46,6 @@ function fvcn_get_current_author_ua() {
 /**
  * fvcn_user_id()
  *
- * @version 20120307
  * @param int $userId
  */
 function fvcn_user_id($userId = 0) {
@@ -59,8 +55,7 @@ function fvcn_user_id($userId = 0) {
     /**
      * fvcn_get_user_id()
      *
-     * @version 20120307
-                 * @param int $userId
+     * @param int $userId
      * @return int
      */
     function fvcn_get_user_id($userId = 0) {
@@ -81,7 +76,6 @@ function fvcn_user_id($userId = 0) {
 /**
  * fvcn_current_user_id()
  *
- * @version 20120229
  */
 function fvcn_current_user_id() {
     echo fvcn_get_current_user_id();
@@ -90,8 +84,7 @@ function fvcn_current_user_id() {
     /**
      * fvcn_get_current_user_id()
      *
-     * @version 20120229
-             * @return int
+     * @return int
      */
     function fvcn_get_current_user_id() {
         $current_user = wp_get_current_user();
@@ -103,7 +96,6 @@ function fvcn_current_user_id() {
 /**
  * fvcn_current_user_name()
  *
- * @version 20120307
  */
 function fvcn_current_user_name() {
     echo fvcn_get_current_user_name();
@@ -112,7 +104,6 @@ function fvcn_current_user_name() {
     /**
      * fvcn_get_current_user_name()
      *
-     * @version 20120307
      * @return string
      */
     function fvcn_get_current_user_name() {
@@ -125,7 +116,6 @@ function fvcn_current_user_name() {
 /**
  * fvcn_has_user_posts()
  *
- * @version 20120323
  * @param int $userId
  * @param string $post_status
  * @return bool

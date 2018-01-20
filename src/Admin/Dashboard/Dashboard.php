@@ -21,7 +21,6 @@ class Dashboard
      * __construct()
      *
      * @param Config $config
-     * @version 20180119
      */
     public function __construct(Config $config)
     {
@@ -33,7 +32,6 @@ class Dashboard
      * registerWidgets()
      *
      * @return Dashboard
-     * @version 20171111
      */
     public function registerWidgets()
     {

@@ -18,7 +18,6 @@ class ValidatorChain extends AbstractValidator
     /**
      * __construct()
      *
-     * @version 20120705
      * @param array $validators
      */
     public function __construct(array $validators=null)
@@ -31,7 +30,6 @@ class ValidatorChain extends AbstractValidator
     /**
      * setValidators()
      *
-     * @version 20120705
      * @param array $validators
      * @return ValidatorChain
      */
@@ -49,7 +47,6 @@ class ValidatorChain extends AbstractValidator
     /**
      * clearValidators()
      *
-     * @version 20120705
      * @return ValidatorChain
      */
     public function clearValidators()
@@ -61,7 +58,6 @@ class ValidatorChain extends AbstractValidator
     /**
      * getValidators()
      *
-     * @version 20120705
      * @return array
      */
     public function getValidators()
@@ -72,7 +68,6 @@ class ValidatorChain extends AbstractValidator
     /**
      * addValidator()
      *
-     * @version 20120705
      * @param string|AbstractValidator $validator
      * @return ValidatorChain
      * @throws Exception
@@ -95,7 +90,6 @@ class ValidatorChain extends AbstractValidator
     /**
      * removeValidator()
      *
-     * @version 20120705
      * @param string|AbstractValidator $validator
      * @return ValidatorChain
      */
@@ -115,7 +109,6 @@ class ValidatorChain extends AbstractValidator
     /**
      * validate()
      *
-     * @version 20120705
      * @param mixed $value
      * @return boolean
      */

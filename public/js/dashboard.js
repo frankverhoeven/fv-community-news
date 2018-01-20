@@ -3,7 +3,6 @@
  *
  * AJAX post handling for the dashboard.
  *
- * @version 20171111
  * @package FV Community News
  * @subpackage Admin Dashboard
  * @author Frank Verhoeven <hi@frankverhoeven.me>
@@ -50,7 +49,6 @@
     /**
      * parseQueryString()
      *
-     * @version 20120723
      * @link http://stevenbenner.com/2010/03/javascript-regex-trick-parse-a-query-string-into-an-object/
      * @param query
      * @return object

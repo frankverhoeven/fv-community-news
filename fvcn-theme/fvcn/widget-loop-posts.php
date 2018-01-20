@@ -3,7 +3,6 @@
 /**
  * widget-loop-posts.php
  *
- * @version    20120716
  * @package    FV Community News
  * @subpackage Theme
  */

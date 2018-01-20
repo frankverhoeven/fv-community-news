@@ -14,7 +14,6 @@ class Form extends WP_Widget
     /**
      * register()
      *
-     * @version 20120306
      */
     public static function register()
     {
@@ -24,7 +23,6 @@ class Form extends WP_Widget
     /**
      * __construct()
      *
-     * @version 20171108
      */
     public function __construct()
     {
@@ -41,7 +39,6 @@ class Form extends WP_Widget
      *
      * @param mixed $args
      * @param array $instance
-     * @version 20120306
      */
     public function widget($args, $instance)
     {
@@ -74,7 +71,6 @@ class Form extends WP_Widget
      * @param array $new_instance
      * @param array $old_instance
      * @return array
-     * @version 20120306
      */
     public function update($new_instance, $old_instance)
     {
@@ -88,7 +84,6 @@ class Form extends WP_Widget
      * form()
      *
      * @param array $instance
-         * @version 20120306
      */
     public function form($instance)
     {

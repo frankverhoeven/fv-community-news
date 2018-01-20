@@ -3,7 +3,6 @@
 /**
  * The Template for displaying the archive of community posts.
  *
- * @version    20120716
  * @package    FV Community News
  * @subpackage Theme
  */

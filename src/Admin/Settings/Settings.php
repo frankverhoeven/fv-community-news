@@ -12,8 +12,7 @@ class Settings
     /**
      * fvcn_register_admin_settings()
      *
-     * @version 20120524
-                 */
+     */
     public function __construct()
     {
         // General
@@ -53,8 +52,7 @@ class Settings
     /**
      * fvcn_admin_settings()
      *
-     * @version 20120324
-         */
+     */
     public function fvcn_admin_settings()
     {
         flush_rewrite_rules();
@@ -80,7 +78,6 @@ class Settings
     /**
      * general_section()
      *
-     * @version 20120322
      */
     public function general_section()
     {
@@ -93,7 +90,6 @@ class Settings
     /**
      * moderation()
      *
-     * @version 20120322
      */
     public function moderation()
     {
@@ -112,7 +108,6 @@ class Settings
     /**
      * mail()
      *
-     * @version 20120322
      */
     public function mail()
     {
@@ -131,7 +126,6 @@ class Settings
     /**
      * is_anonymous_allowed()
      *
-     * @version 20120322
      */
     public function is_anonymous_allowed()
     {
@@ -147,7 +141,6 @@ class Settings
     /**
      * permalinks_section()
      *
-     * @version 20120322
      */
     public function permalinks_section()
     {
@@ -160,13 +153,12 @@ class Settings
     /**
      * post_base_slug()
      *
-     * @version 20120524
      */
     public function post_base_slug()
     {
         ?>
 
-        <input type="text" name="_fvcn_base_slug" id="_fvcn_base_slug" value="<?php fvcn_form_option('_fvcn_base_slug', true); ?>" class="reqular-text">
+        <input type="text" name="_fvcn_base_slug" id="_fvcn_base_slug" value="<?= fvcn_get_form_option('_fvcn_base_slug', true); ?>" class="reqular-text">
 
         <?php
     }
@@ -175,13 +167,12 @@ class Settings
     /**
      * post_slug()
      *
-     * @version 20120524
      */
     public function post_slug()
     {
         ?>
 
-        <input type="text" name="_fvcn_post_slug" id="_fvcn_post_slug" value="<?php fvcn_form_option('_fvcn_post_slug', true); ?>" class="reqular-text">
+        <input type="text" name="_fvcn_post_slug" id="_fvcn_post_slug" value="<?= fvcn_get_form_option('_fvcn_post_slug', true); ?>" class="reqular-text">
 
         <?php
     }
@@ -190,13 +181,12 @@ class Settings
     /**
      * post_tag_slug()
      *
-     * @version 20120524
      */
     public function post_tag_slug()
     {
         ?>
 
-        <input type="text" name="_fvcn_post_tag_slug" id="_fvcn_post_tag_slug" value="<?php fvcn_form_option('_fvcn_post_tag_slug', true); ?>" class="reqular-text">
+        <input type="text" name="_fvcn_post_tag_slug" id="_fvcn_post_tag_slug" value="<?= fvcn_get_form_option('_fvcn_post_tag_slug', true); ?>" class="reqular-text">
 
         <?php
     }
@@ -205,13 +195,12 @@ class Settings
     /**
      * post_archive_slug()
      *
-     * @version 20120524
      */
     public function post_archive_slug()
     {
         ?>
 
-        <input type="text" name="_fvcn_post_archive_slug" id="_fvcn_post_archive_slug" value="<?php fvcn_form_option('_fvcn_post_archive_slug', true); ?>" class="reqular-text">
+        <input type="text" name="_fvcn_post_archive_slug" id="_fvcn_post_archive_slug" value="<?= fvcn_get_form_option('_fvcn_post_archive_slug', true); ?>" class="reqular-text">
 
         <?php
     }

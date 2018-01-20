@@ -3,6 +3,7 @@
 namespace FvCommunityNews\Hook;
 
 use FvCommunityNews\Container\Container;
+use FvCommunityNews\Version;
 use FvCommunityNews\View\AjaxForm;
 
 /**
@@ -62,7 +63,7 @@ class EnqueueScripts implements HookInterface
             $uri = fvcn_get_theme_url();
         }
 
-        wp_enqueue_style('fvcn-theme', $uri . '/fvcn/css/fvcn-theme.css', '', fvcn_get_version(), 'all');
+        wp_enqueue_style('fvcn-theme', $uri . '/fvcn/css/fvcn-theme.css', '', Version::getCurrentVersion(), 'all');
 
         do_action('fvcn_enqueue_styles');
     }

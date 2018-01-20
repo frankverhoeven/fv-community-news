@@ -30,7 +30,6 @@ class Admin
      * __construct()
      *
      * @param Container $container
-     * @version 20171112
      */
     public function __construct(Container $container)
     {
@@ -41,7 +40,6 @@ class Admin
     /**
      * setupActions()
      *
-     * @version 20120720
      */
     private function setupActions()
     {
@@ -56,7 +54,6 @@ class Admin
     /**
      * factory()
      *
-     * @version 20120808
      */
     public function factory()
     {
@@ -111,7 +108,6 @@ class Admin
     /**
      * init()
      *
-     * @version 20120129
      */
     public function init()
     {
@@ -121,7 +117,6 @@ class Admin
     /**
      * adminHead()
      *
-     * @version 20120721
      */
     public function adminHead()
     {
@@ -175,7 +170,6 @@ class Admin
     /**
      * enqueueScripts()
      *
-     * @version 20120721
      */
     public function enqueueScripts()
     {
@@ -185,7 +179,6 @@ class Admin
     /**
      * adminMenu()
      *
-     * @version 20120721
      */
     public function adminMenu()
     {

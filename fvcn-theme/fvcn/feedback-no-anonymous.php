@@ -6,7 +6,6 @@
  * The message that will be displayed when an author has to be
  *     logged in, in order to post.
  *
- * @version    20120317
  * @package    FV Community News
  * @subpackage Theme
  */

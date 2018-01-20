@@ -19,7 +19,6 @@ class AjaxForm
     /**
      * __construct()
      *
-     * @version 20120712
      */
     public function __construct()
     {
@@ -40,7 +39,6 @@ class AjaxForm
     /**
      * enqueueScripts()
      *
-     * @version 20120717
      * @return AjaxForm
      */
     public function enqueueScripts()

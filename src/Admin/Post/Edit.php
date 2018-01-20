@@ -19,7 +19,6 @@ class Edit
     /**
      * __construct()
      *
-     * @version 20120721
      */
     public function __construct()
     {
@@ -32,7 +31,6 @@ class Edit
     /**
      * registerMetaboxPostInfo()
      *
-     * @version 20120721
      */
     public function registerMetaboxPostInfo()
     {
@@ -55,7 +53,6 @@ class Edit
     /**
      * saveMetaboxPostInfo()
      *
-     * @version 20120721
      * @param int $postId
      * @return int
      */
@@ -92,7 +89,6 @@ class Edit
     /**
      * metaboxPostInfo()
      *
-     * @version 20120721
      */
     public function metaboxPostInfo()
     {

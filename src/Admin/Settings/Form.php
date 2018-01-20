@@ -12,7 +12,6 @@ class Form
     /**
      * __construct()
      *
-     * @version 20171111
      */
     public function __construct()
     {
@@ -85,7 +84,6 @@ class Form
     /**
      * fvcn_admin_form()
      *
-     * @version 20171111
      */
     public function fvcn_admin_form()
     {
@@ -111,7 +109,6 @@ class Form
     /**
      * fvcn_admin_form_help()
      *
-     * @version 20120728
      */
     public function fvcn_admin_form_help()
     {
@@ -138,7 +135,6 @@ class Form
     /**
      * author_section()
      *
-     * @version 20120302
      */
     public function author_name_section()
     {
@@ -152,13 +148,12 @@ class Form
     /**
      * author_label()
      *
-     * @version 20120524
      */
     public function author_name_label()
     {
         ?>
 
-        <input type="text" name="_fvcn_post_form_author_name_label" id="_fvcn_post_form_author_name_label" value="<?php fvcn_form_option('_fvcn_post_form_author_name_label'); ?>" class="reqular-text">
+        <input type="text" name="_fvcn_post_form_author_name_label" id="_fvcn_post_form_author_name_label" value="<?= fvcn_get_form_option('_fvcn_post_form_author_name_label'); ?>" class="reqular-text">
 
         <?php
     }
@@ -167,7 +162,6 @@ class Form
     /**
      * author_section()
      *
-     * @version 20120302
      */
     public function author_email_section()
     {
@@ -181,13 +175,12 @@ class Form
     /**
      * author_label()
      *
-     * @version 20120524
      */
     public function author_email_label()
     {
         ?>
 
-        <input type="text" name="_fvcn_post_form_author_email_label" id="_fvcn_post_form_author_email_label" value="<?php fvcn_form_option('_fvcn_post_form_author_email_label'); ?>" class="reqular-text">
+        <input type="text" name="_fvcn_post_form_author_email_label" id="_fvcn_post_form_author_email_label" value="<?= fvcn_get_form_option('_fvcn_post_form_author_email_label'); ?>" class="reqular-text">
 
         <?php
     }
@@ -196,7 +189,6 @@ class Form
     /**
      * title_section()
      *
-     * @version 20120302
      */
     public function title_section()
     {
@@ -210,13 +202,12 @@ class Form
     /**
      * title_label()
      *
-     * @version 20120524
      */
     public function title_label()
     {
         ?>
 
-        <input type="text" name="_fvcn_post_form_title_label" id="_fvcn_post_form_title_label" value="<?php fvcn_form_option('_fvcn_post_form_title_label'); ?>" class="reqular-text">
+        <input type="text" name="_fvcn_post_form_title_label" id="_fvcn_post_form_title_label" value="<?= fvcn_get_form_option('_fvcn_post_form_title_label'); ?>" class="reqular-text">
 
         <?php
     }
@@ -225,7 +216,6 @@ class Form
     /**
      * link_section()
      *
-     * @version 20120302
      */
     public function link_section()
     {
@@ -239,13 +229,12 @@ class Form
     /**
      * link_label()
      *
-     * @version 20120524
      */
     public function link_label()
     {
         ?>
 
-        <input type="text" name="_fvcn_post_form_link_label" id="_fvcn_post_form_link_label" value="<?php fvcn_form_option('_fvcn_post_form_link_label'); ?>" class="reqular-text">
+        <input type="text" name="_fvcn_post_form_link_label" id="_fvcn_post_form_link_label" value="<?= fvcn_get_form_option('_fvcn_post_form_link_label'); ?>" class="reqular-text">
 
         <?php
     }
@@ -253,7 +242,6 @@ class Form
     /**
      * link_required()
      *
-     * @version 20120302
      */
     public function link_required()
     {
@@ -269,7 +257,6 @@ class Form
     /**
      * content_section()
      *
-     * @version 20120302
      */
     public function content_section()
     {
@@ -283,13 +270,12 @@ class Form
     /**
      * content_label()
      *
-     * @version 20120524
      */
     public function content_label()
     {
         ?>
 
-        <input type="text" name="_fvcn_post_form_content_label" id="_fvcn_post_form_content_label" value="<?php fvcn_form_option('_fvcn_post_form_content_label'); ?>" class="reqular-text">
+        <input type="text" name="_fvcn_post_form_content_label" id="_fvcn_post_form_content_label" value="<?= fvcn_get_form_option('_fvcn_post_form_content_label'); ?>" class="reqular-text">
 
         <?php
     }
@@ -298,7 +284,6 @@ class Form
     /**
      * tags_section()
      *
-     * @version 20120302
      */
     public function tags_section()
     {
@@ -312,13 +297,12 @@ class Form
     /**
      * tags_label()
      *
-     * @version 20120524
      */
     public function tags_label()
     {
         ?>
 
-        <input type="text" name="_fvcn_post_form_tags_label" id="_fvcn_post_form_tags_label" value="<?php fvcn_form_option('_fvcn_post_form_tags_label'); ?>" class="reqular-text">
+        <input type="text" name="_fvcn_post_form_tags_label" id="_fvcn_post_form_tags_label" value="<?= fvcn_get_form_option('_fvcn_post_form_tags_label'); ?>" class="reqular-text">
 
         <?php
     }
@@ -326,7 +310,6 @@ class Form
     /**
      * tags_required()
      *
-     * @version 20120302
      */
     public function tags_required()
     {
@@ -342,7 +325,6 @@ class Form
     /**
      * thumbnail_section()
      *
-     * @version 20120306
      */
     public function thumbnail_section()
     {
@@ -357,7 +339,6 @@ class Form
     /**
      * thumbnail_enabled()
      *
-     * @version 20120306
      */
     public function thumbnail_enabled()
     {
@@ -372,13 +353,12 @@ class Form
     /**
      * thumbnail_label()
      *
-     * @version 20120524
      */
     public function thumbnail_label()
     {
         ?>
 
-        <input type="text" name="_fvcn_post_form_thumbnail_label" id="_fvcn_post_form_thumbnail_label" value="<?php fvcn_form_option('_fvcn_post_form_thumbnail_label'); ?>" class="reqular-text">
+        <input type="text" name="_fvcn_post_form_thumbnail_label" id="_fvcn_post_form_thumbnail_label" value="<?= fvcn_get_form_option('_fvcn_post_form_thumbnail_label'); ?>" class="reqular-text">
 
         <?php
     }
@@ -386,7 +366,6 @@ class Form
     /**
      * thumbnail_required()
      *
-     * @version 20120306
      */
     public function thumbnail_required()
     {

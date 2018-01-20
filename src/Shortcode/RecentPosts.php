@@ -17,7 +17,6 @@ class RecentPosts
     /**
      * obStart()
      *
-     * @version 20120315
      */
     private function obStart()
     {
@@ -27,7 +26,6 @@ class RecentPosts
     /**
      * obEnd()
      *
-     * @version 20120315
      * @return string
      */
     private function obEnd()

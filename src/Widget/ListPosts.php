@@ -14,7 +14,6 @@ class ListPosts extends WP_Widget
     /**
      * register()
      *
-     * @version 20120305
      */
     public static function register()
     {
@@ -24,7 +23,6 @@ class ListPosts extends WP_Widget
     /**
      * __construct()
      *
-     * @version 20171108
      */
     public function __construct()
     {
@@ -41,7 +39,6 @@ class ListPosts extends WP_Widget
      *
      * @param mixed $args
      * @param array $instance
-         * @version 20120710
      */
     public function widget($args, $instance)
     {
@@ -76,7 +73,6 @@ class ListPosts extends WP_Widget
      * @param array $new_instance
      * @param array $old_instance
      * @return array
-     * @version 20120305
      */
     public function update($new_instance, $old_instance)
     {
@@ -100,7 +96,6 @@ class ListPosts extends WP_Widget
      *
      * @param array $instance
      * @return void
-     * @version 20120305
      */
     public function form($instance)
     {

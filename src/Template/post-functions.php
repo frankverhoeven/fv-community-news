@@ -5,7 +5,6 @@ use FvCommunityNews\Post\PostType;
 /**
  * fvcn_post_slug()
  *
- * @version 20120321
  */
 function fvcn_post_slug()
 {
@@ -15,7 +14,6 @@ function fvcn_post_slug()
     /**
      * fvcn_get_post_slug()
      *
-     * @version 20120321
      * @return string
      */
     function fvcn_get_post_slug()
@@ -28,7 +26,6 @@ function fvcn_post_slug()
 /**
  * fvcn_has_posts()
  *
- * @version 20120305
  * @param mixed $args
  * @return object
  */
@@ -54,7 +51,6 @@ function fvcn_has_posts($args='')
 /**
  * fvcn_posts()
  *
- * @version 20120305
  * @return object
  */
 function fvcn_posts()
@@ -73,7 +69,6 @@ function fvcn_posts()
 /**
  * fvcn_the_post()
  *
- * @version 20120305
  * @return object
  */
 function fvcn_the_post()
@@ -86,7 +81,6 @@ function fvcn_the_post()
 /**
  * fvcn_post_id()
  *
- * @version 20120305
  * @param int $postId
  */
 function fvcn_post_id($postId = 0)
@@ -97,7 +91,6 @@ function fvcn_post_id($postId = 0)
     /**
      * fvcn_get_post_id()
      *
-     * @version 20120325
      * @param int $postId
      * @return int
      */
@@ -129,7 +122,6 @@ function fvcn_post_id($postId = 0)
 /**
  * fvcn_get_post()
  *
- * @version 20120309
  * @param int $postId
  * @return object
  */
@@ -154,7 +146,6 @@ function fvcn_get_post($postId = 0)
 /**
  * fvcn_post_permalink()
  *
- * @version 20120305
  * @param int $postId
  */
 function fvcn_post_permalink($postId = 0)
@@ -165,7 +156,6 @@ function fvcn_post_permalink($postId = 0)
     /**
      * fvcn_get_post_permalink()
      *
-     * @version 20120305
      * @param int $postId
      * @param string $redirect
      * @return string
@@ -187,7 +177,6 @@ function fvcn_post_permalink($postId = 0)
 /**
  * fvcn_has_post_link()
  *
- * @version 20120316
  * @param int $postId
  * @return bool
  */
@@ -202,7 +191,6 @@ function fvcn_has_post_link($postId = 0)
 /**
  * fvcn_post_link()
  *
- * @version 20120311
  * @param int $postId
  */
 function fvcn_post_link($postId = 0)
@@ -213,7 +201,6 @@ function fvcn_post_link($postId = 0)
     /**
      * fvcn_get_post_link()
      *
-     * @version 20120311
      * @param int $postId
      * @return string
      */
@@ -230,7 +217,6 @@ function fvcn_post_link($postId = 0)
 /**
  * fvcn_post_title()
  *
- * @version 20120305
  * @param int $postId
  */
 function fvcn_post_title($postId = 0)
@@ -241,7 +227,6 @@ function fvcn_post_title($postId = 0)
     /**
      * fvcn_get_post_title()
      *
-     * @version 20120305
      * @param int $postId
      * @return string
      */
@@ -256,7 +241,6 @@ function fvcn_post_title($postId = 0)
 /**
  * fvcn_post_content()
  *
- * @version 20120305
  * @param int $postId
  */
 function fvcn_post_content($postId = 0)
@@ -267,7 +251,6 @@ function fvcn_post_content($postId = 0)
     /**
      * fvcn_get_post_content()
      *
-     * @version 20120305
      * @param int $postId
      * @return string
      */
@@ -288,23 +271,21 @@ function fvcn_post_content($postId = 0)
 /**
  * fvcn_post_excerpt()
  *
- * @version 20120305
  * @param int $postId
  * @param int $length
  */
-function fvcn_post_excerpt($postId = 0, $length=100) {
+function fvcn_post_excerpt($postId = 0, $length = 100) {
     echo fvcn_get_post_excerpt($postId, $length);
 }
 
     /**
      * fvcn_get_post_excerpt()
      *
-     * @version 20120305
      * @param int $postId
      * @param int $length
      * @return string
      */
-    function fvcn_get_post_excerpt($postId = 0, $length=100) {
+    function fvcn_get_post_excerpt($postId = 0, $length = 100) {
         $id = fvcn_get_post_id($postId);
         $length = abs((int)$length);
 
@@ -341,23 +322,21 @@ function fvcn_post_excerpt($postId = 0, $length=100) {
 /**
  * fvcn_post_date()
  *
- * @version 20120322
  * @param int $postId
  * @param string $format
  */
-function fvcn_post_date($postId = 0, $format='') {
+function fvcn_post_date($postId = 0, $format = '') {
     echo fvcn_get_post_date($postId, $format);
 }
 
     /**
      * fvcn_get_post_date()
      *
-     * @version 20120322
      * @param int $postId
      * @param string $format
      * @return string
      */
-    function fvcn_get_post_date($postId = 0, $format='') {
+    function fvcn_get_post_date($postId = 0, $format = '') {
         $id = fvcn_get_post_id($postId);
 
         if (empty($format)) {
@@ -373,22 +352,20 @@ function fvcn_post_date($postId = 0, $format='') {
 /**
  * fvcn_post_time()
  *
- * @version 20120322
  * @param int $postId
  * @param string $format
  * @param bool $gmt
  */
-function fvcn_post_time($postId = 0, $format='', $gmt=false) {
+function fvcn_post_time($postId = 0, $format = '', $gmt = false) {
     echo fvcn_get_post_time($postId, $format, $gmt);
 }
 
     /**
      * fvcn_get_post_time()
      *
-     * @version 20120924
      * @param int $postId
      * @param string $format
-      * @param bool $gmt
+     * @param bool $gmt
      * @return string
      */
     function fvcn_get_post_time($postId = 0, $format='', $gmt=false) {
@@ -413,7 +390,6 @@ function fvcn_post_time($postId = 0, $format='', $gmt=false) {
 /**
  * fvcn_has_post_thumbnail()
  *
- * @version 20120801
  * @param int $postId
  * @return bool
  */
@@ -434,7 +410,6 @@ function fvcn_has_post_thumbnail($postId = 0)
 /**
  * fvcn_post_thumbnail()
  *
- * @version 20120311
  * @param int $postId
  * @param string|array $size
  * @param string|array $attributes
@@ -447,7 +422,6 @@ function fvcn_post_thumbnail($postId = 0, $size = 'thumbnail', $attributes = [])
     /**
      * fvcn_get_post_thumbnail()
      *
-     * @version 20120317
      * @param int $postId
      * @param string|array $size
      * @param string|array $attributes
@@ -463,7 +437,6 @@ function fvcn_post_thumbnail($postId = 0, $size = 'thumbnail', $attributes = [])
 /**
  * fvcn_post_rating()
  *
- * @version 20120321
  * @param int $postId
  */
 function fvcn_post_rating($postId = 0)
@@ -474,7 +447,6 @@ function fvcn_post_rating($postId = 0)
     /**
      * fvcn_get_post_rating()
      *
-     * @version 20120321
      * @param int $postId
      * @return int
      */
@@ -494,7 +466,6 @@ function fvcn_post_rating($postId = 0)
 /**
  * fvcn_post_rating_increment_link()
  *
- * @version 20120321
  * @param int $postId
  */
 function fvcn_post_rating_increment_link($postId = 0)
@@ -505,7 +476,6 @@ function fvcn_post_rating_increment_link($postId = 0)
     /**
      * fvcn_get_post_rating_increment_link()
      *
-     * @version 20120321
      * @param int $postId
      * @return string
      */
@@ -528,7 +498,6 @@ function fvcn_post_rating_increment_link($postId = 0)
 /**
  * fvcn_post_rating_decrement_link()
  *
- * @version 20120321
  * @param int $postId
  */
 function fvcn_post_rating_decrement_link($postId = 0)
@@ -539,7 +508,6 @@ function fvcn_post_rating_decrement_link($postId = 0)
     /**
      * fvcn_get_post_rating_decrement_link()
      *
-     * @version 20120321
      * @param int $postId
      * @return string
      */
@@ -562,7 +530,6 @@ function fvcn_post_rating_decrement_link($postId = 0)
 /**
  * fvcn_is_post_rated_by_current_user()
  *
- * @version 20120321
  * @param int $postId
  * @return bool
  */
@@ -577,7 +544,6 @@ function fvcn_is_post_rated_by_current_user($postId = 0)
 /**
  * fvcn_post_views()
  *
- * @version 20120622
  * @param int $postId
  */
 function fvcn_post_views($postId = 0)
@@ -588,7 +554,6 @@ function fvcn_post_views($postId = 0)
     /**
      * fvcn_get_post_views()
      *
-     * @version 20120622
      * @param int $postId
      * @return int
      */
@@ -609,7 +574,6 @@ function fvcn_post_views($postId = 0)
 /**
  * fvcn_post_status()
  *
- * @version 20120306
  * @param int $postId
  */
 function fvcn_post_status($postId = 0)
@@ -620,7 +584,6 @@ function fvcn_post_status($postId = 0)
     /**
      * fvcn_get_post_status()
      *
-     * @version 20120306
      * @param int $postId
      * @return string
      */
@@ -635,7 +598,6 @@ function fvcn_post_status($postId = 0)
 /**
  * fvcn_post_archive_link()
  *
- * @version 20120321
  */
 function fvcn_post_archive_link()
 {
@@ -645,7 +607,6 @@ function fvcn_post_archive_link()
     /**
      * fvcn_get_post_archive_link()
      *
-     * @version 20120321
      * @return string
      */
     function fvcn_get_post_archive_link()
@@ -659,7 +620,6 @@ function fvcn_post_archive_link()
 /**
  * fvcn_is_post()
  *
- * @version 20180119
  * @param int $postId
  * @return bool
  */
@@ -678,7 +638,6 @@ function fvcn_is_post($postId = 0): bool
 /**
  * fvcn_is_post_published()
  *
- * @version 20120306
  * @param int $postId
  * @return bool
  */
@@ -691,7 +650,6 @@ function fvcn_is_post_published($postId = 0)
 /**
  * fvcn_is_post_pending()
  *
- * @version 20120306
  * @param int $postId
  * @return bool
  */
@@ -704,7 +662,6 @@ function fvcn_is_post_pending($postId = 0)
 /**
  * fvcn_is_post_trash()
  *
- * @version 20120306
  * @param int $postId
  * @return bool
  */
@@ -717,7 +674,6 @@ function fvcn_is_post_trash($postId = 0)
 /**
  * fvcn_is_post_spam()
  *
- * @version 20120306
  * @param int $postId
  * @return bool
  */
@@ -730,7 +686,6 @@ function fvcn_is_post_spam($postId = 0)
 /**
  * fvcn_is_post_private()
  *
- * @version 20120306
  * @param int $postId
  * @return bool
  */
@@ -743,7 +698,6 @@ function fvcn_is_post_private($postId = 0)
 /**
  * fvcn_is_post_anonymous()
  *
- * @version 20120306
  * @param int $postId
  * @return bool
  */
@@ -768,7 +722,6 @@ function fvcn_is_post_anonymous($postId = 0)
 /**
  * fvcn_is_single_post()
  *
- * @version 20120319
  * @return bool
  */
 function fvcn_is_single_post()
@@ -786,7 +739,6 @@ function fvcn_is_single_post()
 /**
  * fvcn_is_post_archive()
  *
- * @version 20120322
  * @return bool
  */
 function fvcn_is_post_archive()
@@ -804,7 +756,6 @@ function fvcn_is_post_archive()
 /**
  * fv_is_post_tag_archive()
  *
- * @version 20120325
  * @return bool
  */
 function fvcn_is_post_tag_archive()
@@ -822,7 +773,6 @@ function fvcn_is_post_tag_archive()
 /**
  * fvcn_post_author()
  *
- * @version 20120306
  * @param int $postId
  */
 function fvcn_post_author($postId = 0)
@@ -833,7 +783,6 @@ function fvcn_post_author($postId = 0)
     /**
      * fvcn_get_post_author()
      *
-     * @version 20120306
      * @param int $postId
      * @return string
      */
@@ -854,7 +803,6 @@ function fvcn_post_author($postId = 0)
 /**
  * fvcn_post_author_id()
  *
- * @version 20120306
  * @param int $postId
  */
 function fvcn_post_author_id($postId = 0)
@@ -865,7 +813,6 @@ function fvcn_post_author_id($postId = 0)
     /**
      * fvcn_get_post_author_id()
      *
-     * @version 20120306
      * @param int $postId
      * @return string
      */
@@ -881,7 +828,6 @@ function fvcn_post_author_id($postId = 0)
 /**
  * fvcn_post_author_display_name()
  *
- * @version 20120306
  * @param int $postId
  */
 function fvcn_post_author_display_name($postId = 0)
@@ -892,7 +838,6 @@ function fvcn_post_author_display_name($postId = 0)
     /**
      * fvcn_get_post_author_display_name()
      *
-     * @version 20120306
      * @param int $postId
      * @return string
      */
@@ -913,7 +858,6 @@ function fvcn_post_author_display_name($postId = 0)
 /**
  * fvcn_post_author_email()
  *
- * @version 20120306
  * @param int $postId
  */
 function fvcn_post_author_email($postId = 0)
@@ -924,7 +868,6 @@ function fvcn_post_author_email($postId = 0)
     /**
      * fvcn_get_post_author_email()
      *
-     * @version 20120306
      * @param int $postId
      * @return string
      */
@@ -945,7 +888,6 @@ function fvcn_post_author_email($postId = 0)
 /**
  * fvcn_post_author_avatar()
  *
- * @version 20120306
  * @param int $postId
  * @param int $size
  */
@@ -957,7 +899,6 @@ function fvcn_post_author_avatar($postId = 0, $size=40)
     /**
      * fvcn_get_post_author_avatar()
      *
-     * @version 20120701
      * @param int $postId
      * @param int $size
      * @return string
@@ -973,7 +914,6 @@ function fvcn_post_author_avatar($postId = 0, $size=40)
 /**
  * fvcn_post_author_website()
  *
- * @version 20120306
  * @param int $postId
  */
 function fvcn_post_author_website($postId = 0)
@@ -984,7 +924,6 @@ function fvcn_post_author_website($postId = 0)
     /**
      * fvcn_get_post_author_website()
      *
-     * @version 20120306
      * @param int $postId
      * @return string
      */
@@ -1005,7 +944,6 @@ function fvcn_post_author_website($postId = 0)
 /**
  * fvcn_post_author_link()
  *
- * @version 20120305
  * @param int $postId
  */
 function fvcn_post_author_link($postId = 0)
@@ -1016,7 +954,6 @@ function fvcn_post_author_link($postId = 0)
     /**
      * fvcn_get_post_author_link()
      *
-     * @version 20120305
      * @param int $postId
      * @return string
      */
@@ -1037,7 +974,6 @@ function fvcn_post_author_link($postId = 0)
 /**
  * fvcn_post_author_ip()
  *
- * @version 20120311
  * @param int $postId
  */
 function fvcn_post_author_ip($postId = 0)
@@ -1048,7 +984,6 @@ function fvcn_post_author_ip($postId = 0)
     /**
      * fvcn_get_post_author_ip()
      *
-     * @version 20120311
      * @param int $postId
      * @return string
      */
@@ -1065,7 +1000,6 @@ function fvcn_post_author_ip($postId = 0)
 /**
  * fvcn_post_author_ua()
  *
- * @version 20120322
  * @param int $postId
  */
 function fvcn_post_author_ua($postId = 0)
@@ -1076,7 +1010,6 @@ function fvcn_post_author_ua($postId = 0)
     /**
      * fvcn_get_post_author_ua()
      *
-     * @version 20120322
      * @param int $postId
      * @return string
      */
@@ -1093,7 +1026,6 @@ function fvcn_post_author_ua($postId = 0)
 /**
  * fvcn_post_tag_id()
  *
- * @version 20120229
  */
 function fvcn_post_tag_id()
 {
@@ -1104,7 +1036,6 @@ function fvcn_post_tag_id()
      * fvcn_get_post_tag_id()
      *
      * @return string
-     * @version 20171111
      */
     function fvcn_get_post_tag_id()
     {
@@ -1115,7 +1046,6 @@ function fvcn_post_tag_id()
 /**
  * fvcn_post_tag_slug()
  *
- * @version 20120325
  */
 function fvcn_post_tag_slug()
 {
@@ -1125,7 +1055,6 @@ function fvcn_post_tag_slug()
     /**
      * fvcn_get_post_tag_slug()
      *
-     * @version 20120710
      * @return string
      */
     function fvcn_get_post_tag_slug()
@@ -1138,7 +1067,6 @@ function fvcn_post_tag_slug()
 /**
  * fvcn_post_tag_list()
  *
- * @version 20120311
  * @param int $postId
  * @param string|array $args
  */
@@ -1150,7 +1078,6 @@ function fvcn_post_tag_list($postId = 0, $args='')
     /**
      * fvcn_get_post_tag_list()
      *
-     * @version 20120311
      * @param int $postId
      * @param string|array $args
      * @return string
@@ -1178,7 +1105,6 @@ function fvcn_post_tag_list($postId = 0, $args='')
 /**
  * fvcn_post_form_fields()
  *
- * @version 20171123
  */
 function fvcn_post_form_fields()
 {
@@ -1194,7 +1120,6 @@ function fvcn_post_form_fields()
 /**
  * fvcn_post_form_field_error()
  *
- * @version 20120706
  * @param string $field
  */
 function fvcn_post_form_field_error($field)
@@ -1218,7 +1143,6 @@ function fvcn_post_form_field_error($field)
 /**
  * fvcn_post_form_author_name_label()
  *
- * @version 20120306
  */
 function fvcn_post_form_author_name_label()
 {
@@ -1228,7 +1152,6 @@ function fvcn_post_form_author_name_label()
     /**
      * fvcn_get_post_form_author_name_label()
      *
-     * @version 20180119
      * @return string
      */
     function fvcn_get_post_form_author_name_label(): string
@@ -1240,7 +1163,6 @@ function fvcn_post_form_author_name_label()
 /**
  * fvcn_post_form_author_name()
  *
- * @version 20120306
  */
 function fvcn_post_form_author_name()
 {
@@ -1250,7 +1172,6 @@ function fvcn_post_form_author_name()
     /**
      * fvcn_get_post_form_author_name()
      *
-     * @version 20120306
      * @return string
      */
     function fvcn_get_post_form_author_name()
@@ -1268,7 +1189,6 @@ function fvcn_post_form_author_name()
 /**
  * fvcn_post_form_author_email_label()
  *
- * @version 20120306
  */
 function fvcn_post_form_author_email_label()
 {
@@ -1278,7 +1198,6 @@ function fvcn_post_form_author_email_label()
     /**
      * fvcn_get_post_form_author_email_label()
      *
-     * @version 20180119
      * @return string
      */
     function fvcn_get_post_form_author_email_label(): string
@@ -1290,7 +1209,6 @@ function fvcn_post_form_author_email_label()
 /**
  * fvcn_post_form_author_email()
  *
- * @version 20120306
  */
 function fvcn_post_form_author_email()
 {
@@ -1300,7 +1218,6 @@ function fvcn_post_form_author_email()
     /**
      * fvcn_get_post_form_author_email()
      *
-     * @version 20120306
      * @return string
      */
     function fvcn_get_post_form_author_email()
@@ -1318,7 +1235,6 @@ function fvcn_post_form_author_email()
 /**
  * fvcn_post_form_title_label()
  *
- * @version 20120306
  */
 function fvcn_post_form_title_label()
 {
@@ -1328,7 +1244,6 @@ function fvcn_post_form_title_label()
     /**
      * fvcn_get_post_form_title_label()
      *
-     * @version 20180119
      * @return string
      */
     function fvcn_get_post_form_title_label(): string
@@ -1340,7 +1255,6 @@ function fvcn_post_form_title_label()
 /**
  * fvcn_post_form_title()
  *
- * @version 20120306
  */
 function fvcn_post_form_title()
 {
@@ -1350,7 +1264,6 @@ function fvcn_post_form_title()
     /**
      * fvcn_get_post_form_title()
      *
-     * @version 20120306
      * @return string
      */
     function fvcn_get_post_form_title()
@@ -1368,7 +1281,6 @@ function fvcn_post_form_title()
 /**
  * fvcn_post_form_link_label()
  *
- * @version 20120307
  */
 function fvcn_post_form_link_label()
 {
@@ -1378,7 +1290,6 @@ function fvcn_post_form_link_label()
     /**
      * fvcn_get_post_form_link_label()
      *
-     * @version 20180119
      * @return string
      */
     function fvcn_get_post_form_link_label(): string
@@ -1390,7 +1301,6 @@ function fvcn_post_form_link_label()
 /**
  * fvcn_post_form_link()
  *
- * @version 20120307
  */
 function fvcn_post_form_link()
 {
@@ -1400,7 +1310,6 @@ function fvcn_post_form_link()
     /**
      * fvcn_get_post_form_link()
      *
-     * @version 20120307
      * @return string
      */
     function fvcn_get_post_form_link()
@@ -1417,7 +1326,6 @@ function fvcn_post_form_link()
 /**
  * fvcn_is_post_form_link_required()
  *
- * @version 20180119
  * @return bool
  */
 function fvcn_is_post_form_link_required(): bool
@@ -1431,7 +1339,6 @@ function fvcn_is_post_form_link_required(): bool
 /**
  * fvcn_post_form_content_label()
  *
- * @version 20120306
  */
 function fvcn_post_form_content_label()
 {
@@ -1441,7 +1348,6 @@ function fvcn_post_form_content_label()
     /**
      * fvcn_get_post_form_content_label()
      *
-     * @version 20180119
      * @return string
      */
     function fvcn_get_post_form_content_label(): string
@@ -1453,7 +1359,6 @@ function fvcn_post_form_content_label()
 /**
  * fvcn_post_form_content()
  *
- * @version 20120306
  */
 function fvcn_post_form_content()
 {
@@ -1463,7 +1368,6 @@ function fvcn_post_form_content()
     /**
      * fvcn_get_post_form_content()
      *
-     * @version 20120306
      * @return string
      */
     function fvcn_get_post_form_content()
@@ -1481,7 +1385,6 @@ function fvcn_post_form_content()
 /**
  * fvcn_post_form_tags_label()
  *
- * @version 20120306
  */
 function fvcn_post_form_tags_label()
 {
@@ -1491,7 +1394,6 @@ function fvcn_post_form_tags_label()
     /**
      * fvcn_get_post_form_tags_label()
      *
-     * @version 20180119
      * @return string
      */
     function fvcn_get_post_form_tags_label(): string
@@ -1503,7 +1405,6 @@ function fvcn_post_form_tags_label()
 /**
  * fvcn_post_form_tags()
  *
- * @version 20120306
  */
 function fvcn_post_form_tags()
 {
@@ -1513,7 +1414,6 @@ function fvcn_post_form_tags()
     /**
      * fvcn_get_post_form_tags()
      *
-     * @version 20120306
      * @return string
      */
     function fvcn_get_post_form_tags()
@@ -1530,7 +1430,6 @@ function fvcn_post_form_tags()
 /**
  * fvcn_is_post_form_tags_required()
  *
- * @version 20180119
  * @return bool
  */
 function fvcn_is_post_form_tags_required(): bool
@@ -1544,7 +1443,6 @@ function fvcn_is_post_form_tags_required(): bool
 /**
  * fvcn_post_form_thumbnail_label()
  *
- * @version 20120306
  */
 function fvcn_post_form_thumbnail_label()
 {
@@ -1554,7 +1452,6 @@ function fvcn_post_form_thumbnail_label()
     /**
      * fvcn_get_post_form_thumbnail_label()
      *
-     * @version 20180119
      * @return string
      */
     function fvcn_get_post_form_thumbnail_label(): string
@@ -1566,7 +1463,6 @@ function fvcn_post_form_thumbnail_label()
 /**
  * fvcn_is_post_form_thumbnail_enabled()
  *
- * @version 20180119
  * @return bool
  */
 function fvcn_is_post_form_thumbnail_enabled(): bool
@@ -1579,7 +1475,6 @@ function fvcn_is_post_form_thumbnail_enabled(): bool
 /**
  * fvcn_is_post_form_thumbnail_required()
  *
- * @version 20180119
  * @return bool
  */
 function fvcn_is_post_form_thumbnail_required(): bool
@@ -1593,7 +1488,6 @@ function fvcn_is_post_form_thumbnail_required(): bool
 /**
  * fvcn_is_post_added()
  *
- * @version 20120531
  * @return bool
  */
 function fvcn_is_post_added()
@@ -1608,7 +1502,6 @@ function fvcn_is_post_added()
     /**
      * fvcn_is_post_added_approved()
      *
-     * @version 20120531
      * @return bool
      */
     function fvcn_is_post_added_approved()

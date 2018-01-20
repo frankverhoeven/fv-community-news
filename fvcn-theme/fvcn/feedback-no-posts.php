@@ -5,7 +5,6 @@
  *
  * The message that will be displayed when there are no posts.
  *
- * @version    20120318
  * @package    FV Community News
  * @subpackage Theme
  */

@@ -21,7 +21,6 @@ class RecentPosts
      * __construct()
      *
      * @param Config $config
-     * @version 20180119
      */
     public function __construct(Config $config)
     {
@@ -38,7 +37,6 @@ class RecentPosts
     /**
      * enqueueScripts()
      *
-     * @version 20120729
      */
     public function enqueueScripts()
     {
@@ -67,7 +65,6 @@ class RecentPosts
     /**
      * dashboardHead()
      *
-     * @version 20120729
      */
     public function dashboardHead()
     {
@@ -147,7 +144,6 @@ class RecentPosts
     /**
      * response()
      *
-     * @version 20120729
      */
     public function response()
     {
@@ -161,7 +157,6 @@ class RecentPosts
     /**
      * ajaxResponse()
      *
-     * @version 20120729
      */
     public function ajaxResponse()
     {
@@ -204,7 +199,6 @@ class RecentPosts
     /**
      * updatePostStatus()
      *
-     * @version 20120729
      * @param $postId
      * @param string $action
      * @return bool
@@ -230,7 +224,6 @@ class RecentPosts
     /**
      * register()
      *
-     * @version 20120719
      * @return RecentPosts
      */
     public function register()
@@ -250,7 +243,6 @@ class RecentPosts
     /**
      * widget()
      *
-     * @version 20120721
      */
     public function widget()
     {
@@ -350,7 +342,6 @@ class RecentPosts
     /**
      * control()
      *
-     * @version 20120729
      */
     public function control()
     {
@@ -361,7 +352,7 @@ class RecentPosts
         ?>
         <p>
             <label for="_fvcn_dashboard_rp_num"><?php _e('Number of posts to show:', 'fvcn'); ?></label>
-            <input type="text" name="_fvcn_dashboard_rp_num" id="_fvcn_dashboard_rp_num" value="<?= fvcn_form_option('_fvcn_dashboard_rp_num'); ?>" size="3">
+            <input type="text" name="_fvcn_dashboard_rp_num" id="_fvcn_dashboard_rp_num" value="<?= fvcn_get_form_option('_fvcn_dashboard_rp_num'); ?>" size="3">
             <small><?php _e('(1 - 30)', 'fvcn'); ?></small>
         </p>
 

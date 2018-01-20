@@ -8,7 +8,6 @@ use FvCommunityNews\Validator\ValidatorChain;
 /**
  * fvcn_insert_post()
  *
- * @version 20120322
  * 
  * @param array $post_data
  * @param array $post_meta
@@ -59,7 +58,6 @@ function fvcn_insert_post(array $post_data, array $post_meta)
 /**
  * fvcn_insert_post_thumbnail()
  *
- * @version 20120307
  * @param int $postId
  * @return int
  */
@@ -80,7 +78,7 @@ function fvcn_insert_post_thumbnail($postId)
 /**
  * fvcn_new_post_handler()
  *
- * @version 20120808
+ * @return int|void
  */
 function fvcn_new_post_handler()
 {
@@ -307,7 +305,6 @@ function fvcn_new_post_handler()
 /**
  * fvcn_filter_new_post_data()
  *
- * @version 20120710
  * @param array $data
  * @return array
  */
@@ -325,7 +322,6 @@ function fvcn_filter_new_post_data(array $data)
 /**
  * fvcn_increase_post_view_count()
  *
- * @version 20120722
  * @param string $template
  * @return string
  */
@@ -340,7 +336,7 @@ function fvcn_increase_post_view_count($template)
         return $template;
     }
 
-    $postMapper = new FvCommunityNews_PostMapper();
+    $postMapper = new \FvCommunityNews\Post\Mapper();
     $postMapper->increasePostViewCount($id);
 
     setcookie('fvcn_post_viewed_' . $id . '_' . COOKIEHASH, 'true', 0, COOKIEPATH, COOKIE_DOMAIN);
@@ -352,13 +348,12 @@ function fvcn_increase_post_view_count($template)
 /**
  * fvcn_publish_post()
  *
- * @version 20120722
  * @param int $postId
  * @return int
  */
 function fvcn_publish_post($postId)
 {
-    $postMapper = new FvCommunityNews_PostMapper();
+    $postMapper = new \FvCommunityNews\Post\Mapper();
     return $postMapper->publishPost($postId);
 }
 
@@ -366,13 +361,12 @@ function fvcn_publish_post($postId)
 /**
  * fvcn_unpublish_post()
  *
- * @version 20120722
  * @param int $postId
  * @return int
  */
 function fvcn_unpublish_post($postId)
 {
-    $postMapper = new FvCommunityNews_PostMapper();
+    $postMapper = new \FvCommunityNews\Post\Mapper();
     return $postMapper->unpublishPost($postId);
 }
 
@@ -380,13 +374,12 @@ function fvcn_unpublish_post($postId)
 /**
  * fvcn_spam_post()
  *
- * @version 20120722
  * @param int $postId
  * @return int
  */
 function fvcn_spam_post($postId)
 {
-    $postMapper = new FvCommunityNews_PostMapper();
+    $postMapper = new \FvCommunityNews\Post\Mapper();
     return $postMapper->spamPost($postId);
 }
 
@@ -394,7 +387,6 @@ function fvcn_spam_post($postId)
 /**
  * fvcn_post_rating_handler()
  *
- * @version 20120722
  */
 function fvcn_post_rating_handler()
 {
@@ -415,7 +407,7 @@ function fvcn_post_rating_handler()
 
     check_admin_referer('fvcn-post-rating');
 
-    $postMapper = new FvCommunityNews_PostMapper();
+    $postMapper = new \FvCommunityNews\Post\Mapper();
     if ('increase' == $_REQUEST['fvcn_post_rating_action']) {
         $postMapper->increasePostRating($id);
     } else {
@@ -425,110 +417,4 @@ function fvcn_post_rating_handler()
     setcookie('fvcn_post_rated_' . $id . '_' . COOKIEHASH, 'true', time() + 30000000, COOKIEPATH, COOKIE_DOMAIN);
 
     wp_redirect(fvcn_get_post_permalink($id));
-}
-
-
-/**
- * FvCommunityNews_PostMapper
- *
- */
-class FvCommunityNews_PostMapper
-{
-    /**
-     * changePostStatus()
-     *
-     * @version 20120722
-     * @param int $postId
-     * @param string $status
-     * @return int
-     */
-    protected function changePostStatus($postId, $status)
-    {
-        $post = [];
-        $post['ID'] = $postId;
-        $post['post_status'] = $status;
-
-        return wp_update_post($post);
-    }
-
-    /**
-     * publishPost()
-     *
-     * @version 20120722
-     * @param int $postId
-     * @return int
-     */
-    public function publishPost($postId)
-    {
-        do_action('fvcn_publish_post', $postId);
-
-        return $this->changePostStatus($postId, PostType::STATUS_PUBLISH);
-    }
-
-    /**
-     * unpublishPost()
-     *
-     * @version 20120722
-     * @param int $postId
-     * @return int
-     */
-    public function unpublishPost($postId)
-    {
-        do_action('fvcn_unpublish_post', $postId);
-
-        return $this->changePostStatus($postId, PostType::STATUS_PENDING);
-    }
-
-    /**
-     * spamPost()
-     *
-     * @version 20120728
-     * @param int $postId
-     * @return int
-     */
-    public function spamPost($postId)
-    {
-        do_action('fvcn_spam_post', $postId);
-
-        return $this->changePostStatus($postId, PostType::STATUS_SPAM);
-    }
-
-    /**
-     * increasePostRating()
-     *
-     * @version 20120722
-     * @param int $postId
-     */
-    public function increasePostRating($postId)
-    {
-        do_action('fvcn_increase_post_rating', $postId);
-
-        update_post_meta($postId, '_fvcn_post_rating', fvcn_get_post_rating($postId)+1);
-    }
-
-    /**
-     * decreasePostRating()
-     *
-     * @version 20120722
-     * @param int $postId
-     */
-    public function decreasePostRating($postId)
-    {
-        do_action('fvcn_decrease_post_rating', $postId);
-
-        update_post_meta($postId, '_fvcn_post_rating', fvcn_get_post_rating($postId)-1);
-    }
-
-    /**
-     * increasePostViewCount()
-     *
-     * @version 20120724
-     * @param int $postId
-     */
-    public function increasePostViewCount($postId)
-    {
-        do_action('fvcn_increase_post_view_count', $postId);
-
-        update_post_meta($postId, '_fvcn_post_views', fvcn_get_post_views($postId)+1);
-    }
 }

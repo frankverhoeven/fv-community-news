@@ -3,7 +3,6 @@
 /**
  * The Template for displaying a single community post.
  *
- * @version    20120716
  * @package    FV Community News
  * @subpackage Theme
  */

@@ -4,7 +4,6 @@
  * fvcn_admin_moderation()
  *
  * @return bool
- * @version 20180119
  */
 function fvcn_admin_moderation(): bool
 {
@@ -17,7 +16,6 @@ function fvcn_admin_moderation(): bool
  * fvcn_user_moderation()
  *
  * @return bool
- * @version 20180119
  */
 function fvcn_user_moderation(): bool
 {
@@ -30,7 +28,6 @@ function fvcn_user_moderation(): bool
  * fvcn_mail_on_submission()
  *
  * @return bool
- * @version 20180119
  */
 function fvcn_mail_on_submission(): bool
 {
@@ -43,7 +40,6 @@ function fvcn_mail_on_submission(): bool
  * fvcn_mail_on_moderation()
  *
  * @return bool
- * @version 20180119
  */
 function fvcn_mail_on_moderation(): bool
 {
@@ -56,7 +52,6 @@ function fvcn_mail_on_moderation(): bool
  * fvcn_is_anonymous_allowed()
  *
  * @return bool
- * @version 20180119
  */
 function fvcn_is_anonymous_allowed(): bool
 {

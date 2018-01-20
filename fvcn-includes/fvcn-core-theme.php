@@ -5,7 +5,6 @@ use FvCommunityNews\Post\PostType;
 /**
  * fvcn_get_theme_dir()
  *
- * @version 20120531
  * @return string
  */
 function fvcn_get_theme_dir(): string
@@ -18,7 +17,6 @@ function fvcn_get_theme_dir(): string
 /**
  * fvcn_get_theme_url()
  *
- * @version 20120531
  * @return string
  */
 function fvcn_get_theme_url(): string
@@ -31,7 +29,6 @@ function fvcn_get_theme_url(): string
 /**
  * fvcn_template_include()
  *
- * @version 20120319
  * @param string $template
  * @return string
  */
@@ -44,7 +41,6 @@ function fvcn_template_include($template = ''): string
 /**
  * fvcn_theme_get_template_part()
  *
- * @version 20120716
  * @param string $slug
  * @param string $name
  */
@@ -67,7 +63,6 @@ function fvcn_get_template_part($slug, $name = null)
 /**
  * fvcn_get_query_template()
  *
- * @version 20120716
  * @param string $type
  * @param array $templates
  * @return string
@@ -90,7 +85,6 @@ function fvcn_get_query_template($type, $templates)
 /**
  * fvcn_theme_get_single_post_template()
  *
- * @version 20120806
  * @return string
  */
 function fvcn_theme_get_single_post_template()
@@ -105,7 +99,6 @@ function fvcn_theme_get_single_post_template()
 /**
  * fvcn_theme_get_post_archive_template()
  *
- * @version 20120806
  * @return string
  */
 function fvcn_theme_get_post_archive_template()
@@ -120,7 +113,6 @@ function fvcn_theme_get_post_archive_template()
 /**
  * fvcn_theme_get_post_tag_archive_template()
  *
- * @version 20120806
  * @return string
  */
 function fvcn_theme_get_post_tag_archive_template()
@@ -135,7 +127,6 @@ function fvcn_theme_get_post_tag_archive_template()
 /**
  * fvcn_theme_compat_active()
  *
- * @version 20120716
  * @return bool
  */
 function fvcn_theme_is_compat_active()
@@ -154,7 +145,6 @@ function fvcn_theme_is_compat_active()
 /**
  * fvcn_theme_compat_template_include()
  *
- * @version 20120716
  * @param string $template
  * @return string
  */
@@ -185,7 +175,6 @@ function fvcn_theme_compat_template_include($template)
 /**
  * fvcn_theme_compat_replace_the_content()
  *
- * @version 20120707
  * @param string $content
  * @return string
  */

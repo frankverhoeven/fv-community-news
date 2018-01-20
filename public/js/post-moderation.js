@@ -3,7 +3,6 @@
  *
  * Improve the moderation panel, required because of WordPress limitations.
  *
- * @version        20120730
  * @package FV Community News
  * @subpackage Admin Post Moderation
  * @author Frank Verhoeven <hi@frankverhoeven.me>

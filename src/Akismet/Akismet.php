@@ -3,6 +3,7 @@
 namespace FvCommunityNews\Akismet;
 
 use Exception;
+use FvCommunityNews\Version;
 
 /**
  * Akismet
@@ -23,7 +24,6 @@ class Akismet
     /**
      * __construct()
      *
-     * @version 20120711
      * @param string $apiKey
      * @param string $blogUrl
      */
@@ -36,7 +36,6 @@ class Akismet
     /**
      * setApiKey()
      *
-     * @version 20120711
      * @param string $apiKey
      * @return Akismet
      */
@@ -49,7 +48,6 @@ class Akismet
     /**
      * getApiKey()
      *
-     * @version 20120711
      * @return string
      */
     public function getApiKey()
@@ -60,7 +58,6 @@ class Akismet
     /**
      * setBlogUrl()
      *
-     * @version 20120711
      * @param string $blogUrl
      * @return Akismet
      */
@@ -73,7 +70,6 @@ class Akismet
     /**
      * getBlogUrl()
      *
-     * @version 20120711
      * @return string
      */
     public function getBlogUrl()
@@ -89,7 +85,6 @@ class Akismet
      * @param array $params
      * @return string
      * @throws Exception
-     * @version 20171111
      */
     protected function post($host, $path, array $params)
     {
@@ -99,7 +94,7 @@ class Akismet
             'headers' => [
                 'Content-Type' => 'application/x-www-form-urlencoded; charset=' . get_option('blog_charset'),
                 'Host' => $host,
-                'User-Agent' => 'FV Community News/' . fvcn_get_version() . ' | Akismet/20120711'
+                'User-Agent' => 'FV Community News/' . Version::getCurrentVersion() . ' | Akismet/20120711'
             ],
             'httpversion' => '1.0',
             'timeout' => 15
@@ -117,7 +112,6 @@ class Akismet
     /**
      * makeApiCall()
      *
-     * @version 20120711
      * @param string $path
      * @param array $params
      * @return string
@@ -137,7 +131,6 @@ class Akismet
     /**
      * verifyKey()
      *
-     * @version 20120711
      * @param string $key
      * @param string $blog
      * @return bool
@@ -158,7 +151,6 @@ class Akismet
     /**
      * isSpam()
      *
-     * @version 20120711
      * @param array $params
      * @return bool
      * @throws Exception
@@ -180,7 +172,6 @@ class Akismet
     /**
      * submitSpam()
      *
-     * @version 20120711
      * @param array $params
      * @throws Exception
      */
@@ -192,7 +183,6 @@ class Akismet
     /**
      * submitHam()
      *
-     * @version 20120711
      * @param array $params
      * @throws Exception
      */

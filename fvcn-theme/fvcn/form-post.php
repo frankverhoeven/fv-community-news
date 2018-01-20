@@ -5,7 +5,6 @@
  *
  * The form for submitting community news.
  *
- * @version    20171112
  * @package    FV Community News
  * @subpackage Theme
  */

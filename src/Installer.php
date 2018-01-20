@@ -20,7 +20,6 @@ class Installer
      * __construct()
      *
      * @param Config $config
-     * @version 20171112
      */
     public function __construct(Config $config)
     {
@@ -31,7 +30,6 @@ class Installer
      * isInstall()
      *
      * @return bool
-     * @version 20171112
      */
     public function isInstall()
     {
@@ -42,7 +40,6 @@ class Installer
      * isUpdate()
      *
      * @return bool
-     * @version 20171112
      */
     public function isUpdate()
     {
@@ -53,7 +50,6 @@ class Installer
      * install()
      *
      * @return Installer
-     * @version 20171111
      */
     public function install()
     {
@@ -66,7 +62,6 @@ class Installer
      * update()
      *
      * @return Installer
-     * @version 20171111
      */
     public function update()
     {
@@ -80,7 +75,6 @@ class Installer
      * Add options to the database
      *
      * @return Installer
-     * @version 20171112
      */
     public function addOptions()
     {
@@ -95,7 +89,6 @@ class Installer
      * Check if an update is available.
      *
      * @return bool
-     * @version 20171112
      */
     public function hasUpdate()
     {
