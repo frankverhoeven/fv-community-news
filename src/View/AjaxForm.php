@@ -45,7 +45,7 @@ class AjaxForm
     {
         $registry = \FvCommunityNews::$container->get('Registry');
 
-        wp_enqueue_script('fvcn-js', $registry['pluginUrl'] . 'public/js/fvcn-js.js', ['jquery', 'jquery-form']);
+        wp_enqueue_script('fvcn-js', $registry['pluginUrl'] . 'public/js/post-form.min.js', ['jquery', 'jquery-form'], false, true);
         wp_localize_script('fvcn-js', 'FvCommunityNewsJavascript', $this->jsParams);
 
         return $this;
