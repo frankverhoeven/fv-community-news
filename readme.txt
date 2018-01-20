@@ -132,8 +132,13 @@ For more details on changes, please visit the [WordPress Trac](http://plugins.tr
 
 = 3.1.2 =
 
-* Change: Now requires PHP >= 7.0
-* Improvement: New DI method
+* Change: Now requires PHP >= 7.0.
+* Fix: Links in the notification mail now correctly point to wp-admin if wp is located in a custom directory.
+* Improvement: No longer replaces jQuery.Form shipped with WP.
+* Improvement: New/minified javascript, moved to footer.
+* Improvement: Minified css.
+* Improvement: New dependency injection.
+* Improvement: General code improvements & cleanup.
 
 
 = 3.1.1 =
