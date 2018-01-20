@@ -45,12 +45,7 @@ class AjaxForm
     {
         $registry = \FvCommunityNews::$container->get('Registry');
 
-        // Replace the outdated version of jQuery Form that is shipped with WordPress
-        wp_deregister_script('jquery-form');
-        wp_register_script('jquery-form', $registry['pluginUrl'] . 'public/js/jquery-form.js');
-
         wp_enqueue_script('fvcn-js', $registry['pluginUrl'] . 'public/js/fvcn-js.js', ['jquery', 'jquery-form']);
-
         wp_localize_script('fvcn-js', 'FvCommunityNewsJavascript', $this->jsParams);
 
         return $this;
