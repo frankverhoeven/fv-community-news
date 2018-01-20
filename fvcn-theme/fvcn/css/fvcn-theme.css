@@ -30,10 +30,7 @@
     text-align: right;
 }
 
-.fvcn-post-link {
-    font-weight: bold;
-    font-size: 1.1em;
-}
+.fvcn-post-link {}
 
 
 /**
@@ -70,39 +67,27 @@
  * Form
  *
  */
-.fvcn-post-form-ajax-loader {
-    display: none;
-    text-align: center;
-    float: none !important;
-    clear: both;
-}
-
-.fvcn-post-form-ajax-loader p {
-    margin-bottom: 0;
-}
-
-.fvcn-post-form-ajax-loader .fvcn-post-form-ajax-progress-bar-outer {
-    width: 120px;
-    height: 4px !important;
-    margin: 0 auto;
-    border: 1px solid #bbb;
-    background: #fff;
-    padding: 1px !important;
-    border-radius: 6px !important;
-    float: none !important;
-}
-
-.fvcn-post-form-ajax-loader .fvcn-post-form-ajax-progress-bar-inner {
-    width: 0;
-    padding: 0 !important;
-    height: 4px !important;
-    background: #1982d1;
-    border-radius: 2px !important;
-    float: none !important;
-}
-
 .fvcn_form_widget .fvcn-post-form input[type="text"],
 .fvcn_form_widget .fvcn-post-form input[type="file"],
 .fvcn_form_widget .fvcn-post-form textarea {
     width: 100%;
 }
+
+.fvcn-post-form-loader {
+    margin-top: 1.5em;
+    margin-left: .5em;
+    display: none;
+}
+
+.fvcn-post-form-loader-img {
+    width: 1em;
+    height: 1em;
+    overflow: hidden;
+    -webkit-animation: spin 1.5s linear infinite;
+    -moz-animation: spin 1.5s linear infinite;
+    animation: spin 1.5s linear infinite;
+}
+
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
