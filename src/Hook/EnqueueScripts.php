@@ -58,12 +58,12 @@ class EnqueueScripts implements HookInterface
     protected function enqueueStyles(): void
     {
         if (!fvcn_theme_is_compat_active() && file_exists(get_stylesheet_directory() . '/fvcn/css/fvcn-theme.css')) {
-            $uri = get_stylesheet_directory_uri();
+            $src = get_stylesheet_directory_uri() . '/fvcn/css/fvcn-theme.css';
         } else {
-            $uri = fvcn_get_theme_url();
+            $src = fvcn_get_theme_url() . '/fvcn/css/fvcn-theme.min.css';
         }
 
-        wp_enqueue_style('fvcn-theme', $uri . '/fvcn/css/fvcn-theme.css', '', Version::getCurrentVersion(), 'all');
+        wp_enqueue_style('fvcn-theme', $src, '', Version::getCurrentVersion(), 'all');
 
         do_action('fvcn_enqueue_styles');
     }
