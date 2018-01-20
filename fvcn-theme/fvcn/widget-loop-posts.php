@@ -9,7 +9,7 @@
 
 ?>
 
-<ul class="fvcn-list-posts-widget">
+<div class="fvcn-list-posts-widget">
 
     <?php while (fvcn_posts()) : fvcn_the_post(); ?>
 
@@ -17,7 +17,7 @@
 
     <?php endwhile; ?>
 
-</ul>
+</div>
 
 <?php if (fvcn_show_widget_view_all()) : ?>
     <p class="fvcn-view-all">

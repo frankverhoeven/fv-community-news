@@ -28,7 +28,7 @@
     <?php endif; ?>
 </div><!-- .entry-content -->
 
-<footer class="fvcn-post-meta">
+<div class="fvcn-post-meta">
     <span class="fvcn-post-tags">
         <?php fvcn_post_tag_list(0, ['before'=>__('Tags: ', 'fvcn'), 'after'=>'']); ?>
     </span>
@@ -44,4 +44,4 @@
             <a href="<?php fvcn_post_rating_increment_link(); ?>" rel="nofollow">+</a>
         <?php endif; ?>
     </span>
-</footer><!-- .entry-meta -->
+</div><!-- .entry-meta -->
