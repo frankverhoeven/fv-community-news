@@ -1,6 +1,7 @@
 <?php
 
 namespace FvCommunityNews\Validator;
+
 use Exception;
 
 /**

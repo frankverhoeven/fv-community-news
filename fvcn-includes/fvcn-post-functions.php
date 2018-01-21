@@ -1,9 +1,6 @@
 <?php
 
 use FvCommunityNews\Post\PostType;
-use FvCommunityNews\Validator\MaxLength;
-use FvCommunityNews\Validator\MinLength;
-use FvCommunityNews\Validator\ValidatorChain;
 
 /**
  * fvcn_insert_post()
@@ -78,211 +75,66 @@ function fvcn_insert_post_thumbnail($postId)
 /**
  * fvcn_new_post_handler()
  *
- * @return int|void
+ * @return int|null
  */
 function fvcn_new_post_handler()
 {
     if ('post' != strtolower($_SERVER['REQUEST_METHOD'])) {
-        return;
+        return null;
     }
     if (!isset($_POST['fvcn_post_form_action']) || 'fvcn-new-post' != $_POST['fvcn_post_form_action']) {
-        return;
+        return null;
     }
     if (fvcn_is_anonymous() && !fvcn_is_anonymous_allowed()) {
-        return;
+        return null;
     }
     if (!wp_verify_nonce($_POST['fvcn_post_form_nonce'], 'fvcn-new-post')) {
-        return;
+        return null;
     }
 
-
-    $postData = [
-        'author' => 0,
-        'post_author_name' => '',
-        'post_author_email' => '',
-        'post_link' => '',
-        'post_tags' => '',
-        'post_status' => PostType::STATUS_PENDING
-    ];
-    $validator = new ValidatorChain();
-
-    if (fvcn_is_anonymous()) {
-        // Author Name
-        apply_filters('fvcn_post_author_name_validators', $validator->setValidators([
-            'FvCommunityNews\Validator\NotEmpty',
-            'FvCommunityNews\Validator\Name',
-            new MinLength(2),
-            new MaxLength(40)
-        ]));
-
-        if ($validator->isValid($_POST['fvcn_post_form_author_name'])) {
-            $postData['post_author_name'] = $_POST['fvcn_post_form_author_name'];
-        } else {
-            fvcn_add_error('fvcn_post_form_author_name', sprintf(__('<strong>ERROR</strong>: %s', 'fvcn'), $validator->getMessage()));
-        }
-
-        // Author Email
-        apply_filters('fvcn_post_author_email_validators', $validator->setValidators([
-            'FvCommunityNews\Validator\NotEmpty',
-            'FvCommunityNews\Validator\Email',
-            new MinLength(10),
-            new MaxLength(60)
-        ]));
-
-        if ($validator->isValid($_POST['fvcn_post_form_author_email'])) {
-            $postData['post_author_email'] = $_POST['fvcn_post_form_author_email'];
-        } else {
-            fvcn_add_error('fvcn_post_form_author_email', sprintf(__('<strong>ERROR</strong>: %s', 'fvcn'), $validator->getMessage()));
-        }
-    } else {
-        $postData['author'] = fvcn_get_current_user_id();
-    }
-
-    // Status
-    if (!fvcn_admin_moderation()) {
-        if (fvcn_user_moderation()) {
-            if (fvcn_has_user_posts()) {
-                $postData['post_status'] = PostType::STATUS_PUBLISH;
-            }
-        } else {
-            $postData['post_status'] = PostType::STATUS_PUBLISH;
-        }
-    }
-
-    // Title
-    apply_filters('fvcn_post_title_validators', $validator->setValidators([
-        'FvCommunityNews\Validator\NotEmpty',
-        new MinLength(8),
-        new MaxLength(70)
-    ]));
-
-    if ($validator->isValid($_POST['fvcn_post_form_title'])) {
-        $postData['post_title'] = $_POST['fvcn_post_form_title'];
-    } else {
-        fvcn_add_error('fvcn_post_form_title', sprintf(__('<strong>ERROR</strong>: %s', 'fvcn'), $validator->getMessage()));
-    }
-
-    // Link
-    if (fvcn_is_post_form_link_required()) {
-        apply_filters('fvcn_post_link_validators', $validator->setValidators([
-            'FvCommunityNews\Validator\NotEmpty',
-            'FvCommunityNews\Validator\Url',
-            new MinLength(6)
-        ]));
-
-        if ($validator->isValid($_POST['fvcn_post_form_link'])) {
-            $postData['post_link'] = $_POST['fvcn_post_form_link'];
-        } else {
-            fvcn_add_error('fvcn_post_form_link', sprintf(__('<strong>ERROR</strong>: %s', 'fvcn'), $validator->getMessage()));
-        }
-    } else {
-        $validator->setValidators(['FvCommunityNews\Validator\NotEmpty']);
-
-        if ($validator->isValid($_POST['fvcn_post_form_link'])) {
-            apply_filters('fvcn_post_link_validators', $validator->setValidators([
-                'FvCommunityNews\Validator\Url',
-                new MinLength(6)
-            ]));
-
-            if (false === strpos($_POST['fvcn_post_form_link'], 'http://')) {
-                $_POST['fvcn_post_form_link'] = 'http://' . $_POST['fvcn_post_form_link'];
-            }
-            if ($validator->isValid($_POST['fvcn_post_form_link'])) {
-                $postData['post_link'] = $_POST['fvcn_post_form_link'];
-            } else {
-                fvcn_add_error('fvcn_post_form_link', sprintf(__('<strong>ERROR</strong>: %s', 'fvcn'), $validator->getMessage()));
-            }
-        }
-    }
-
-    // Content
-    apply_filters('fvcn_post_content_validators', $validator->setValidators([
-        'FvCommunityNews\Validator\NotEmpty',
-        new MinLength(20)
-    ]));
-
-    if ($validator->isValid($_POST['fvcn_post_form_content'])) {
-        $postData['post_content'] = $_POST['fvcn_post_form_content'];
-    } else {
-        fvcn_add_error('fvcn_post_form_content', sprintf(__('<strong>ERROR</strong>: %s', 'fvcn'), $validator->getMessage()));
-    }
-
-    // Tags
-    if (fvcn_is_post_form_tags_required()) {
-        apply_filters('fvcn_post_tags_validators', $validator->setValidators([
-            'FvCommunityNews\Validator\NotEmpty',
-            'FvCommunityNews\Validator\Tags',
-            new MinLength(2)
-        ]));
-
-        if ($validator->isValid($_POST['fvcn_post_form_tags'])) {
-            if (false !== strpos($_POST['fvcn_post_form_tags'], ',')) {
-                $_POST['fvcn_post_form_tags'] = explode(',', $_POST['fvcn_post_form_tags']);
-            }
-            $postData['post_tags'] = [fvcn_get_post_tag_id() => $_POST['fvcn_post_form_tags']];
-        } else {
-            fvcn_add_error('fvcn_post_form_tags', sprintf(__('<strong>ERROR</strong>: %s', 'fvcn'), $validator->getMessage()));
-        }
-    } else {
-        $validator->setValidators(['FvCommunityNews\Validator\NotEmpty']);
-
-        if ($validator->isValid($_POST['fvcn_post_form_link'])) {
-            apply_filters('fvcn_post_tags_validators', $validator->setValidators([
-                'FvCommunityNews\Validator\Tags',
-                new MinLength(2)
-            ]));
-
-            if ($validator->isValid($_POST['fvcn_post_form_tags'])) {
-                if (false !== strpos($_POST['fvcn_post_form_tags'], ',')) {
-                    $_POST['fvcn_post_form_tags'] = explode(',', $_POST['fvcn_post_form_tags']);
-                }
-                $postData['post_tags'] = [fvcn_get_post_tag_id() => $_POST['fvcn_post_form_tags']];
-            } else {
-                fvcn_add_error('fvcn_post_form_tags', sprintf(__('<strong>ERROR</strong>: %s', 'fvcn'), $validator->getMessage()));
-            }
-        }
-    }
-
-    // Thumbnail
-    if (fvcn_is_post_form_thumbnail_required()) {
-        apply_filters('fvcn_post_title_validators', $validator->setValidators([
-            'FvCommunityNews\Validator\Image'
-        ]));
-
-        if ($validator->isValid($_FILES['fvcn_post_form_thumbnail'])) {
-            add_action('fvcn_insert_post', 'fvcn_insert_post_thumbnail');
-        } else {
-            fvcn_add_error('fvcn_post_form_thumbnail', sprintf(__('<strong>ERROR</strong>: %s', 'fvcn'), $validator->getMessage()));
-        }
-    } else if (!empty($_FILES['fvcn_post_form_thumbnail']['tmp_name'])) {
-        apply_filters('fvcn_post_title_validators', $validator->setValidators([
-            'FvCommunityNews\Validator\Image'
-        ]));
-
-        if ($validator->isValid($_FILES['fvcn_post_form_thumbnail'])) {
-            add_action('fvcn_insert_post', 'fvcn_insert_post_thumbnail');
-        } else {
-            fvcn_add_error('fvcn_post_form_thumbnail', sprintf(__('<strong>ERROR</strong>: %s', 'fvcn'), $validator->getMessage()));
-        }
-    }
-
+    $data = array_merge([
+        'fvcn_post_form_author_name' => null,
+        'fvcn_post_form_author_email' => null,
+        'fvcn_post_form_title' => null,
+        'fvcn_post_form_link' => null,
+        'fvcn_post_form_content' => null,
+        'fvcn_post_form_tags' => null,
+        'fvcn_post_form_thumbnail' => null,
+    ], $_POST, $_FILES);
+    /* @var \FvCommunityNews\Post\Validator $validator */
+    $validator = FvCommunityNews::$container->get(\FvCommunityNews\Post\Validator::class);
 
     do_action('fvcn_new_post_pre_extras');
 
+    if ($validator->isValid($data)) {
+        $status = PostType::STATUS_PENDING;
+        if (!fvcn_admin_moderation()) {
+            if (fvcn_user_moderation()) {
+                if (fvcn_has_user_posts()) {
+                    $status = PostType::STATUS_PUBLISH;
+                }
+            } else {
+                $status = PostType::STATUS_PUBLISH;
+            }
+        }
 
-    if (!fvcn_has_errors()) {
+        if (false !== strpos($data['fvcn_post_form_tags'], ',')) {
+            $data['fvcn_post_form_tags'] = explode(',', $data['fvcn_post_form_tags']);
+        }
+        $data['fvcn_post_form_tags'] = [fvcn_get_post_tag_id() => $data['fvcn_post_form_tags']];
+
         $post_data = apply_filters('fvcn_new_post_data_pre_insert', [
-            'post_author' => $postData['author'],
-            'post_title' => $postData['post_title'],
-            'post_content' => $postData['post_content'],
-            'tax_input' => $postData['post_tags'],
-            'post_status' => $postData['post_status'],
+            'post_author' => fvcn_is_anonymous() ? 0 : fvcn_get_current_user_id(),
+            'post_title' => $data['fvcn_post_form_title'],
+            'post_content' => $data['fvcn_post_form_content'],
+            'tax_input' => $data['fvcn_post_form_tags'],
+            'post_status' => $status,
             'post_type' => PostType::POST_TYPE_KEY
         ]);
         $post_meta = apply_filters('fvcn_new_post_meta_pre_insert', [
-            '_fvcn_anonymous_author_name' => $postData['post_author_name'],
-            '_fvcn_anonymous_author_email' => $postData['post_author_email'],
-            '_fvcn_post_url' => $postData['post_link']
+            '_fvcn_anonymous_author_name' => fvcn_is_anonymous() ? $data['fvcn_post_form_author_name'] : '',
+            '_fvcn_anonymous_author_email' => fvcn_is_anonymous() ? $data['fvcn_post_form_author_email'] : '',
+            '_fvcn_post_url' => $data['fvcn_post_form_link']
         ]);
 
         do_action('fvcn_new_post_pre_insert', $post_data, $post_meta);
@@ -299,6 +151,8 @@ function fvcn_new_post_handler()
             return $postId;
         }
     }
+
+    return null;
 }
 
 
