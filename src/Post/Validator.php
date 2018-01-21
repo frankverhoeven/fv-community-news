@@ -42,7 +42,6 @@ class Validator
     {
         $this->config = $config;
         $this->error = $error;
-        $this->messageTemplate = __($this->messageTemplate, 'fvcn');
     }
 
     /**
@@ -53,6 +52,8 @@ class Validator
      */
     public function isValid(array $data): bool
     {
+        $this->messageTemplate = __($this->messageTemplate, 'fvcn');
+
         $data = array_merge([
             'fvcn_post_form_author_name' => null,
             'fvcn_post_form_author_email' => null,
