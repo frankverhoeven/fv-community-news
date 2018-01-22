@@ -10,16 +10,29 @@ namespace FvCommunityNews\Admin\Settings;
 class Form
 {
     /**
-     * __construct()
-     *
+     * @var bool
      */
+    private $advanced = false;
+    
     public function __construct()
     {
+        $this->advanced = false;
+        if (isset($_REQUEST['mode']) && 'advanced' == $_REQUEST['mode']) {
+            $this->advanced = true;
+        }
+
         // Author Name
         add_settings_section('fvcn_form_author_name', __('Author Name', 'fvcn'), [$this, 'author_name_section'], 'fvcn-form');
 
         add_settings_field('_fvcn_post_form_author_name_label', __('Label', 'fvcn'), [$this, 'author_name_label'], 'fvcn-form', 'fvcn_form_author_name');
         register_setting('fvcn-form', '_fvcn_post_form_author_name_label', 'esc_sql');
+
+        if ($this->advanced) {
+            add_settings_field('_fvcn_post_form_author_name_length_min', __('Minimum Length', 'fvcn'), [$this, 'author_name_length_min'], 'fvcn-form', 'fvcn_form_author_name');
+            register_setting('fvcn-form', '_fvcn_post_form_author_name_length_min', 'intval');
+            add_settings_field('_fvcn_post_form_author_name_length_max', __('Maximum Length', 'fvcn'), [$this, 'author_name_length_max'], 'fvcn-form', 'fvcn_form_author_name');
+            register_setting('fvcn-form', '_fvcn_post_form_author_name_length_max', 'intval');
+        }
 
 
         // Author Email
@@ -35,6 +48,13 @@ class Form
         add_settings_field('_fvcn_post_form_title_label', __('Label', 'fvcn'), [$this, 'title_label'], 'fvcn-form', 'fvcn_form_title');
         register_setting('fvcn-form', '_fvcn_post_form_title_label', 'esc_sql');
 
+        if ($this->advanced) {
+            add_settings_field('_fvcn_post_form_title_length_min', __('Minimum Length', 'fvcn'), [$this, 'title_length_min'], 'fvcn-form', 'fvcn_form_title');
+            register_setting('fvcn-form', '_fvcn_post_form_title_length_min', 'intval');
+            add_settings_field('_fvcn_post_form_title_length_max', __('Maximum Length', 'fvcn'), [$this, 'title_length_max'], 'fvcn-form', 'fvcn_form_title');
+            register_setting('fvcn-form', '_fvcn_post_form_title_length_max', 'intval');
+        }
+
 
         // Link
         add_settings_section('fvcn_form_link', __('Link', 'fvcn'), [$this, 'link_section'], 'fvcn-form');
@@ -45,12 +65,26 @@ class Form
         add_settings_field('_fvcn_post_form_link_required', __('Required', 'fvcn'), [$this, 'link_required'], 'fvcn-form', 'fvcn_form_link');
         register_setting('fvcn-form', '_fvcn_post_form_link_required', 'intval');
 
+        if ($this->advanced) {
+            add_settings_field('_fvcn_post_form_link_length_min', __('Minimum Length', 'fvcn'), [$this, 'link_length_min'], 'fvcn-form', 'fvcn_form_link');
+            register_setting('fvcn-form', '_fvcn_post_form_link_length_min', 'intval');
+            add_settings_field('_fvcn_post_form_link_length_max', __('Maximum Length', 'fvcn'), [$this, 'link_length_max'], 'fvcn-form', 'fvcn_form_link');
+            register_setting('fvcn-form', '_fvcn_post_form_link_length_max', 'intval');
+        }
+
 
         // Content
         add_settings_section('fvcn_form_content', __('Content', 'fvcn'), [$this, 'content_section'], 'fvcn-form');
 
         add_settings_field('_fvcn_post_form_content_label', __('Label', 'fvcn'), [$this, 'content_label'], 'fvcn-form', 'fvcn_form_content');
         register_setting('fvcn-form', '_fvcn_post_form_content_label', 'esc_sql');
+
+        if ($this->advanced) {
+            add_settings_field('_fvcn_post_form_content_length_min', __('Minimum Length', 'fvcn'), [$this, 'content_length_min'], 'fvcn-form', 'fvcn_form_content');
+            register_setting('fvcn-form', '_fvcn_post_form_content_length_min', 'intval');
+            add_settings_field('_fvcn_post_form_content_length_max', __('Maximum Length', 'fvcn'), [$this, 'content_length_max'], 'fvcn-form', 'fvcn_form_content');
+            register_setting('fvcn-form', '_fvcn_post_form_content_length_max', 'intval');
+        }
 
 
         // Tags
@@ -61,6 +95,13 @@ class Form
 
         add_settings_field('_fvcn_post_form_tags_required', __('Required', 'fvcn'), [$this, 'tags_required'], 'fvcn-form', 'fvcn_form_tags');
         register_setting('fvcn-form', '_fvcn_post_form_tags_required', 'intval');
+
+        if ($this->advanced) {
+            add_settings_field('_fvcn_post_form_tags_length_min', __('Minimum Length', 'fvcn'), [$this, 'tags_length_min'], 'fvcn-form', 'fvcn_form_tags');
+            register_setting('fvcn-form', '_fvcn_post_form_tags_length_min', 'intval');
+            add_settings_field('_fvcn_post_form_tags_length_max', __('Maximum Length', 'fvcn'), [$this, 'tags_length_max'], 'fvcn-form', 'fvcn_form_tags');
+            register_setting('fvcn-form', '_fvcn_post_form_tags_length_max', 'intval');
+        }
 
 
         // Thumbnail
@@ -80,23 +121,24 @@ class Form
         do_action('fvcn_register_admin_form_settings');
     }
 
-
-    /**
-     * fvcn_admin_form()
-     *
-     */
     public function fvcn_admin_form()
     {
         ?>
         <div class="wrap">
-            <h2><?php _e('FV Community News Form', 'fvcn'); ?></h2>
+            <h1><?php _e('FV Community News Form', 'fvcn'); ?></h1>
             <?php settings_errors(); ?>
 
-            <form action="options.php" method="post">
+            <h2 class="nav-tab-wrapper wp-clearfix">
+                <a href="<?= esc_url(add_query_arg(['page' => 'fvcn-form', 'post_type' => 'fvcn-post'], admin_url('edit.php'))); ?>" class="nav-tab<?php if (!$this->advanced) echo ' nav-tab-active'; ?>"><?php esc_html_e('Basic', 'fvcn'); ?></a>
+                <a href="<?= esc_url(add_query_arg(['page' => 'fvcn-form', 'post_type' => 'fvcn-post', 'mode' => 'advanced'], admin_url('edit.php'))); ?>" class="nav-tab<?php if ($this->advanced) echo ' nav-tab-active'; ?>"><?php esc_html_e('Advanced', 'fvcn'); ?></a>
+            </h2>
+
+            <form action="<?= admin_url('options.php'); ?>" method="post">
                 <?php settings_fields('fvcn-form'); ?>
 
                 <?php do_settings_sections('fvcn-form'); ?>
 
+                <?php if ($this->advanced) echo '<input type="hidden" name="mode" value="advanced">'; ?>
                 <p class="submit">
                     <input type="submit" name="submit" class="button-primary" value="<?php _e('Save Changes', 'fvcn'); ?>">
                 </p>
@@ -105,275 +147,200 @@ class Form
         <?php
     }
 
-
-    /**
-     * fvcn_admin_form_help()
-     *
-     */
     public function fvcn_admin_form_help()
     {
         $screen = get_current_screen();
 
-        // Pre 3.3
-        if (!method_exists($screen, 'add_help_tab')) {
-            return;
-        }
-
-        $content = '<p>' . __('This screen provides access to the form configuration.', 'fvcn') . '</p>';
+        $content = '<p>' . __('This screen provides access to the basic form configuration.', 'fvcn') . '</p>';
         $content .= '<ul><li>' . __('Change the label of a form field, this is the value displayed above the field. Note that it is <em>not</em> possible to use any html.', 'fvcn') . '</li>';
         $content .= '<li>' . __('Make a field required or optional.', 'fvcn') . '</li></ul>';
         $content .= '<p>' . __('Remember to save your settings when you are done!', 'fvcn') . '</p>';
 
         $screen->add_help_tab([
-            'id' => 'fvcn-admin-form-help',
-            'title' => __('Overview', 'fvcn'),
+            'id' => 'fvcn-admin-form-help-basic',
+            'title' => __('Basic', 'fvcn'),
+            'content' => $content
+        ]);
+
+        $content = '<p>' . __('This screen provides access to the advanced form configuration.', 'fvcn') . '</p>';
+        $content .= '<p>' . __('It allows you to set the minimum/maximum number of characters a field requires.', 'fvcn') . '</p>';
+
+        $screen->add_help_tab([
+            'id' => 'fvcn-admin-form-help-advanced',
+            'title' => __('Advanced', 'fvcn'),
             'content' => $content
         ]);
     }
 
-
-    /**
-     * author_section()
-     *
-     */
     public function author_name_section()
     {
-        ?>
-
-        <p><?php _e('Author name field settings.', 'fvcn'); ?></p>
-
-        <?php
+        echo $this->sectionDescription('Author name field settings.');
     }
 
-    /**
-     * author_label()
-     *
-     */
     public function author_name_label()
     {
-        ?>
-
-        <input type="text" name="_fvcn_post_form_author_name_label" id="_fvcn_post_form_author_name_label" value="<?= fvcn_get_form_option('_fvcn_post_form_author_name_label'); ?>" class="reqular-text">
-
-        <?php
+        echo $this->inputField('_fvcn_post_form_author_name_label');
     }
 
+    public function author_name_length_min()
+    {
+        echo $this->inputField('_fvcn_post_form_author_name_length_min', 'number');
+    }
 
-    /**
-     * author_section()
-     *
-     */
+    public function author_name_length_max()
+    {
+        echo $this->inputField('_fvcn_post_form_author_name_length_max', 'number');
+    }
+
     public function author_email_section()
     {
-        ?>
-
-        <p><?php _e('Author email field settings.', 'fvcn'); ?></p>
-
-        <?php
+        echo $this->sectionDescription('Author email field settings.');
     }
 
-    /**
-     * author_label()
-     *
-     */
     public function author_email_label()
     {
-        ?>
-
-        <input type="text" name="_fvcn_post_form_author_email_label" id="_fvcn_post_form_author_email_label" value="<?= fvcn_get_form_option('_fvcn_post_form_author_email_label'); ?>" class="reqular-text">
-
-        <?php
+        echo $this->inputField('_fvcn_post_form_author_email_label');
     }
 
-
-    /**
-     * title_section()
-     *
-     */
     public function title_section()
     {
-        ?>
-
-        <p><?php _e('Title field settings.', 'fvcn'); ?></p>
-
-        <?php
+        echo $this->sectionDescription('Title field settings.');
     }
 
-    /**
-     * title_label()
-     *
-     */
     public function title_label()
     {
-        ?>
-
-        <input type="text" name="_fvcn_post_form_title_label" id="_fvcn_post_form_title_label" value="<?= fvcn_get_form_option('_fvcn_post_form_title_label'); ?>" class="reqular-text">
-
-        <?php
+        echo $this->inputField('_fvcn_post_form_title_label');
     }
 
+    public function title_length_min()
+    {
+        echo $this->inputField('_fvcn_post_form_title_length_min', 'number');
+    }
 
-    /**
-     * link_section()
-     *
-     */
+    public function title_length_max()
+    {
+        echo $this->inputField('_fvcn_post_form_title_length_max', 'number');
+    }
+
     public function link_section()
     {
-        ?>
-
-        <p><?php _e('Link field settings.', 'fvcn'); ?></p>
-
-        <?php
+        echo $this->sectionDescription('Link field settings.');
     }
 
-    /**
-     * link_label()
-     *
-     */
     public function link_label()
     {
-        ?>
-
-        <input type="text" name="_fvcn_post_form_link_label" id="_fvcn_post_form_link_label" value="<?= fvcn_get_form_option('_fvcn_post_form_link_label'); ?>" class="reqular-text">
-
-        <?php
+        echo $this->inputField('_fvcn_post_form_link_label');
     }
 
-    /**
-     * link_required()
-     *
-     */
     public function link_required()
     {
-        ?>
-
-        <input type="checkbox" name="_fvcn_post_form_link_required" id="_fvcn_post_form_link_required" value="1" <?php checked(get_option('_fvcn_post_form_link_required', true)); ?>>
-        <label for="_fvcn_post_form_link_required"><?php _e('Make the link field a required field.', 'fvcn'); ?></label>
-
-        <?php
+        echo $this->checkboxField('_fvcn_post_form_link_required', 'Make the link field a required field.');
     }
 
+    public function link_length_min()
+    {
+        echo $this->inputField('_fvcn_post_form_link_length_min', 'number');
+    }
 
-    /**
-     * content_section()
-     *
-     */
+    public function link_length_max()
+    {
+        echo $this->inputField('_fvcn_post_form_link_length_max', 'number');
+    }
+
     public function content_section()
     {
-        ?>
-
-        <p><?php _e('Content field settings.', 'fvcn'); ?></p>
-
-        <?php
+        echo $this->sectionDescription('Content field settings.');
     }
 
-    /**
-     * content_label()
-     *
-     */
     public function content_label()
     {
-        ?>
-
-        <input type="text" name="_fvcn_post_form_content_label" id="_fvcn_post_form_content_label" value="<?= fvcn_get_form_option('_fvcn_post_form_content_label'); ?>" class="reqular-text">
-
-        <?php
+        echo $this->inputField('_fvcn_post_form_content_label');
     }
 
+    public function content_length_min()
+    {
+        echo $this->inputField('_fvcn_post_form_content_length_min', 'number');
+    }
 
-    /**
-     * tags_section()
-     *
-     */
+    public function content_length_max()
+    {
+        echo $this->inputField('_fvcn_post_form_content_length_max', 'number');
+    }
+
     public function tags_section()
     {
-        ?>
-
-        <p><?php _e('Tags field settings.', 'fvcn'); ?></p>
-
-        <?php
+        echo $this->sectionDescription('Tags field settings.');
     }
 
-    /**
-     * tags_label()
-     *
-     */
     public function tags_label()
     {
-        ?>
-
-        <input type="text" name="_fvcn_post_form_tags_label" id="_fvcn_post_form_tags_label" value="<?= fvcn_get_form_option('_fvcn_post_form_tags_label'); ?>" class="reqular-text">
-
-        <?php
+        echo $this->inputField('_fvcn_post_form_tags_label');
     }
 
-    /**
-     * tags_required()
-     *
-     */
     public function tags_required()
     {
-        ?>
-
-        <input type="checkbox" name="_fvcn_post_form_tags_required" id="_fvcn_post_form_tags_required" value="1" <?php checked(get_option('_fvcn_post_form_tags_required', true)); ?>>
-        <label for="_fvcn_post_form_tags_required"><?php _e('Make the tags field a required field.', 'fvcn'); ?></label>
-
-        <?php
+        echo $this->checkboxField('_fvcn_post_form_tags_required', 'Make the tags field a required field.');
     }
 
+    public function tags_length_min()
+    {
+        echo $this->inputField('_fvcn_post_form_tags_length_min', 'number');
+    }
 
-    /**
-     * thumbnail_section()
-     *
-     */
+    public function tags_length_max()
+    {
+        echo $this->inputField('_fvcn_post_form_tags_length_max', 'number');
+    }
+
     public function thumbnail_section()
     {
-        ?>
-
-        <p><?php _e('Thumbnail field settings.', 'fvcn'); ?></p>
-
-        <?php
+        echo $this->sectionDescription('Thumbnail field settings.');
     }
 
-
-    /**
-     * thumbnail_enabled()
-     *
-     */
     public function thumbnail_enabled()
     {
-        ?>
-
-        <input type="checkbox" name="_fvcn_post_form_thumbnail_enabled" id="_fvcn_post_form_thumbnail_enabled" value="1" <?php checked(get_option('_fvcn_post_form_thumbnail_enabled', true)); ?>>
-        <label for="_fvcn_post_form_thumbnail_enabled"><?php _e('Enable the thumbnail field.', 'fvcn'); ?></label>
-
-        <?php
+        echo $this->checkboxField('_fvcn_post_form_thumbnail_enabled', 'Enable the thumbnail field.');
     }
-    
-    /**
-     * thumbnail_label()
-     *
-     */
+
     public function thumbnail_label()
     {
-        ?>
+        echo $this->inputField('_fvcn_post_form_thumbnail_label');
+    }
 
-        <input type="text" name="_fvcn_post_form_thumbnail_label" id="_fvcn_post_form_thumbnail_label" value="<?= fvcn_get_form_option('_fvcn_post_form_thumbnail_label'); ?>" class="reqular-text">
-
-        <?php
+    public function thumbnail_required()
+    {
+        echo $this->checkboxField('_fvcn_post_form_thumbnail_required', 'Make the thumbnail field a required field.');
     }
 
     /**
-     * thumbnail_required()
+     * Generate section description.
      *
+     * @param string $description
+     * @return string
      */
-    public function thumbnail_required()
+    protected function sectionDescription(string $description): string
     {
-        ?>
+        return sprintf('<p>%s</p>', __($description, 'fvcn'));
+    }
 
-        <input type="checkbox" name="_fvcn_post_form_thumbnail_required" id="_fvcn_post_form_thumbnail_required" value="1" <?php checked(get_option('_fvcn_post_form_thumbnail_required', false)); ?>>
-        <label for="_fvcn_post_form_thumbnail_required"><?php _e('Make the thumbnail field a required field.', 'fvcn'); ?></label>
+    /**
+     * Generate input field.
+     *
+     * @param string $id
+     * @param string $type
+     * @return string
+     */
+    protected function inputField(string $id, string $type = 'text'): string
+    {
+        return sprintf('<input type="%s" name="%s" id="%s" value="%s" class="reqular-text">',
+            $type, $id, $id, fvcn_get_form_option($id)
+        );
+    }
 
-        <?php
+    protected function checkboxField(string $id, string $label): string
+    {
+        return sprintf('<input type="checkbox" name="%s" id="%s" value="1" %s><label for="%s">%s</label>',
+            $id, $id, checked((bool) get_option($id), true, false), $id, __($label, 'fvcn')
+        );
     }
 }

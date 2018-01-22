@@ -68,8 +68,8 @@ class Validator
             $validator = apply_filters('fvcn_post_author_name_validators', new ValidatorChain([
                 NotEmpty::class,
                 Name::class,
-                new MinLength(2),
-                new MaxLength(40)
+                new MinLength($this->config['_fvcn_post_form_author_name_length_min']),
+                new MaxLength($this->config['_fvcn_post_form_author_name_length_max']),
             ]));
 
             if (!$validator->isValid($data['fvcn_post_form_author_name'])) {
@@ -80,7 +80,7 @@ class Validator
                 NotEmpty::class,
                 Email::class,
                 new MinLength(10),
-                new MaxLength(60)
+                new MaxLength(200)
             ]));
 
             if (!$validator->isValid($data['fvcn_post_form_title'])) {
@@ -90,8 +90,8 @@ class Validator
 
         $validator = apply_filters('fvcn_post_title_validators', new ValidatorChain([
             NotEmpty::class,
-            new MinLength(8),
-            new MaxLength(70)
+            new MinLength($this->config['_fvcn_post_form_title_length_min']),
+            new MaxLength($this->config['_fvcn_post_form_title_length_max']),
         ]));
 
         if (!$validator->isValid($data['fvcn_post_form_title'])) {
@@ -102,8 +102,8 @@ class Validator
             $validator = apply_filters('fvcn_post_link_validators', $validator->setValidators([
                 NotEmpty::class,
                 Url::class,
-                new MinLength(6),
-                new MaxLength(1000),
+                new MinLength($this->config['_fvcn_post_form_link_length_min']),
+                new MaxLength($this->config['_fvcn_post_form_link_length_max']),
             ]));
 
             if (!$validator->isValid($data['fvcn_post_form_link'])) {
@@ -115,8 +115,8 @@ class Validator
                 $validator = apply_filters('fvcn_post_link_validators', $validator->setValidators([
                     NotEmpty::class,
                     Url::class,
-                    new MinLength(6),
-                    new MaxLength(1000),
+                    new MinLength($this->config['_fvcn_post_form_link_length_min']),
+                    new MaxLength($this->config['_fvcn_post_form_link_length_max']),
                 ]));
 
                 if (!$validator->isValid($data['fvcn_post_form_link'])) {
@@ -127,8 +127,8 @@ class Validator
 
         $validator = apply_filters('fvcn_post_content_validators', new ValidatorChain([
             NotEmpty::class,
-            new MinLength(20),
-            new MaxLength(5000),
+            new MinLength($this->config['_fvcn_post_form_content_length_min']),
+            new MaxLength($this->config['_fvcn_post_form_content_length_max']),
         ]));
 
         if (!$validator->isValid($data['fvcn_post_form_content'])) {
@@ -139,8 +139,8 @@ class Validator
             $validator = apply_filters('fvcn_post_tags_validators', new ValidatorChain([
                 NotEmpty::class,
                 Tags::class,
-                new MinLength(2),
-                new MaxLength(1000),
+                new MinLength($this->config['_fvcn_post_form_tags_length_min']),
+                new MaxLength($this->config['_fvcn_post_form_tags_length_max']),
             ]));
 
             if (!$validator->isValid($data['fvcn_post_form_tags'])) {
@@ -151,8 +151,8 @@ class Validator
             if ($notEmpty->isValid($data['fvcn_post_form_tags'])) {
                 $validator = apply_filters('fvcn_post_tags_validators', new ValidatorChain([
                     Tags::class,
-                    new MinLength(2),
-                    new MaxLength(1000),
+                    new MinLength($this->config['_fvcn_post_form_tags_length_min']),
+                    new MaxLength($this->config['_fvcn_post_form_tags_length_max']),
                 ]));
 
                 if (!$validator->isValid($data['fvcn_post_form_tags'])) {

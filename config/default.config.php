@@ -57,6 +57,16 @@ return [
     '_fvcn_post_form_author_name_label' => __('Author Name', 'fvcn'),
 
     /**
+     * @var int Minimum author name length
+     */
+    '_fvcn_post_form_author_name_length_min' => 2,
+
+    /**
+     * @var int Maximum author name length
+     */
+    '_fvcn_post_form_author_name_length_max' => 40,
+
+    /**
      * @var string Author email form field label
      */
     '_fvcn_post_form_author_email_label' => __('Author Email', 'fvcn'),
@@ -67,9 +77,29 @@ return [
     '_fvcn_post_form_title_label' => __('Title', 'fvcn'),
 
     /**
+     * @var int Minimum title length
+     */
+    '_fvcn_post_form_title_length_min' => 8,
+
+    /**
+     * @var int Maximum title length
+     */
+    '_fvcn_post_form_title_length_max' => 70,
+
+    /**
      * @var string Link form field label
      */
     '_fvcn_post_form_link_label' => __('Link', 'fvcn'),
+
+    /**
+     * @var int Minimum link length
+     */
+    '_fvcn_post_form_link_length_min' => 6,
+
+    /**
+     * @var int Maximum link length
+     */
+    '_fvcn_post_form_link_length_max' => 1000,
 
     /**
      * @var bool Require a link to be posted
@@ -82,9 +112,29 @@ return [
     '_fvcn_post_form_content_label' => __('Description', 'fvcn'),
 
     /**
+     * @var int Minimum content length
+     */
+    '_fvcn_post_form_content_length_min' => 20,
+
+    /**
+     * @var int Maximum content length
+     */
+    '_fvcn_post_form_content_length_max' => 5000,
+
+    /**
      * @var string Tags form field label
      */
     '_fvcn_post_form_tags_label' => __('Tags', 'fvcn'),
+
+    /**
+     * @var int Minimum tags length
+     */
+    '_fvcn_post_form_tags_length_min' => 2,
+
+    /**
+     * @var int Maximum tags length
+     */
+    '_fvcn_post_form_tags_length_max' => 1000,
 
     /**
      * @var bool Require tags to be added
