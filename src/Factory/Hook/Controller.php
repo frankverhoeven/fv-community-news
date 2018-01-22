@@ -1,19 +1,18 @@
 <?php
 
-namespace FvCommunityNews\Factory\View;
+namespace FvCommunityNews\Factory\Hook;
 
 use FvCommunityNews\Container\Container;
 use FvCommunityNews\Container\FactoryInterface;
-use FvCommunityNews\Post\Controller;
-use FvCommunityNews\View\AjaxForm as AjaxFormView;
-use WP_Error;
+use FvCommunityNews\Hook\Controller as PostControllerHook;
+use FvCommunityNews\Post\Controller as PostController;
 
 /**
- * AjaxForm
+ * Controller
  *
  * @author Frank Verhoeven <hi@frankverhoeven.me>
  */
-class AjaxForm implements FactoryInterface
+class Controller implements FactoryInterface
 {
     /**
      * Create new container object
@@ -24,9 +23,6 @@ class AjaxForm implements FactoryInterface
      */
     public function create(Container $container, string $requestedName)
     {
-        return new AjaxFormView(
-            $container->get(Controller::class),
-            $container->get(WP_Error::class)
-        );
+        return new PostControllerHook($container->get(PostController::class));
     }
 }

@@ -34,8 +34,7 @@ class Collection
         ],
 
         'template_redirect' => [
-            ['function' => 'fvcn_new_post_handler'],
-            ['function' => 'fvcn_post_rating_handler'],
+            Controller::class,
         ],
 
         'fvcn_insert_post' => [

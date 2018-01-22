@@ -2,7 +2,9 @@
 
 namespace FvCommunityNews\View;
 
+use FvCommunityNews\Post\Controller;
 use FvCommunityNews\Post\PostType;
+use WP_Error;
 
 /**
  * AjaxForm
@@ -12,16 +14,27 @@ use FvCommunityNews\Post\PostType;
 class AjaxForm
 {
     /**
+     * @var Controller
+     */
+    private $postController;
+    /**
+     * @var WP_Error
+     */
+    private $error;
+    /**
      * @var array
      */
     protected $jsParams = [];
 
     /**
-     * __construct()
-     *
+     * @param Controller $postController
+     * @param WP_Error $error
      */
-    public function __construct()
+    public function __construct(Controller $postController, WP_Error $error)
     {
+        $this->postController = $postController;
+        $this->error = $error;
+
         $this->jsParams = [
             'ajaxurl' => esc_url(admin_url('admin-ajax.php')),
             'nonce' => wp_create_nonce('fvcn-ajax'),
@@ -43,7 +56,7 @@ class AjaxForm
      */
     public function enqueueScripts()
     {
-        $registry = \FvCommunityNews::$container->get('Registry');
+        $registry = fvcn_container_get('Registry');
 
         wp_enqueue_script('fvcn-js', $registry['pluginUrl'] . 'public/js/post-form.min.js', ['jquery', 'jquery-form'], false, true);
         wp_localize_script('fvcn-js', 'FvCommunityNewsJavascript', $this->jsParams);
@@ -57,12 +70,12 @@ class AjaxForm
             exit;
         }
 
-        $postId = fvcn_new_post_handler();
+        $postId = $this->postController->createPost();
 
         if (fvcn_has_errors()) {
             $errors = [];
-            foreach (\FvCommunityNews::$container->get(\WP_Error::class)->get_error_codes() as $code) {
-                $errors[ $code ] = \FvCommunityNews::$container->get(\WP_Error::class)->get_error_message($code);
+            foreach ($this->error->get_error_codes() as $code) {
+                $errors[ $code ] = $this->error->get_error_message($code);
             }
 
             $response = [

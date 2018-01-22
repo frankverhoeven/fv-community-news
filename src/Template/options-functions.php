@@ -8,7 +8,7 @@
 function fvcn_admin_moderation(): bool
 {
     return apply_filters('fvcn_admin_moderation',
-        FvCommunityNews::$container->get('Config')['_fvcn_admin_moderation']
+        fvcn_container_get('Config')['_fvcn_admin_moderation']
     );
 }
 
@@ -20,7 +20,7 @@ function fvcn_admin_moderation(): bool
 function fvcn_user_moderation(): bool
 {
     return apply_filters('fvcn_user_moderation',
-        FvCommunityNews::$container->get('Config')['_fvcn_user_moderation']
+        fvcn_container_get('Config')['_fvcn_user_moderation']
     );
 }
 
@@ -32,7 +32,7 @@ function fvcn_user_moderation(): bool
 function fvcn_mail_on_submission(): bool
 {
     return apply_filters('fvcn_mail_on_submission',
-        FvCommunityNews::$container->get('Config')['_fvcn_mail_on_submission']
+        fvcn_container_get('Config')['_fvcn_mail_on_submission']
     );
 }
 
@@ -44,7 +44,7 @@ function fvcn_mail_on_submission(): bool
 function fvcn_mail_on_moderation(): bool
 {
     return apply_filters('fvcn_mail_on_moderation',
-        FvCommunityNews::$container->get('Config')['_fvcn_mail_on_moderation']
+        fvcn_container_get('Config')['_fvcn_mail_on_moderation']
     );
 }
 
@@ -56,6 +56,6 @@ function fvcn_mail_on_moderation(): bool
 function fvcn_is_anonymous_allowed(): bool
 {
     return apply_filters('fvcn_is_anonymous_allowed',
-        FvCommunityNews::$container->get('Config')['_fvcn_is_anonymous_allowed']
+        fvcn_container_get('Config')['_fvcn_is_anonymous_allowed']
     );
 }

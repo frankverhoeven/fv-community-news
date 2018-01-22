@@ -9,7 +9,7 @@ use FvCommunityNews\Post\PostType;
  */
 function fvcn_get_theme_dir(): string
 {
-    $reg = FvCommunityNews::$container->get('Registry');
+    $reg = fvcn_container_get('Registry');
     return apply_filters('fvcn_get_theme_dir', $reg['themeDir']);
 }
 
@@ -21,7 +21,7 @@ function fvcn_get_theme_dir(): string
  */
 function fvcn_get_theme_url(): string
 {
-    $reg = FvCommunityNews::$container->get('Registry');
+    $reg = fvcn_container_get('Registry');
     return apply_filters('fvcn_get_theme_url', $reg['themeUrl']);
 }
 
@@ -69,7 +69,7 @@ function fvcn_get_template_part($slug, $name = null)
  */
 function fvcn_get_query_template($type, $templates)
 {
-    $reg = FvCommunityNews::$container->get('Registry');
+    $reg = fvcn_container_get('Registry');
     $templates = apply_filters('fvcn_get_' . $type . '_template', $templates);
 
     if ('' == ($template = locate_template($templates))) {
@@ -132,7 +132,7 @@ function fvcn_theme_get_post_tag_archive_template()
 function fvcn_theme_is_compat_active()
 {
     $active = true;
-    $reg = FvCommunityNews::$container->get('Registry');
+    $reg = fvcn_container_get('Registry');
 
     if (false === $reg['themeCompatActive']) {
         $active = false;

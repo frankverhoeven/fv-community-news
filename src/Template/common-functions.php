@@ -3,6 +3,18 @@
 use FvCommunityNews\Post\PostType;
 
 /**
+ * Finds an entry of the container by its identifier and returns it.
+ *  Convenience function for use in template functions.
+ *
+ * @param string $id Identifier of the entry to look for.
+ * @return mixed Entry.
+ */
+function fvcn_container_get(string $id)
+{
+    return FvCommunityNews::$container->get($id);
+}
+
+/**
  * fvcn_add_error()
  *
  * @param string $code
@@ -11,7 +23,7 @@ use FvCommunityNews\Post\PostType;
  */
 function fvcn_add_error($code='', $message='', $data='')
 {
-    FvCommunityNews::$container->get(WP_Error::class)->add($code, $message, $data);
+    fvcn_container_get(WP_Error::class)->add($code, $message, $data);
 }
 
 /**
@@ -23,11 +35,11 @@ function fvcn_has_errors()
 {
     $hasErrors = false;
 
-    if (FvCommunityNews::$container->get(WP_Error::class)->get_error_codes()) {
+    if (fvcn_container_get(WP_Error::class)->get_error_codes()) {
         $hasErrors = true;
     }
 
-    return apply_filters('fvcn_has_errors', $hasErrors, FvCommunityNews::$container->get(WP_Error::class));
+    return apply_filters('fvcn_has_errors', $hasErrors, fvcn_container_get(WP_Error::class));
 }
 
 /**
@@ -36,7 +48,7 @@ function fvcn_has_errors()
  */
 function fvcn_add_thumbnail_theme_support()
 {
-    $reg = FvCommunityNews::$container->get('Registry');
+    $reg = fvcn_container_get('Registry');
     if (true === get_theme_support('post-thumbnails')) {
         $reg['nativeThumbnailSupport'] = true;
     } else {
@@ -120,7 +132,7 @@ function fvcn_send_notification_mail($postId)
  */
 function fvcn_get_form_option($option, $slug = false)
 {
-    $value = FvCommunityNews::$container->get('Config')[$option];
+    $value = fvcn_container_get('Config')[$option];
 
     if (true === $slug) {
         $value = apply_filters('editable_slug', $value);
@@ -157,7 +169,7 @@ function is_fvcn(): bool
  */
 function fvcn_show_widget_thumbnail(): bool
 {
-    $registry = \FvCommunityNews::$container->get('Registry');
+    $registry = fvcn_container_get('Registry');
     return $registry['widgetShowThumbnail'];
 }
 
@@ -168,6 +180,6 @@ function fvcn_show_widget_thumbnail(): bool
  */
 function fvcn_show_widget_view_all(): bool
 {
-    $registry = \FvCommunityNews::$container->get('Registry');
+    $registry = fvcn_container_get('Registry');
     return $registry['widgetShowViewAll'];
 }

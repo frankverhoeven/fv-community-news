@@ -120,7 +120,7 @@ class Admin
      */
     public function adminHead()
     {
-        $registry = \FvCommunityNews::$container->get('Registry');
+        $registry = fvcn_container_get('Registry');
         $menuIconUrl = $registry['pluginUrl'] . 'public/images/menu.png';
         $menuIconUrl2x = $registry['pluginUrl'] . 'public/images/menu@2x.png';
         $postClass = sanitize_html_class(PostType::POST_TYPE_KEY);

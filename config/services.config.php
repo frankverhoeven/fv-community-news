@@ -16,20 +16,25 @@ use FvCommunityNews\Factory\Admin\Post\Moderation as AdminModerationFactory;
 use FvCommunityNews\Factory\Akismet\Akismet as AkismetFactory;
 use FvCommunityNews\Factory\Akismet\Handler as AkismetHandlerFactory;
 use FvCommunityNews\Factory\Hook\Akismet as AkismetHookFactory;
+use FvCommunityNews\Factory\Hook\Controller as PostControllerHookFactory;
 use FvCommunityNews\Factory\Hook\EnqueueScripts as EnqueueScriptsHookFactory;
 use FvCommunityNews\Factory\Hook\Init as InitHookFactory;
+use FvCommunityNews\Factory\Post\Controller as PostControllerFactory;
 use FvCommunityNews\Factory\Post\Validator as PostValidatorFactory;
 use FvCommunityNews\Factory\View\AjaxForm as AjaxFormFactory;
 use FvCommunityNews\Hook\Akismet as AkismetHook;
+use FvCommunityNews\Hook\Controller as PostControllerHook;
 use FvCommunityNews\Hook\EnqueueScripts as EnqueueScriptsHook;
 use FvCommunityNews\Hook\Head as HeadHook;
 use FvCommunityNews\Hook\Init as InitHook;
 use FvCommunityNews\Hook\WidgetsInit as WidgetsInitHook;
+use FvCommunityNews\Post\Controller as PostController;
 use FvCommunityNews\Post\Mapper as PostMapper;
 use FvCommunityNews\Post\Validator as PostValidator;
 use FvCommunityNews\View\AjaxForm;
 
 return [
+    PostController::class       => PostControllerFactory::class,
     PostMapper::class           => InvokableFactory::class,
     PostValidator::class        => PostValidatorFactory::class,
 
@@ -47,6 +52,7 @@ return [
     EnqueueScriptsHook::class   => EnqueueScriptsHookFactory::class,
     HeadHook::class             => InvokableFactory::class,
     InitHook::class             => InitHookFactory::class,
+    PostControllerHook::class   => PostControllerHookFactory::class,
     WidgetsInitHook::class      => InvokableFactory::class,
 
     AjaxForm::class             => AjaxFormFactory::class,

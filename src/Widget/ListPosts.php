@@ -48,7 +48,7 @@ class ListPosts extends WP_Widget
         $title = apply_filters('fvcn_list_posts_widget_title', $instance['title']);
         $num_posts = !empty($instance['num_posts']) ? $instance['num_posts'] : '5';
 
-        $registry = \FvCommunityNews::$container->get('Registry');
+        $registry = fvcn_container_get('Registry');
         $registry['widgetShowThumbnail'] = !empty($instance['thumbnail']) ? true : false;
         $registry['widgetShowViewAll'] = !empty($instance['view_all']) ? true : false;
 

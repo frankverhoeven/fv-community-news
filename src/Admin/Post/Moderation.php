@@ -63,7 +63,7 @@ class Moderation
      */
     public function enqueueScripts()
     {
-        $registry = \FvCommunityNews::$container->get('Registry');
+        $registry = fvcn_container_get('Registry');
         wp_enqueue_script(
             'fvcn-admin-post-moderation-js',
             $registry['pluginUrl'] . 'public/js/post-moderation.js',
