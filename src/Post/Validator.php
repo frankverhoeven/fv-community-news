@@ -148,7 +148,7 @@ class Validator
             }
         } else {
             $notEmpty = new NotEmpty();
-            if ($notEmpty->isValid($data['fvcn_post_form_link'])) {
+            if ($notEmpty->isValid($data['fvcn_post_form_tags'])) {
                 $validator = apply_filters('fvcn_post_tags_validators', new ValidatorChain([
                     Tags::class,
                     new MinLength(2),
