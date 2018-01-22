@@ -1,13 +1,16 @@
 <?php
 
+use FvCommunityNews\Post\PostType;
+
 /**
  * fvcn_tag_cloud()
  *
- * @param string|array $args
+ * @param array|string $args
+ * @return void
  */
-function fvcn_tag_cloud($args='')
+function fvcn_tag_cloud($args = ''): void
 {
-    $default = ['taxonomy' => fvcn_get_post_tag_id()];
+    $default = ['taxonomy' => PostType::TAG_TYPE_KEY];
     $args = wp_parse_args($args, $default);
 
     wp_tag_cloud($args);

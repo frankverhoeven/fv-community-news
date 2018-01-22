@@ -7,14 +7,15 @@ use FvCommunityNews\Post\PostType;
  *
  * @return bool
  */
-function fvcn_is_anonymous() {
+function fvcn_is_anonymous(): bool
+{
     if (!is_user_logged_in()) {
-        $is_anonymous = true;
+        $isAnonymous = true;
     } else {
-        $is_anonymous = false;
+        $isAnonymous = false;
     }
 
-    return apply_filters('fvcn_is_anonymous', $is_anonymous);
+    return apply_filters('fvcn_is_anonymous', $isAnonymous);
 }
 
 /**
@@ -22,9 +23,9 @@ function fvcn_is_anonymous() {
  *
  * @return string
  */
-function fvcn_get_current_author_ip() {
+function fvcn_get_current_author_ip(): string
+{
     $ip = preg_replace('/[^0-9a-fA-F:., ]/', '', $_SERVER['REMOTE_ADDR']);
-
     return apply_filters('fvcn_get_current_author_ip', $ip);
 }
 
@@ -33,7 +34,8 @@ function fvcn_get_current_author_ip() {
  *
  * @return string
  */
-function fvcn_get_current_author_ua() {
+function fvcn_get_current_author_ua(): string
+{
     if (!empty($_SERVER['HTTP_USER_AGENT'])) {
         $ua = substr($_SERVER['HTTP_USER_AGENT'], 0, 254);
     } else {
@@ -48,7 +50,8 @@ function fvcn_get_current_author_ua() {
  *
  * @param int $userId
  */
-function fvcn_user_id($userId = 0) {
+function fvcn_user_id(int $userId = 0): void
+{
     echo fvcn_get_user_id($userId);
 }
 
@@ -58,13 +61,12 @@ function fvcn_user_id($userId = 0) {
      * @param int $userId
      * @return int
      */
-    function fvcn_get_user_id($userId = 0) {
-        if (!empty($userId) && is_numeric($userId)) {
+    function fvcn_get_user_id(int $userId = 0): int
+    {
+        if (0 < $userId) {
             $id = $userId;
-
         } elseif (!fvcn_is_anonymous()) {
             $id = fvcn_get_current_user_id();
-
         } else {
             $id = 0;
         }
@@ -77,7 +79,8 @@ function fvcn_user_id($userId = 0) {
  * fvcn_current_user_id()
  *
  */
-function fvcn_current_user_id() {
+function fvcn_current_user_id(): void
+{
     echo fvcn_get_current_user_id();
 }
 
@@ -86,10 +89,10 @@ function fvcn_current_user_id() {
      *
      * @return int
      */
-    function fvcn_get_current_user_id() {
-        $current_user = wp_get_current_user();
-
-        return apply_filters('fvcn_get_current_user_id', $current_user->ID);
+    function fvcn_get_current_user_id(): int
+    {
+        $currentUser = wp_get_current_user();
+        return apply_filters('fvcn_get_current_user_id', $currentUser->ID);
     }
 
 
@@ -97,7 +100,8 @@ function fvcn_current_user_id() {
  * fvcn_current_user_name()
  *
  */
-function fvcn_current_user_name() {
+function fvcn_current_user_name(): void
+{
     echo fvcn_get_current_user_name();
 }
 
@@ -106,9 +110,9 @@ function fvcn_current_user_name() {
      *
      * @return string
      */
-    function fvcn_get_current_user_name() {
+    function fvcn_get_current_user_name(): string
+    {
         $currentUser = wp_get_current_user();
-
         return apply_filters('fvcn_get_current_user_name', $currentUser->display_name);
     }
 
@@ -117,26 +121,25 @@ function fvcn_current_user_name() {
  * fvcn_has_user_posts()
  *
  * @param int $userId
- * @param string $post_status
+ * @param string|null $postStatus
  * @return bool
  */
-function fvcn_has_user_posts($userId=0, $post_status='') {
+function fvcn_has_user_posts(int $userId = 0, string $postStatus = ''): bool
+{
     $id = fvcn_get_user_id($userId);
 
     if (0 == $id) {
         $retval = false;
     } else {
-        if (empty($post_status)) {
-            $post_status = PostType::STATUS_PUBLISH;
+        if (empty($postStatus)) {
+            $postStatus = PostType::STATUS_PUBLISH;
         }
 
-        $args = [
+        $retval = fvcn_has_posts([
             'author' => $id,
-            'post_status' => $post_status
-        ];
-
-        $retval = fvcn_has_posts($args);
+            'post_status' => $postStatus
+        ]);
     }
 
-    return apply_filters('fvcn_has_user_posts', (bool) $retval);
+    return apply_filters('fvcn_has_user_posts', $retval);
 }

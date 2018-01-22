@@ -80,9 +80,7 @@ final class FvCommunityNews
         $autoloader->register();
 
         $files = [
-            '/fvcn-includes/fvcn-core-theme.php',
-            '/fvcn-includes/fvcn-post-functions.php',
-
+            '/src/Template/fvcn-core-theme.php',
             '/src/Template/common-functions.php',
             '/src/Template/options-functions.php',
             '/src/Template/post-functions.php',

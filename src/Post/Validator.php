@@ -169,8 +169,8 @@ class Validator
             if (!$validator->isValid($data['fvcn_post_form_thumbnail'])) {
                 $this->error->add('fvcn_post_form_thumbnail', sprintf($this->messageTemplate, $validator->getMessage()));
             } else {
-                add_action('fvcn_insert_post', 'fvcn_insert_post_thumbnail');
-                // @todo: relocate
+                add_action('fvcn_insert_post', [fvcn_container_get(Mapper::class), 'insertPostThumbnail']);
+                // @todo: change
             }
         } else if (!empty($data['fvcn_post_form_thumbnail']['tmp_name'])) {
             $validator = apply_filters('fvcn_post_title_validators', new ValidatorChain([
@@ -180,8 +180,8 @@ class Validator
             if (!$validator->isValid($data['fvcn_post_form_thumbnail'])) {
                 $this->error->add('fvcn_post_form_thumbnail', sprintf($this->messageTemplate, $validator->getMessage()));
             } else {
-                add_action('fvcn_insert_post', 'fvcn_insert_post_thumbnail');
-                // @todo: relocate
+                add_action('fvcn_insert_post', [fvcn_container_get(Mapper::class), 'insertPostThumbnail']);
+                // @todo: change
             }
         }
 

@@ -21,7 +21,7 @@ function fvcn_container_get(string $id)
  * @param string $message
  * @param string $data
  */
-function fvcn_add_error($code='', $message='', $data='')
+function fvcn_add_error($code = '', $message = '', $data = '')
 {
     fvcn_container_get(WP_Error::class)->add($code, $message, $data);
 }
@@ -182,4 +182,29 @@ function fvcn_show_widget_view_all(): bool
 {
     $registry = fvcn_container_get('Registry');
     return $registry['widgetShowViewAll'];
+}
+
+/**
+ * fvcn_increase_post_view_count()
+ *
+ * @param string $template
+ * @return string
+ */
+function fvcn_increase_post_view_count(string $template): string
+{
+    if (!fvcn_is_single_post()) {
+        return $template;
+    }
+
+    $id = (int) fvcn_get_post_id();
+    if (isset($_COOKIE['fvcn_post_viewed_' . $id . '_' . COOKIEHASH])) {
+        return $template;
+    }
+
+    $postMapper = fvcn_container_get(\FvCommunityNews\Post\Mapper::class);
+    $postMapper->increasePostViewCount($id);
+
+    setcookie('fvcn_post_viewed_' . $id . '_' . COOKIEHASH, 'true', 0, COOKIEPATH, COOKIE_DOMAIN);
+
+    return $template;
 }

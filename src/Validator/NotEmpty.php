@@ -11,7 +11,7 @@ class NotEmpty extends AbstractValidator
 {
     protected $trim;
 
-    public function __construct($trim=true)
+    public function __construct($trim = true)
     {
         $this->trim = (bool) $trim;
         $this->setMessage(__('Value cannot be empty.', 'fvcn'));

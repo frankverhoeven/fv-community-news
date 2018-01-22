@@ -76,13 +76,6 @@ class Collection
             ['function' => 'stripslashes'],
         ],
 
-        'fvcn_new_post_data_pre_insert' => [
-            ['function' => 'fvcn_filter_new_post_data'],
-        ],
-        'fvcn_new_post_meta_pre_insert' => [
-            ['function' => 'fvcn_filter_new_post_data'],
-        ],
-
         'fvcn_new_post_pre_anonymous_author_name' => [
             ['function' => 'sanitize_text_field'],
             ['function' => '_wp_specialchars', 'priority' => 30],

@@ -85,15 +85,23 @@ class Controller
                 'post_status' => $status,
                 'post_type' => PostType::POST_TYPE_KEY
             ]);
+            foreach ($post_data as $key => $value) {
+                $post_data[$key] = apply_filters('fvcn_new_post_pre_' . $key, $value);
+            }
+
             $post_meta = apply_filters('fvcn_new_post_meta_pre_insert', [
                 '_fvcn_anonymous_author_name' => fvcn_is_anonymous() ? $data['fvcn_post_form_author_name'] : '',
                 '_fvcn_anonymous_author_email' => fvcn_is_anonymous() ? $data['fvcn_post_form_author_email'] : '',
                 '_fvcn_post_url' => $data['fvcn_post_form_link']
             ]);
+            foreach ($post_meta as $key => $value) {
+                $filter = str_replace('_fvcn_', '', $key);
+                $post_meta[$key] = apply_filters('fvcn_new_post_pre_' . $filter, $value);
+            }
 
             do_action('fvcn_new_post_pre_insert', $post_data, $post_meta);
 
-            $postId = fvcn_insert_post($post_data, $post_meta);
+            $postId = $this->postMapper->insertPost($post_data, $post_meta);
 
             if ('template_redirect' == current_filter()) {
                 if (PostType::STATUS_PUBLISH == fvcn_get_post_status($postId)) {

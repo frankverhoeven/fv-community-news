@@ -6,7 +6,7 @@ use FvCommunityNews\Post\PostType;
  * fvcn_post_slug()
  *
  */
-function fvcn_post_slug()
+function fvcn_post_slug(): void
 {
     echo fvcn_get_post_slug();
 }
@@ -16,20 +16,19 @@ function fvcn_post_slug()
      *
      * @return string
      */
-    function fvcn_get_post_slug()
+    function fvcn_get_post_slug(): string
     {
-        $registry = fvcn_container_get('Registry');
-        return apply_filters('fvcn_get_post_slug', $registry['postSlug']);
+        return apply_filters('fvcn_get_post_slug', fvcn_container_get('Registry')['postSlug']);
     }
 
 
 /**
  * fvcn_has_posts()
  *
- * @param mixed $args
- * @return object
+ * @param array|string $args
+ * @return bool
  */
-function fvcn_has_posts($args='')
+function fvcn_has_posts($args = ''): bool
 {
     $defaults = [
         'post_type' => PostType::POST_TYPE_KEY,
@@ -51,30 +50,32 @@ function fvcn_has_posts($args='')
 /**
  * fvcn_posts()
  *
- * @return object
+ * @return bool
  */
-function fvcn_posts()
+function fvcn_posts(): bool
 {
-    $registry = fvcn_container_get('Registry');
-    $have_posts = $registry['wpQuery']->have_posts();
+    /* @var WP_Query $wpQuery */
+    $wpQuery = fvcn_container_get('Registry')['wpQuery'];
+    $havePosts = $wpQuery->have_posts();
 
-    if (empty($have_posts)) {
-        wp_reset_postdata();
+    if (!$havePosts) {
+        $wpQuery->reset_postdata();
     }
 
-    return $have_posts;
+    return $havePosts;
 }
 
 
 /**
  * fvcn_the_post()
  *
- * @return object
+ * @return void
  */
-function fvcn_the_post()
+function fvcn_the_post(): void
 {
-    $registry = fvcn_container_get('Registry');
-    return $registry['wpQuery']->the_post();
+    /* @var WP_Query $wpQuery */
+    $wpQuery = fvcn_container_get('Registry')['wpQuery'];
+    $wpQuery->the_post();
 }
 
 
@@ -83,7 +84,7 @@ function fvcn_the_post()
  *
  * @param int $postId
  */
-function fvcn_post_id($postId = 0)
+function fvcn_post_id(int $postId = 0): void
 {
     echo fvcn_get_post_id($postId);
 }
@@ -94,23 +95,20 @@ function fvcn_post_id($postId = 0)
      * @param int $postId
      * @return int
      */
-    function fvcn_get_post_id($postId = 0)
+    function fvcn_get_post_id(int $postId = 0): int
     {
         global $wp_query, $post;
-        $registry = fvcn_container_get('Registry');
+        /* @var WP_Query $wpQuery */
+        $wpQuery = fvcn_container_get('Registry')['wpQuery'];
 
-        if (!empty($postId) && is_numeric($postId)) {
+        if (0 < $postId) {
             $id = $postId;
-
-        } elseif (!empty($registry['wpQuery']->in_the_loop) && isset($registry['wpQuery']->post->ID)) {
-            $id = $registry['wpQuery']->post->ID;
-
+        } elseif (null !== $wpQuery && $wpQuery->in_the_loop && isset($wpQuery->post->ID)) {
+            $id = $wpQuery->post->ID;
         } elseif (fvcn_is_single_post() && isset($wp_query->post->ID)) {
             $id = $wp_query->post->ID;
-
         } elseif (isset($post->ID)) {
             $id = $post->ID;
-
         } else {
             $id = 0;
         }
@@ -123,9 +121,9 @@ function fvcn_post_id($postId = 0)
  * fvcn_get_post()
  *
  * @param int $postId
- * @return object
+ * @return WP_Post|null
  */
-function fvcn_get_post($postId = 0)
+function fvcn_get_post(int $postId = 0)
 {
     $id = fvcn_get_post_id($postId);
 
@@ -148,7 +146,7 @@ function fvcn_get_post($postId = 0)
  *
  * @param int $postId
  */
-function fvcn_post_permalink($postId = 0)
+function fvcn_post_permalink(int $postId = 0): void
 {
     echo fvcn_get_post_permalink($postId);
 }
@@ -160,7 +158,7 @@ function fvcn_post_permalink($postId = 0)
      * @param string $redirect
      * @return string
      */
-    function fvcn_get_post_permalink($postId = 0, $redirect='')
+    function fvcn_get_post_permalink(int $postId = 0, string $redirect = ''): string
     {
         $id = fvcn_get_post_id($postId);
 
@@ -180,10 +178,9 @@ function fvcn_post_permalink($postId = 0)
  * @param int $postId
  * @return bool
  */
-function fvcn_has_post_link($postId = 0)
+function fvcn_has_post_link(int $postId = 0): bool
 {
     $link = fvcn_get_post_link($postId);
-
     return !empty($link);
 }
 
@@ -193,7 +190,7 @@ function fvcn_has_post_link($postId = 0)
  *
  * @param int $postId
  */
-function fvcn_post_link($postId = 0)
+function fvcn_post_link(int $postId = 0): void
 {
     echo fvcn_get_post_link($postId);
 }
@@ -204,10 +201,9 @@ function fvcn_post_link($postId = 0)
      * @param int $postId
      * @return string
      */
-    function fvcn_get_post_link($postId = 0)
+    function fvcn_get_post_link(int $postId = 0): string
     {
         $id = fvcn_get_post_id($postId);
-
         $link = esc_url(get_post_meta($id, '_fvcn_post_url', true));
 
         return apply_filters('fvcn_get_post_link', $link, $id);
@@ -219,7 +215,7 @@ function fvcn_post_link($postId = 0)
  *
  * @param int $postId
  */
-function fvcn_post_title($postId = 0)
+function fvcn_post_title(int $postId = 0): void
 {
     echo fvcn_get_post_title($postId);
 }
@@ -230,10 +226,9 @@ function fvcn_post_title($postId = 0)
      * @param int $postId
      * @return string
      */
-    function fvcn_get_post_title($postId = 0)
+    function fvcn_get_post_title(int $postId = 0): string
     {
         $id = fvcn_get_post_id($postId);
-
         return apply_filters('fvcn_get_post_title', get_the_title($id), $id);
     }
 
@@ -243,7 +238,7 @@ function fvcn_post_title($postId = 0)
  *
  * @param int $postId
  */
-function fvcn_post_content($postId = 0)
+function fvcn_post_content(int $postId = 0): void
 {
     echo fvcn_get_post_content($postId);
 }
@@ -254,7 +249,7 @@ function fvcn_post_content($postId = 0)
      * @param int $postId
      * @return string
      */
-    function fvcn_get_post_content($postId = 0)
+    function fvcn_get_post_content(int $postId = 0): string
     {
         $id = fvcn_get_post_id($postId);
 
@@ -274,7 +269,7 @@ function fvcn_post_content($postId = 0)
  * @param int $postId
  * @param int $length
  */
-function fvcn_post_excerpt($postId = 0, $length = 100) {
+function fvcn_post_excerpt(int $postId = 0, $length = 100) {
     echo fvcn_get_post_excerpt($postId, $length);
 }
 
@@ -285,7 +280,7 @@ function fvcn_post_excerpt($postId = 0, $length = 100) {
      * @param int $length
      * @return string
      */
-    function fvcn_get_post_excerpt($postId = 0, $length = 100) {
+    function fvcn_get_post_excerpt(int $postId = 0, $length = 100) {
         $id = fvcn_get_post_id($postId);
         $length = abs((int)$length);
 
@@ -325,7 +320,7 @@ function fvcn_post_excerpt($postId = 0, $length = 100) {
  * @param int $postId
  * @param string $format
  */
-function fvcn_post_date($postId = 0, $format = '') {
+function fvcn_post_date(int $postId = 0, string $format = '') {
     echo fvcn_get_post_date($postId, $format);
 }
 
@@ -336,7 +331,7 @@ function fvcn_post_date($postId = 0, $format = '') {
      * @param string $format
      * @return string
      */
-    function fvcn_get_post_date($postId = 0, $format = '') {
+    function fvcn_get_post_date(int $postId = 0, string $format = '') {
         $id = fvcn_get_post_id($postId);
 
         if (empty($format)) {
@@ -356,7 +351,7 @@ function fvcn_post_date($postId = 0, $format = '') {
  * @param string $format
  * @param bool $gmt
  */
-function fvcn_post_time($postId = 0, $format = '', $gmt = false) {
+function fvcn_post_time(int $postId = 0, string $format = '', $gmt = false) {
     echo fvcn_get_post_time($postId, $format, $gmt);
 }
 
@@ -368,7 +363,7 @@ function fvcn_post_time($postId = 0, $format = '', $gmt = false) {
      * @param bool $gmt
      * @return string
      */
-    function fvcn_get_post_time($postId = 0, $format='', $gmt=false) {
+    function fvcn_get_post_time(int $postId = 0, string $format = '', $gmt = false) {
         $id = fvcn_get_post_id($postId);
 
         if ($gmt) {
@@ -393,7 +388,7 @@ function fvcn_post_time($postId = 0, $format = '', $gmt = false) {
  * @param int $postId
  * @return bool
  */
-function fvcn_has_post_thumbnail($postId = 0)
+function fvcn_has_post_thumbnail(int $postId = 0)
 {
     $id = fvcn_get_post_id($postId);
     $registry = fvcn_container_get('Registry');
@@ -414,7 +409,7 @@ function fvcn_has_post_thumbnail($postId = 0)
  * @param string|array $size
  * @param string|array $attributes
  */
-function fvcn_post_thumbnail($postId = 0, $size = 'thumbnail', $attributes = [])
+function fvcn_post_thumbnail(int $postId = 0, $size = 'thumbnail', $attributes = [])
 {
     echo fvcn_get_post_thumbnail($postId, $size, $attributes);
 }
@@ -427,7 +422,7 @@ function fvcn_post_thumbnail($postId = 0, $size = 'thumbnail', $attributes = [])
      * @param string|array $attributes
      * @return string
      */
-    function fvcn_get_post_thumbnail($postId = 0, $size = 'thumbnail', $attributes= [])
+    function fvcn_get_post_thumbnail(int $postId = 0, $size = 'thumbnail', $attributes= [])
     {
         $id = fvcn_get_post_id($postId);
         return apply_filters('fvcn_get_post_thumbnail', get_the_post_thumbnail($id, $size, $attributes), $id);
@@ -439,7 +434,7 @@ function fvcn_post_thumbnail($postId = 0, $size = 'thumbnail', $attributes = [])
  *
  * @param int $postId
  */
-function fvcn_post_rating($postId = 0)
+function fvcn_post_rating(int $postId = 0)
 {
     echo fvcn_get_post_rating($postId);
 }
@@ -450,7 +445,7 @@ function fvcn_post_rating($postId = 0)
      * @param int $postId
      * @return int
      */
-    function fvcn_get_post_rating($postId = 0)
+    function fvcn_get_post_rating(int $postId = 0)
     {
         $id = fvcn_get_post_id($postId);
         $rating = get_post_meta($id, '_fvcn_post_rating', true);
@@ -468,7 +463,7 @@ function fvcn_post_rating($postId = 0)
  *
  * @param int $postId
  */
-function fvcn_post_rating_increment_link($postId = 0)
+function fvcn_post_rating_increment_link(int $postId = 0)
 {
     echo fvcn_get_post_rating_increment_link($postId);
 }
@@ -479,7 +474,7 @@ function fvcn_post_rating_increment_link($postId = 0)
      * @param int $postId
      * @return string
      */
-    function fvcn_get_post_rating_increment_link($postId = 0)
+    function fvcn_get_post_rating_increment_link(int $postId = 0)
     {
         $id = fvcn_get_post_id($postId);
 
@@ -489,7 +484,7 @@ function fvcn_post_rating_increment_link($postId = 0)
                 'fvcn_post_rating_action' => 'increase'
             ],
             fvcn_get_post_permalink($id)
-), 'fvcn-post-rating');
+        ), 'fvcn-post-rating');
 
         return apply_filters('fvcn_get_post_rating_increment_link', $link, $id);
     }
@@ -500,7 +495,7 @@ function fvcn_post_rating_increment_link($postId = 0)
  *
  * @param int $postId
  */
-function fvcn_post_rating_decrement_link($postId = 0)
+function fvcn_post_rating_decrement_link(int $postId = 0)
 {
     echo fvcn_get_post_rating_decrement_link($postId);
 }
@@ -511,7 +506,7 @@ function fvcn_post_rating_decrement_link($postId = 0)
      * @param int $postId
      * @return string
      */
-    function fvcn_get_post_rating_decrement_link($postId = 0)
+    function fvcn_get_post_rating_decrement_link(int $postId = 0)
     {
         $id = fvcn_get_post_id($postId);
 
@@ -521,7 +516,7 @@ function fvcn_post_rating_decrement_link($postId = 0)
                 'fvcn_post_rating_action' => 'decrease'
             ],
             fvcn_get_post_permalink($id)
-), 'fvcn-post-rating');
+        ), 'fvcn-post-rating');
 
         return apply_filters('fvcn_get_post_rating_decrement_link', $link, $id);
     }
@@ -533,7 +528,7 @@ function fvcn_post_rating_decrement_link($postId = 0)
  * @param int $postId
  * @return bool
  */
-function fvcn_is_post_rated_by_current_user($postId = 0)
+function fvcn_is_post_rated_by_current_user(int $postId = 0)
 {
     $id = fvcn_get_post_id($postId);
 
@@ -546,7 +541,7 @@ function fvcn_is_post_rated_by_current_user($postId = 0)
  *
  * @param int $postId
  */
-function fvcn_post_views($postId = 0)
+function fvcn_post_views(int $postId = 0)
 {
     echo fvcn_get_post_views($postId);
 }
@@ -557,7 +552,7 @@ function fvcn_post_views($postId = 0)
      * @param int $postId
      * @return int
      */
-    function fvcn_get_post_views($postId = 0)
+    function fvcn_get_post_views(int $postId = 0)
     {
         $postId = fvcn_get_post_id($postId);
 
@@ -576,7 +571,7 @@ function fvcn_post_views($postId = 0)
  *
  * @param int $postId
  */
-function fvcn_post_status($postId = 0)
+function fvcn_post_status(int $postId = 0)
 {
     echo fvcn_get_post_status($postId);
 }
@@ -587,7 +582,7 @@ function fvcn_post_status($postId = 0)
      * @param int $postId
      * @return string
      */
-    function fvcn_get_post_status($postId = 0)
+    function fvcn_get_post_status(int $postId = 0)
     {
         $id = fvcn_get_post_id($postId);
 
@@ -623,7 +618,7 @@ function fvcn_post_archive_link()
  * @param int $postId
  * @return bool
  */
-function fvcn_is_post($postId = 0): bool
+function fvcn_is_post(int $postId = 0): bool
 {
     $is_post = false;
 
@@ -641,7 +636,7 @@ function fvcn_is_post($postId = 0): bool
  * @param int $postId
  * @return bool
  */
-function fvcn_is_post_published($postId = 0)
+function fvcn_is_post_published(int $postId = 0)
 {
     return PostType::STATUS_PUBLISH == fvcn_get_post_status(fvcn_get_post_id($postId));
 }
@@ -653,7 +648,7 @@ function fvcn_is_post_published($postId = 0)
  * @param int $postId
  * @return bool
  */
-function fvcn_is_post_pending($postId = 0)
+function fvcn_is_post_pending(int $postId = 0)
 {
     return PostType::STATUS_PENDING == fvcn_get_post_status(fvcn_get_post_id($postId));
 }
@@ -665,7 +660,7 @@ function fvcn_is_post_pending($postId = 0)
  * @param int $postId
  * @return bool
  */
-function fvcn_is_post_trash($postId = 0)
+function fvcn_is_post_trash(int $postId = 0)
 {
     return PostType::STATUS_TRASH == fvcn_get_post_status(fvcn_get_post_id($postId));
 }
@@ -677,7 +672,7 @@ function fvcn_is_post_trash($postId = 0)
  * @param int $postId
  * @return bool
  */
-function fvcn_is_post_spam($postId = 0)
+function fvcn_is_post_spam(int $postId = 0)
 {
     return PostType::STATUS_SPAM == fvcn_get_post_status(fvcn_get_post_id($postId));
 }
@@ -689,7 +684,7 @@ function fvcn_is_post_spam($postId = 0)
  * @param int $postId
  * @return bool
  */
-function fvcn_is_post_private($postId = 0)
+function fvcn_is_post_private(int $postId = 0)
 {
     return PostType::STATUS_PRIVATE == fvcn_get_post_status(fvcn_get_post_id($postId));
 }
@@ -701,7 +696,7 @@ function fvcn_is_post_private($postId = 0)
  * @param int $postId
  * @return bool
  */
-function fvcn_is_post_anonymous($postId = 0)
+function fvcn_is_post_anonymous(int $postId = 0)
 {
     $id = fvcn_get_post_id($postId);
 
@@ -775,7 +770,7 @@ function fvcn_is_post_tag_archive()
  *
  * @param int $postId
  */
-function fvcn_post_author($postId = 0)
+function fvcn_post_author(int $postId = 0)
 {
     echo fvcn_get_post_author($postId);
 }
@@ -786,7 +781,7 @@ function fvcn_post_author($postId = 0)
      * @param int $postId
      * @return string
      */
-    function fvcn_get_post_author($postId = 0)
+    function fvcn_get_post_author(int $postId = 0)
     {
         $id = fvcn_get_post_id($postId);
 
@@ -805,7 +800,7 @@ function fvcn_post_author($postId = 0)
  *
  * @param int $postId
  */
-function fvcn_post_author_id($postId = 0)
+function fvcn_post_author_id(int $postId = 0)
 {
     echo fvcn_get_post_author_id($postId);
 }
@@ -816,7 +811,7 @@ function fvcn_post_author_id($postId = 0)
      * @param int $postId
      * @return string
      */
-    function fvcn_get_post_author_id($postId = 0)
+    function fvcn_get_post_author_id(int $postId = 0)
     {
         $id = fvcn_get_post_id($postId);
         $author = get_post_field('post_author', $id);
@@ -830,7 +825,7 @@ function fvcn_post_author_id($postId = 0)
  *
  * @param int $postId
  */
-function fvcn_post_author_display_name($postId = 0)
+function fvcn_post_author_display_name(int $postId = 0)
 {
     echo fvcn_get_post_author_display_name($postId);
 }
@@ -841,7 +836,7 @@ function fvcn_post_author_display_name($postId = 0)
      * @param int $postId
      * @return string
      */
-    function fvcn_get_post_author_display_name($postId = 0)
+    function fvcn_get_post_author_display_name(int $postId = 0)
     {
         $id = fvcn_get_post_id($postId);
 
@@ -860,7 +855,7 @@ function fvcn_post_author_display_name($postId = 0)
  *
  * @param int $postId
  */
-function fvcn_post_author_email($postId = 0)
+function fvcn_post_author_email(int $postId = 0)
 {
     echo fvcn_get_post_author_email($postId);
 }
@@ -871,7 +866,7 @@ function fvcn_post_author_email($postId = 0)
      * @param int $postId
      * @return string
      */
-    function fvcn_get_post_author_email($postId = 0)
+    function fvcn_get_post_author_email(int $postId = 0)
     {
         $id = fvcn_get_post_id($postId);
 
@@ -891,7 +886,7 @@ function fvcn_post_author_email($postId = 0)
  * @param int $postId
  * @param int $size
  */
-function fvcn_post_author_avatar($postId = 0, $size=40)
+function fvcn_post_author_avatar(int $postId = 0, $size=40)
 {
     echo fvcn_get_post_author_avatar($postId, $size);
 }
@@ -903,7 +898,7 @@ function fvcn_post_author_avatar($postId = 0, $size=40)
      * @param int $size
      * @return string
      */
-    function fvcn_get_post_author_avatar($postId = 0, $size=40)
+    function fvcn_get_post_author_avatar(int $postId = 0, $size=40)
     {
         $avatar = get_avatar(fvcn_get_post_author_email($postId), $size);
 
@@ -916,7 +911,7 @@ function fvcn_post_author_avatar($postId = 0, $size=40)
  *
  * @param int $postId
  */
-function fvcn_post_author_website($postId = 0)
+function fvcn_post_author_website(int $postId = 0)
 {
     echo fvcn_get_post_author_website($postId);
 }
@@ -927,7 +922,7 @@ function fvcn_post_author_website($postId = 0)
      * @param int $postId
      * @return string
      */
-    function fvcn_get_post_author_website($postId = 0)
+    function fvcn_get_post_author_website(int $postId = 0)
     {
         $id = fvcn_get_post_id($postId);
 
@@ -946,7 +941,7 @@ function fvcn_post_author_website($postId = 0)
  *
  * @param int $postId
  */
-function fvcn_post_author_link($postId = 0)
+function fvcn_post_author_link(int $postId = 0)
 {
     echo fvcn_get_post_author_link($postId);
 }
@@ -957,7 +952,7 @@ function fvcn_post_author_link($postId = 0)
      * @param int $postId
      * @return string
      */
-    function fvcn_get_post_author_link($postId = 0)
+    function fvcn_get_post_author_link(int $postId = 0)
     {
         $id = fvcn_get_post_id($postId);
 
@@ -976,7 +971,7 @@ function fvcn_post_author_link($postId = 0)
  *
  * @param int $postId
  */
-function fvcn_post_author_ip($postId = 0)
+function fvcn_post_author_ip(int $postId = 0)
 {
     echo fvcn_get_post_author_ip($postId);
 }
@@ -987,7 +982,7 @@ function fvcn_post_author_ip($postId = 0)
      * @param int $postId
      * @return string
      */
-    function fvcn_get_post_author_ip($postId = 0)
+    function fvcn_get_post_author_ip(int $postId = 0)
     {
         $id = fvcn_get_post_id($postId);
 
@@ -1002,7 +997,7 @@ function fvcn_post_author_ip($postId = 0)
  *
  * @param int $postId
  */
-function fvcn_post_author_ua($postId = 0)
+function fvcn_post_author_ua(int $postId = 0)
 {
     echo fvcn_get_post_author_ua($postId);
 }
@@ -1013,7 +1008,7 @@ function fvcn_post_author_ua($postId = 0)
      * @param int $postId
      * @return string
      */
-    function fvcn_get_post_author_ua($postId = 0)
+    function fvcn_get_post_author_ua(int $postId = 0)
     {
         $id = fvcn_get_post_id($postId);
 
@@ -1070,7 +1065,7 @@ function fvcn_post_tag_slug()
  * @param int $postId
  * @param string|array $args
  */
-function fvcn_post_tag_list($postId = 0, $args='')
+function fvcn_post_tag_list(int $postId = 0, $args = '')
 {
     echo fvcn_get_post_tag_list($postId, $args);
 }
@@ -1082,7 +1077,7 @@ function fvcn_post_tag_list($postId = 0, $args='')
      * @param string|array $args
      * @return string
      */
-    function fvcn_get_post_tag_list($postId = 0, $args='')
+    function fvcn_get_post_tag_list(int $postId = 0, $args = '')
     {
         $id = fvcn_get_post_id($postId);
 
