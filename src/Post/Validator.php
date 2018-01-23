@@ -30,6 +30,14 @@ class Validator
      */
     private $error;
     /**
+     * @var array
+     */
+    private $validators;
+    /**
+     * @var array
+     */
+    private $data;
+    /**
      * @var string
      */
     private $messageTemplate = '<strong>ERROR</strong>: %s';
@@ -54,137 +62,160 @@ class Validator
     {
         $this->messageTemplate = __($this->messageTemplate, 'fvcn');
 
-        $data = array_merge([
-            'fvcn_post_form_author_name' => null,
-            'fvcn_post_form_author_email' => null,
-            'fvcn_post_form_title' => null,
-            'fvcn_post_form_link' => null,
-            'fvcn_post_form_content' => null,
-            'fvcn_post_form_tags' => null,
-            'fvcn_post_form_thumbnail' => null,
-        ], $data);
+        $this->data = [];
 
-        if (fvcn_is_anonymous()) {
-            $validator = apply_filters('fvcn_post_author_name_validators', new ValidatorChain([
-                NotEmpty::class,
-                Name::class,
-                new MinLength($this->config['_fvcn_post_form_author_name_length_min']),
-                new MaxLength($this->config['_fvcn_post_form_author_name_length_max']),
-            ]));
-
-            if (!$validator->isValid($data['fvcn_post_form_author_name'])) {
-                $this->error->add('fvcn_post_form_author_name', sprintf($this->messageTemplate, $validator->getMessage()));
-            }
-
-            $validator = apply_filters('fvcn_post_author_email_validators', new ValidatorChain([
-                NotEmpty::class,
-                Email::class,
-                new MinLength(10),
-                new MaxLength(200)
-            ]));
-
-            if (!$validator->isValid($data['fvcn_post_form_title'])) {
-                $this->error->add('fvcn_post_form_title', sprintf($this->messageTemplate, $validator->getMessage()));
-            }
+        $validators = $this->getValidators();
+        if (!fvcn_is_anonymous()) {
+            unset($validators['fvcn_post_form_author_name'], $validators['fvcn_post_form_author_email']);
         }
 
-        $validator = apply_filters('fvcn_post_title_validators', new ValidatorChain([
-            NotEmpty::class,
-            new MinLength($this->config['_fvcn_post_form_title_length_min']),
-            new MaxLength($this->config['_fvcn_post_form_title_length_max']),
-        ]));
+        foreach ($validators as $field => $fieldValidators) {
+            if (!$this->isEnabled($field)) continue;
 
-        if (!$validator->isValid($data['fvcn_post_form_title'])) {
-            $this->error->add('fvcn_post_form_title', sprintf($this->messageTemplate, $validator->getMessage()));
-        }
+            $validator = new ValidatorChain($fieldValidators);
+            $value = isset($data[$field]) ? $data[$field] : null;
 
-        if ($this->config['_fvcn_post_form_link_required']) {
-            $validator = apply_filters('fvcn_post_link_validators', $validator->setValidators([
-                NotEmpty::class,
-                Url::class,
-                new MinLength($this->config['_fvcn_post_form_link_length_min']),
-                new MaxLength($this->config['_fvcn_post_form_link_length_max']),
-            ]));
+            if (!$this->isRequired($field)) {
+                $notEmpty = new NotEmpty();
 
-            if (!$validator->isValid($data['fvcn_post_form_link'])) {
-                $this->error->add('fvcn_post_form_link', sprintf($this->messageTemplate, $validator->getMessage()));
-            }
-        } else {
-            $notEmpty = new NotEmpty();
-            if ($notEmpty->isValid($data['fvcn_post_form_link'])) {
-                $validator = apply_filters('fvcn_post_link_validators', $validator->setValidators([
-                    NotEmpty::class,
-                    Url::class,
-                    new MinLength($this->config['_fvcn_post_form_link_length_min']),
-                    new MaxLength($this->config['_fvcn_post_form_link_length_max']),
-                ]));
-
-                if (!$validator->isValid($data['fvcn_post_form_link'])) {
-                    $this->error->add('fvcn_post_form_link', sprintf($this->messageTemplate, $validator->getMessage()));
+                if ('fvcn_post_form_thumbnail' == $field) {
+                    $value = $value['tmp_name'];
                 }
-            }
-        }
 
-        $validator = apply_filters('fvcn_post_content_validators', new ValidatorChain([
-            NotEmpty::class,
-            new MinLength($this->config['_fvcn_post_form_content_length_min']),
-            new MaxLength($this->config['_fvcn_post_form_content_length_max']),
-        ]));
+                if ($notEmpty->isValid($value)) {
+                    if ('fvcn_post_form_thumbnail' == $field) {
+                        $value = $data[$field];
+                    }
 
-        if (!$validator->isValid($data['fvcn_post_form_content'])) {
-            $this->error->add('fvcn_post_form_content', sprintf($this->messageTemplate, $validator->getMessage()));
-        }
-
-        if ($this->config['_fvcn_post_form_tags_required']) {
-            $validator = apply_filters('fvcn_post_tags_validators', new ValidatorChain([
-                NotEmpty::class,
-                Tags::class,
-                new MinLength($this->config['_fvcn_post_form_tags_length_min']),
-                new MaxLength($this->config['_fvcn_post_form_tags_length_max']),
-            ]));
-
-            if (!$validator->isValid($data['fvcn_post_form_tags'])) {
-                $this->error->add('fvcn_post_form_tags', sprintf($this->messageTemplate, $validator->getMessage()));
-            }
-        } else {
-            $notEmpty = new NotEmpty();
-            if ($notEmpty->isValid($data['fvcn_post_form_tags'])) {
-                $validator = apply_filters('fvcn_post_tags_validators', new ValidatorChain([
-                    Tags::class,
-                    new MinLength($this->config['_fvcn_post_form_tags_length_min']),
-                    new MaxLength($this->config['_fvcn_post_form_tags_length_max']),
-                ]));
-
-                if (!$validator->isValid($data['fvcn_post_form_tags'])) {
-                    $this->error->add('fvcn_post_form_tags', sprintf($this->messageTemplate, $validator->getMessage()));
+                    if ($validator->isValid($value)) {
+                        $this->data[$field] = $this->filterField($field, $value);
+                    } else {
+                        $this->error->add($field, sprintf($this->messageTemplate, $validator->getMessage()));
+                    }
                 }
-            }
-        }
-
-        if ($this->config['_fvcn_post_form_thumbnail_required']) {
-            $validator = apply_filters('fvcn_post_title_validators', new ValidatorChain([
-                Image::class,
-            ]));
-
-            if (!$validator->isValid($data['fvcn_post_form_thumbnail'])) {
-                $this->error->add('fvcn_post_form_thumbnail', sprintf($this->messageTemplate, $validator->getMessage()));
             } else {
-                add_action('fvcn_insert_post', [fvcn_container_get(Mapper::class), 'insertPostThumbnail']);
-                // @todo: change
-            }
-        } else if (!empty($data['fvcn_post_form_thumbnail']['tmp_name'])) {
-            $validator = apply_filters('fvcn_post_title_validators', new ValidatorChain([
-                Image::class,
-            ]));
-
-            if (!$validator->isValid($data['fvcn_post_form_thumbnail'])) {
-                $this->error->add('fvcn_post_form_thumbnail', sprintf($this->messageTemplate, $validator->getMessage()));
-            } else {
-                add_action('fvcn_insert_post', [fvcn_container_get(Mapper::class), 'insertPostThumbnail']);
-                // @todo: change
+                if ($validator->isValid($value)) {
+                    $this->data[$field] = $this->filterField($field, $value);
+                } else {
+                    $this->error->add($field, sprintf($this->messageTemplate, $validator->getMessage()));
+                }
             }
         }
 
         return empty($this->error->get_error_codes());
+    }
+
+    /**
+     * Setup post validation
+     *
+     * @return array
+     */
+    protected function getValidators(): array
+    {
+        if (null === $this->validators) {
+            $validators = [
+                'fvcn_post_form_author_name' => [
+                    NotEmpty::class,
+                    Name::class,
+                    new MinLength($this->config['_fvcn_post_form_author_name_length_min']),
+                    new MaxLength($this->config['_fvcn_post_form_author_name_length_max']),
+                ],
+                'fvcn_post_form_author_email' => [
+                    NotEmpty::class,
+                    Email::class,
+                    new MaxLength(300),
+                ],
+                'fvcn_post_form_title' => [
+                    NotEmpty::class,
+                    new MinLength($this->config['_fvcn_post_form_title_length_min']),
+                    new MaxLength($this->config['_fvcn_post_form_title_length_max']),
+                ],
+                'fvcn_post_form_link' => [
+                    NotEmpty::class,
+                    Url::class,
+                    new MinLength($this->config['_fvcn_post_form_link_length_min']),
+                    new MaxLength($this->config['_fvcn_post_form_link_length_max']),
+                ],
+                'fvcn_post_form_content' => [
+                    NotEmpty::class,
+                    new MinLength($this->config['_fvcn_post_form_content_length_min']),
+                    new MaxLength($this->config['_fvcn_post_form_content_length_max']),
+                ],
+                'fvcn_post_form_tags' => [
+                    NotEmpty::class,
+                    Tags::class,
+                    new MinLength($this->config['_fvcn_post_form_tags_length_min']),
+                    new MaxLength($this->config['_fvcn_post_form_tags_length_max']),
+                ],
+                'fvcn_post_form_thumbnail' => [
+                    Image::class,
+                ],
+            ];
+
+            $this->validators = apply_filters('fvcn_post_form_validators', $validators);
+        }
+
+        return $this->validators;
+    }
+
+    /**
+     * Checks if the provided field is enabled.
+     *
+     * @param string $field
+     * @return bool
+     */
+    protected function isEnabled(string $field): bool
+    {
+        $enabled = true;
+        $key = '_' . $field . '_enabled';
+
+        if (isset($this->config[$key]) && false === $this->config[$key]) {
+            $enabled = false;
+        }
+
+        return $enabled;
+    }
+
+    /**
+     * Checks if the provided field is required.
+     *
+     * @param string $field
+     * @return bool
+     */
+    protected function isRequired(string $field): bool
+    {
+        $required = true;
+        $key = '_' . $field . '_required';
+        if (isset($this->config[$key]) && false === (bool) $this->config[$key]) {
+            $required = false;
+        }
+
+        return $required;
+    }
+
+    /**
+     * Apply filters to a field value.
+     *
+     * @param string $field
+     * @param string|null $value
+     * @return string|null
+     */
+    protected function filterField(string $field, $value)
+    {
+        $field = str_replace('_fvcn_', '', $field);
+        return apply_filters('fvcn_new_post_pre_' . $field, $value);
+    }
+
+    /**
+     * Get validated data
+     *
+     * @return array
+     */
+    public function getData(): array
+    {
+        if (null === $this->data) {
+            return [];
+        }
+        return $this->data;
     }
 }

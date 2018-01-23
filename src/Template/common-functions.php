@@ -138,7 +138,7 @@ function fvcn_get_form_option($option, $slug = false)
         $value = apply_filters('editable_slug', $value);
     }
 
-    return apply_filters('fvcn_get_form_option', esc_attr($value));
+    return apply_filters('fvcn_get_form_option', $value);
 }
 
 

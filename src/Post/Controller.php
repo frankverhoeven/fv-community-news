@@ -48,19 +48,13 @@ class Controller
             return null;
         }
 
-        $data = array_merge([
-            'fvcn_post_form_author_name' => null,
-            'fvcn_post_form_author_email' => null,
-            'fvcn_post_form_title' => null,
-            'fvcn_post_form_link' => null,
-            'fvcn_post_form_content' => null,
-            'fvcn_post_form_tags' => null,
-            'fvcn_post_form_thumbnail' => null,
-        ], $_POST, $_FILES);
+        $data = array_merge($_POST, $_FILES);
 
         do_action('fvcn_new_post_pre_extras');
 
         if ($this->postValidator->isValid($data)) {
+            $data = $this->postValidator->getData();
+
             $status = PostType::STATUS_PENDING;
             if (!fvcn_admin_moderation()) {
                 if (fvcn_user_moderation()) {
@@ -72,12 +66,14 @@ class Controller
                 }
             }
 
-            if (false !== strpos($data['fvcn_post_form_tags'], ',')) {
-                $data['fvcn_post_form_tags'] = explode(',', $data['fvcn_post_form_tags']);
+            if (isset($data['fvcn_post_form_tags'])) {
+                if (false !== strpos($data['fvcn_post_form_tags'], ',')) {
+                    $data['fvcn_post_form_tags'] = explode(',', $data['fvcn_post_form_tags']);
+                }
+                $data['fvcn_post_form_tags'] = [fvcn_get_post_tag_id() => $data['fvcn_post_form_tags']];
             }
-            $data['fvcn_post_form_tags'] = [fvcn_get_post_tag_id() => $data['fvcn_post_form_tags']];
 
-            $post_data = apply_filters('fvcn_new_post_data_pre_insert', [
+            $postData = apply_filters('fvcn_new_post_data_pre_insert', [
                 'post_author' => fvcn_is_anonymous() ? 0 : fvcn_get_current_user_id(),
                 'post_title' => $data['fvcn_post_form_title'],
                 'post_content' => $data['fvcn_post_form_content'],
@@ -85,23 +81,18 @@ class Controller
                 'post_status' => $status,
                 'post_type' => PostType::POST_TYPE_KEY
             ]);
-            foreach ($post_data as $key => $value) {
-                $post_data[$key] = apply_filters('fvcn_new_post_pre_' . $key, $value);
-            }
-
-            $post_meta = apply_filters('fvcn_new_post_meta_pre_insert', [
+            $postMeta = apply_filters('fvcn_new_post_meta_pre_insert', [
                 '_fvcn_anonymous_author_name' => fvcn_is_anonymous() ? $data['fvcn_post_form_author_name'] : '',
                 '_fvcn_anonymous_author_email' => fvcn_is_anonymous() ? $data['fvcn_post_form_author_email'] : '',
                 '_fvcn_post_url' => $data['fvcn_post_form_link']
             ]);
-            foreach ($post_meta as $key => $value) {
-                $filter = str_replace('_fvcn_', '', $key);
-                $post_meta[$key] = apply_filters('fvcn_new_post_pre_' . $filter, $value);
+
+            do_action('fvcn_new_post_pre_insert', $postData, $postMeta);
+
+            $postId = $this->postMapper->insertPost($postData, $postMeta);
+            if (isset($data['fvcn_post_form_thumbnail'])) {
+                $this->postMapper->insertPostThumbnail($postId);
             }
-
-            do_action('fvcn_new_post_pre_insert', $post_data, $post_meta);
-
-            $postId = $this->postMapper->insertPost($post_data, $post_meta);
 
             if ('template_redirect' == current_filter()) {
                 if (PostType::STATUS_PUBLISH == fvcn_get_post_status($postId)) {

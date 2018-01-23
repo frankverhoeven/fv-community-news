@@ -93,7 +93,7 @@ of the default files.
 = Updating From Version 2 =
 
 Version 2 and older are not compatible with version 3 and later. To convert your posts
-to work with the new version, download the [FV Community News Upgrader](https://frankverhoeven.me/fv-community-news-upgrader/ "FV Community News Upgrader").
+to work with the new version, download the [FV Community News Upgrader](https://frankverhoeven.me/fv-community-news-upgrader/).
 
 If you're still using version 1.x, you will have to update to version 2 first.
 
@@ -119,15 +119,24 @@ Below is a list of frequently asked questions.
 Q: I have a great idea for this plugin, could I make a suggestion?
 A: Sure you can! [Let me know about it](https://frankverhoeven.me/wordpress-plugin-fv-community-news/).
 
+Q: How can I contribute to the plugin?
+A: You can open a pull request at [GitHub](https://github.com/frankverhoeven/fv-community-news/pulls).
+
 Q: What to do if I found a bug?
 A: Please report the bug to me as soon as possible. This way I can solve the problem and make the plugin better for everyone.
-Visit the post at [https://frankverhoeven.me/wordpress-plugin-fv-community-news/](https://frankverhoeven.me/wordpress-plugin-fv-community-news/).
+Open a new issue at [https://github.com/frankverhoeven/fv-community-news/issues](https://github.com/frankverhoeven/fv-community-news/issues).
 
 
 
 == Changelog ==
 
-For more details on changes, please visit the [WordPress Trac](http://plugins.trac.wordpress.org/log/fv-community-news/ "FV Community News on WordPress Trac").
+For more details on changes, please visit the [WordPress Trac](http://plugins.trac.wordpress.org/log/fv-community-news/).
+
+
+= 3.2 =
+
+* New: Advanced form options right in your wp-admin.
+* Improvement: General code improvements & cleanup.
 
 
 = 3.1.2 =
@@ -153,30 +162,3 @@ For more details on changes, please visit the [WordPress Trac](http://plugins.tr
 * Improvement: Code cleanup
 * Improvement: Various bug fixes and enhancements
 * Improvement: Relaxed the very strict form validators
-
-
-= 3.0.3 =
-
-* Fixed the fvcn_get_post_time() function.
-* Various other improvements and minor bugfixes.
-
-
-= 3.0.2 =
-
-* Fixed featured image metabox on normal posts/pages.
-* Fixed non latin text validation.
-* Improved theme compatibility.
-* Other minor improvements.
-
-
-= 3.0.1 =
-
-* Fixed an issue that caused post thumbnails to display twice on certain themes.
-
-
-= 3.0 =
-
-3.0 is a complete rewrite of the plugin. It now uses  the custom post type, and is NOT backwards
-compatible with version 2.x or 1.x!
-
-* Conversion to the custom post type.
