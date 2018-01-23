@@ -87,6 +87,16 @@ return [
     '_fvcn_post_form_title_length_max' => 70,
 
     /**
+     * @var bool Enable the use of link
+     */
+    '_fvcn_post_form_link_enabled' => true,
+
+    /**
+     * @var bool Require a link to be posted
+     */
+    '_fvcn_post_form_link_required' => true,
+
+    /**
      * @var string Link form field label
      */
     '_fvcn_post_form_link_label' => __('Link', 'fvcn'),
@@ -100,11 +110,6 @@ return [
      * @var int Maximum link length
      */
     '_fvcn_post_form_link_length_max' => 1000,
-
-    /**
-     * @var bool Require a link to be posted
-     */
-    '_fvcn_post_form_link_required' => true,
 
     /**
      * @var string Description from field label
@@ -122,6 +127,16 @@ return [
     '_fvcn_post_form_content_length_max' => 5000,
 
     /**
+     * @var bool Enable the use of tags
+     */
+    '_fvcn_post_form_tags_enabled' => true,
+
+    /**
+     * @var bool Require tags to be added
+     */
+    '_fvcn_post_form_tags_required' => true,
+
+    /**
      * @var string Tags form field label
      */
     '_fvcn_post_form_tags_label' => __('Tags', 'fvcn'),
@@ -137,24 +152,19 @@ return [
     '_fvcn_post_form_tags_length_max' => 1000,
 
     /**
-     * @var bool Require tags to be added
-     */
-    '_fvcn_post_form_tags_required' => true,
-
-    /**
      * @var bool Enable the use of thumbnails
      */
     '_fvcn_post_form_thumbnail_enabled' => true,
 
     /**
-     * @var string Thumbnail form field label
-     */
-    '_fvcn_post_form_thumbnail_label' => __('Thumbnail', 'fvcn'),
-
-    /**
      * @var bool Require a thumbnail
      */
     '_fvcn_post_form_thumbnail_required' => false,
+
+    /**
+     * @var string Thumbnail form field label
+     */
+    '_fvcn_post_form_thumbnail_label' => __('Thumbnail', 'fvcn'),
 
     /**
      * @var int Number of posts to show on the admin dashboard

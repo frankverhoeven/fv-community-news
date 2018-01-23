@@ -199,9 +199,9 @@ function fvcn_post_link(int $postId = 0): void
      * fvcn_get_post_link()
      *
      * @param int $postId
-     * @return string
+     * @return string|null
      */
-    function fvcn_get_post_link(int $postId = 0): string
+    function fvcn_get_post_link(int $postId = 0)
     {
         $id = fvcn_get_post_id($postId);
         $link = esc_url(get_post_meta($id, '_fvcn_post_url', true));
@@ -1319,6 +1319,19 @@ function fvcn_post_form_link()
     }
 
 /**
+ * Whether the link field is enabled.
+ *  True if it is enabled.
+ *
+ * @return bool
+ */
+function fvcn_is_post_form_link_enabled(): bool
+{
+    return apply_filters('fvcn_is_post_form_link_enabled',
+        fvcn_container_get('Config')['_fvcn_post_form_link_enabled']
+    );
+}
+
+/**
  * fvcn_is_post_form_link_required()
  *
  * @return bool
@@ -1421,6 +1434,19 @@ function fvcn_post_form_tags()
 
         return apply_filters('fvcn_get_post_form_tags', esc_attr($value));
     }
+
+/**
+ * Whether the tags field is enabled.
+ *  True if it is enabled.
+ * 
+ * @return bool
+ */
+function fvcn_is_post_form_tags_enabled(): bool
+{
+    return apply_filters('fvcn_is_post_form_tags_enabled',
+        fvcn_container_get('Config')['_fvcn_post_form_tags_enabled']
+    );
+}
 
 /**
  * fvcn_is_post_form_tags_required()

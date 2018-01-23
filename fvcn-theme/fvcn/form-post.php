@@ -75,15 +75,19 @@
         </div>
         <?php do_action('fvcn_post_form_after_title'); ?>
 
-        <?php do_action('fvcn_post_form_before_link'); ?>
-        <div class="fvcn-post-form-link">
-            <label for="fvcn_post_form_link"><?php fvcn_post_form_link_label(); ?></label>
-            <input type="text" name="fvcn_post_form_link" id="fvcn_post_form_link" value="<?php fvcn_post_form_link(); ?>">
-            <div class="fvcn-error">
-                <?php fvcn_post_form_field_error('fvcn_post_form_link'); ?>
+        <?php if (fvcn_is_post_form_link_enabled()): ?>
+
+            <?php do_action('fvcn_post_form_before_link'); ?>
+            <div class="fvcn-post-form-link">
+                <label for="fvcn_post_form_link"><?php fvcn_post_form_link_label(); ?></label>
+                <input type="text" name="fvcn_post_form_link" id="fvcn_post_form_link" value="<?php fvcn_post_form_link(); ?>">
+                <div class="fvcn-error">
+                    <?php fvcn_post_form_field_error('fvcn_post_form_link'); ?>
+                </div>
             </div>
-        </div>
-        <?php do_action('fvcn_post_form_after_link'); ?>
+            <?php do_action('fvcn_post_form_after_link'); ?>
+
+        <?php endif; ?>
 
         <?php do_action('fvcn_post_form_before_content'); ?>
         <div class="fvcn-post-form-content">
@@ -95,15 +99,19 @@
         </div>
         <?php do_action('fvcn_post_form_after_content'); ?>
 
-        <?php do_action('fvcn_post_form_before_tags'); ?>
-        <div class="fvcn-post-form-tags">
-            <label for="fvcn_post_form_tags"><?php fvcn_post_form_tags_label(); ?></label>
-            <input type="text" name="fvcn_post_form_tags" id="fvcn_post_form_tags" value="<?php fvcn_post_form_tags(); ?>">
-            <div class="fvcn-error">
-                <?php fvcn_post_form_field_error('fvcn_post_form_tags'); ?>
+        <?php if (fvcn_is_post_form_tags_enabled()): ?>
+
+            <?php do_action('fvcn_post_form_before_tags'); ?>
+            <div class="fvcn-post-form-tags">
+                <label for="fvcn_post_form_tags"><?php fvcn_post_form_tags_label(); ?></label>
+                <input type="text" name="fvcn_post_form_tags" id="fvcn_post_form_tags" value="<?php fvcn_post_form_tags(); ?>">
+                <div class="fvcn-error">
+                    <?php fvcn_post_form_field_error('fvcn_post_form_tags'); ?>
+                </div>
             </div>
-        </div>
-        <?php do_action('fvcn_post_form_after_tags'); ?>
+            <?php do_action('fvcn_post_form_after_tags'); ?>
+
+        <?php endif; ?>
 
         <?php if (fvcn_is_post_form_thumbnail_enabled()): ?>
 
