@@ -15,11 +15,11 @@ use FvCommunityNews\Validator\ValidatorChain;
 use WP_Error;
 
 /**
- * Validator
+ * Form
  *
  * @author Frank Verhoeven <hi@frankverhoeven.me>
  */
-class Validator
+class Form
 {
     /**
      * @var Config

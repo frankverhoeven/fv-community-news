@@ -6,7 +6,7 @@ use FvCommunityNews\Container\Container;
 use FvCommunityNews\Container\FactoryInterface;
 use FvCommunityNews\Post\Controller as PostController;
 use FvCommunityNews\Post\Mapper;
-use FvCommunityNews\Post\Validator;
+use FvCommunityNews\Post\Form;
 
 /**
  * Controller
@@ -26,7 +26,7 @@ class Controller implements FactoryInterface
     {
         return new PostController(
             $container->get(Mapper::class),
-            $container->get(Validator::class)
+            $container->get(Form::class)
         );
     }
 }

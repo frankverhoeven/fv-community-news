@@ -4,15 +4,15 @@ namespace FvCommunityNews\Factory\Post;
 
 use FvCommunityNews\Container\Container;
 use FvCommunityNews\Container\FactoryInterface;
-use FvCommunityNews\Post\Validator as PostValidator;
+use FvCommunityNews\Post\Form as PostForm;
 use WP_Error;
 
 /**
- * Validator
+ * Form
  *
  * @author Frank Verhoeven <hi@frankverhoeven.me>
  */
-class Validator implements FactoryInterface
+class Form implements FactoryInterface
 {
     /**
      * Create new container object
@@ -23,7 +23,7 @@ class Validator implements FactoryInterface
      */
     public function create(Container $container, string $requestedName)
     {
-        return new PostValidator(
+        return new PostForm(
             $container->get('Config'),
             $container->get(WP_Error::class)
         );

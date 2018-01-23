@@ -14,18 +14,18 @@ class Controller
      */
     private $postMapper;
     /**
-     * @var Validator
+     * @var Form
      */
-    private $postValidator;
+    private $postForm;
 
     /**
      * @param Mapper $postMapper
-     * @param Validator $postValidator
+     * @param Form $postForm
      */
-    public function __construct(Mapper $postMapper, Validator $postValidator)
+    public function __construct(Mapper $postMapper, Form $postForm)
     {
         $this->postMapper = $postMapper;
-        $this->postValidator = $postValidator;
+        $this->postForm = $postForm;
     }
 
     /**
@@ -52,8 +52,8 @@ class Controller
 
         do_action('fvcn_new_post_pre_extras');
 
-        if ($this->postValidator->isValid($data)) {
-            $data = $this->postValidator->getData();
+        if ($this->postForm->isValid($data)) {
+            $data = $this->postForm->getData();
 
             $status = PostType::STATUS_PENDING;
             if (!fvcn_admin_moderation()) {
