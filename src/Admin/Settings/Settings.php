@@ -7,27 +7,22 @@ namespace FvCommunityNews\Admin\Settings;
  *
  * @author Frank Verhoeven <hi@frankverhoeven.me>
  */
-class Settings
+class Settings extends AbstractSettings
 {
-    /**
-     * fvcn_register_admin_settings()
-     *
-     */
     public function __construct()
     {
-        // General
         add_settings_section('fvcn_settings_general', __('General Settings', 'fvcn'), [$this, 'general_section'], 'fvcn-settings');
 
         add_settings_field('_fvcn_moderation', __('Before a post appears&hellip;', 'fvcn'), [$this, 'moderation'], 'fvcn-settings', 'fvcn_settings_general');
-        register_setting('fvcn-settings', '_fvcn_admin_moderation', 'intval');
-        register_setting('fvcn-settings', '_fvcn_user_moderation', 'intval');
+        register_setting('fvcn-settings', '_fvcn_admin_moderation', 'boolval');
+        register_setting('fvcn-settings', '_fvcn_user_moderation', 'boolval');
 
         add_settings_field('_fvcn_mail', __('Send a notification mail&hellip;', 'fvcn'), [$this, 'mail'], 'fvcn-settings', 'fvcn_settings_general');
-        register_setting('fvcn-settings', '_fvcn_mail_on_submission', 'intval');
-        register_setting('fvcn-settings', '_fvcn_mail_on_moderation', 'intval');
+        register_setting('fvcn-settings', '_fvcn_mail_on_submission', 'boolval');
+        register_setting('fvcn-settings', '_fvcn_mail_on_moderation', 'boolval');
 
         add_settings_field('_fvcn_is_anonymous_allowed', __('Authentication', 'fvcn'), [$this, 'is_anonymous_allowed'], 'fvcn-settings', 'fvcn_settings_general');
-        register_setting('fvcn-settings', '_fvcn_is_anonymous_allowed', 'intval');
+        register_setting('fvcn-settings', '_fvcn_is_anonymous_allowed', 'boolval');
 
 
         add_settings_section('fvcn_settings_permalinks', __('Permalinks', 'fvcn'), [$this, 'permalinks_section'], 'fvcn-settings');
@@ -48,20 +43,15 @@ class Settings
         do_action('fvcn_register_admin_settings');
     }
 
-
-    /**
-     * fvcn_admin_settings()
-     *
-     */
     public function fvcn_admin_settings()
     {
         flush_rewrite_rules();
         ?>
         <div class="wrap">
-            <h2><?php _e('FV Community News Settings', 'fvcn'); ?></h2>
+            <h1><?php _e('FV Community News Settings', 'fvcn'); ?></h1>
             <?php settings_errors(); ?>
 
-            <form action="options.php" method="post">
+            <form action="<?= admin_url('options.php'); ?>" method="post">
                 <?php settings_fields('fvcn-settings'); ?>
 
                 <?php do_settings_sections('fvcn-settings'); ?>
@@ -74,134 +64,51 @@ class Settings
         <?php
     }
 
-
-    /**
-     * general_section()
-     *
-     */
     public function general_section()
-    {
-        ?>
-        <!--<p><?php _e('General plugin settings.', 'fvcn'); ?></p>-->
-        <?php
-    }
+    {}
 
-
-    /**
-     * moderation()
-     *
-     */
     public function moderation()
     {
-        ?>
-
-        <input type="checkbox" name="_fvcn_admin_moderation" id="_fvcn_admin_moderation" value="1" <?php checked(fvcn_admin_moderation()); ?>>
-        <label for="_fvcn_admin_moderation"><?php _e('an administrator must always approve the post.', 'fvcn'); ?></label>
-        <br>
-        <input type="checkbox" name="_fvcn_user_moderation" id="_fvcn_user_moderation" value="1" <?php checked(fvcn_user_moderation()); ?>>
-        <label for="_fvcn_user_moderation"><?php _e('the user must have a previously approved post (authentication required).', 'fvcn'); ?></label>
-
-        <?php
+        echo $this->checkboxField('_fvcn_admin_moderation', 'an administrator must always approve the post.');
+        echo $this->checkboxField('_fvcn_user_moderation', 'the user must have a previously approved post (authentication required).');
     }
 
-
-    /**
-     * mail()
-     *
-     */
     public function mail()
     {
-        ?>
-
-        <input type="checkbox" name="_fvcn_mail_on_submission" id="_fvcn_mail_on_submission" value="1" <?php checked(fvcn_mail_on_submission()); ?>>
-        <label for="_fvcn_mail_on_submission"><?php _e('when a post is submitted.', 'fvcn'); ?></label>
-        <br>
-        <input type="checkbox" name="_fvcn_mail_on_moderation" id="_fvcn_mail_on_moderation" value="1" <?php checked(fvcn_mail_on_moderation()); ?>>
-        <label for="_fvcn_mail_on_moderation"><?php _e('when a post is held for moderation.', 'fvcn'); ?></label>
-
-        <?php
+        echo $this->checkboxField('_fvcn_mail_on_submission', 'when a post is submitted.');
+        echo $this->checkboxField('_fvcn_mail_on_moderation', 'when a post is held for moderation.');
     }
 
-
-    /**
-     * is_anonymous_allowed()
-     *
-     */
     public function is_anonymous_allowed()
     {
-        ?>
-
-        <input type="checkbox" name="_fvcn_is_anonymous_allowed" id="_fvcn_is_anonymous_allowed" value="1" <?php checked(fvcn_is_anonymous_allowed()); ?>>
-        <label for="_fvcn_is_anonymous_allowed"><?php _e('Anyone can add an article.', 'fvcn'); ?></label>
-
-        <?php
+        echo $this->checkboxField('_fvcn_is_anonymous_allowed', 'Anonymous allowed (disable to require authentication).');
     }
 
-
-    /**
-     * permalinks_section()
-     *
-     */
     public function permalinks_section()
     {
-        ?>
-        <p><?php printf(__('Here you can set the <a href="%s">permalink</a> structure bases.', 'fvcn'), get_admin_url(null, 'options-permalink.php')); ?></p>
-        <?php
+        printf(
+            __('<p>Here you can set the <a href="%s">permalink</a> structure bases.</p>', 'fvcn'),
+            admin_url('options-permalink.php')
+        );
     }
 
-
-    /**
-     * post_base_slug()
-     *
-     */
     public function post_base_slug()
     {
-        ?>
-
-        <input type="text" name="_fvcn_base_slug" id="_fvcn_base_slug" value="<?= fvcn_get_form_option('_fvcn_base_slug', true); ?>" class="reqular-text">
-
-        <?php
+        echo $this->inputField('_fvcn_base_slug');
     }
 
-
-    /**
-     * post_slug()
-     *
-     */
     public function post_slug()
     {
-        ?>
-
-        <input type="text" name="_fvcn_post_slug" id="_fvcn_post_slug" value="<?= fvcn_get_form_option('_fvcn_post_slug', true); ?>" class="reqular-text">
-
-        <?php
+        echo $this->inputField('_fvcn_post_slug');
     }
 
-
-    /**
-     * post_tag_slug()
-     *
-     */
     public function post_tag_slug()
     {
-        ?>
-
-        <input type="text" name="_fvcn_post_tag_slug" id="_fvcn_post_tag_slug" value="<?= fvcn_get_form_option('_fvcn_post_tag_slug', true); ?>" class="reqular-text">
-
-        <?php
+        echo $this->inputField('_fvcn_post_tag_slug');
     }
 
-
-    /**
-     * post_archive_slug()
-     *
-     */
     public function post_archive_slug()
     {
-        ?>
-
-        <input type="text" name="_fvcn_post_archive_slug" id="_fvcn_post_archive_slug" value="<?= fvcn_get_form_option('_fvcn_post_archive_slug', true); ?>" class="reqular-text">
-
-        <?php
+        echo $this->inputField('_fvcn_post_archive_slug');
     }
 }

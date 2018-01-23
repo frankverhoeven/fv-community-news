@@ -135,6 +135,7 @@ For more details on changes, please visit the [WordPress Trac](http://plugins.tr
 
 = 3.2 =
 
+* New: The link and tags field can now be disabled.
 * New: Advanced form options right in your wp-admin.
 * Improvement: General code improvements & cleanup.
 

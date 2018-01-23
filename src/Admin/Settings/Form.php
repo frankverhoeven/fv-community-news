@@ -7,7 +7,7 @@ namespace FvCommunityNews\Admin\Settings;
  *
  * @author Frank Verhoeven <hi@frankverhoeven.me>
  */
-class Form
+class Form extends AbstractSettings
 {
     /**
      * @var bool
@@ -60,8 +60,8 @@ class Form
         add_settings_section('fvcn_form_link', __('Link', 'fvcn'), [$this, 'link_section'], 'fvcn-form');
 
         add_settings_field('_fvcn_post_form_link_enabled', __('Enable', 'fvcn'), [$this, 'link_enabled'], 'fvcn-form', 'fvcn_form_link');
-        register_setting('fvcn-form', '_fvcn_post_form_link_enabled', 'intval');
-        register_setting('fvcn-form', '_fvcn_post_form_link_required', 'intval');
+        register_setting('fvcn-form', '_fvcn_post_form_link_enabled', 'boolval');
+        register_setting('fvcn-form', '_fvcn_post_form_link_required', 'boolval');
 
         add_settings_field('_fvcn_post_form_link_label', __('Label', 'fvcn'), [$this, 'link_label'], 'fvcn-form', 'fvcn_form_link');
         register_setting('fvcn-form', '_fvcn_post_form_link_label', 'esc_sql');
@@ -92,8 +92,8 @@ class Form
         add_settings_section('fvcn_form_tags', __('Tags', 'fvcn'), [$this, 'tags_section'], 'fvcn-form');
 
         add_settings_field('_fvcn_post_form_tags_enabled', __('Enable', 'fvcn'), [$this, 'tags_enabled'], 'fvcn-form', 'fvcn_form_tags');
-        register_setting('fvcn-form', '_fvcn_post_form_tags_enabled', 'intval');
-        register_setting('fvcn-form', '_fvcn_post_form_tags_required', 'intval');
+        register_setting('fvcn-form', '_fvcn_post_form_tags_enabled', 'boolval');
+        register_setting('fvcn-form', '_fvcn_post_form_tags_required', 'boolval');
 
         add_settings_field('_fvcn_post_form_tags_label', __('Label', 'fvcn'), [$this, 'tags_label'], 'fvcn-form', 'fvcn_form_tags');
         register_setting('fvcn-form', '_fvcn_post_form_tags_label', 'esc_sql');
@@ -110,8 +110,8 @@ class Form
         add_settings_section('fvcn_form_thumbnail', __('Thumbnail', 'fvcn'), [$this, 'thumbnail_section'], 'fvcn-form');
 
         add_settings_field('_fvcn_post_form_thumbnail_enabled', __('Enable', 'fvcn'), [$this, 'thumbnail_enabled'], 'fvcn-form', 'fvcn_form_thumbnail');
-        register_setting('fvcn-form', '_fvcn_post_form_thumbnail_enabled', 'intval');
-        register_setting('fvcn-form', '_fvcn_post_form_thumbnail_required', 'intval');
+        register_setting('fvcn-form', '_fvcn_post_form_thumbnail_enabled', 'boolval');
+        register_setting('fvcn-form', '_fvcn_post_form_thumbnail_required', 'boolval');
 
 
         add_settings_field('_fvcn_post_form_thumbnail_label', __('Label', 'fvcn'), [$this, 'thumbnail_label'], 'fvcn-form', 'fvcn_form_thumbnail');
@@ -294,44 +294,5 @@ class Form
     public function thumbnail_label()
     {
         echo $this->inputField('_fvcn_post_form_thumbnail_label');
-    }
-
-    /**
-     * Generate section description.
-     *
-     * @param string $description
-     * @return string
-     */
-    protected function sectionDescription(string $description): string
-    {
-        return sprintf('<p>%s</p>', __($description, 'fvcn'));
-    }
-
-    /**
-     * Generate input field.
-     *
-     * @param string $id
-     * @param string $type
-     * @return string
-     */
-    protected function inputField(string $id, string $type = 'text'): string
-    {
-        return sprintf('<input type="%s" name="%s" id="%s" value="%s" class="regular-text">',
-            $type, $id, $id, esc_attr(fvcn_get_form_option($id))
-        );
-    }
-
-    /**
-     * Generate checkbox field.
-     *
-     * @param string $id
-     * @param string $label
-     * @return string
-     */
-    protected function checkboxField(string $id, string $label): string
-    {
-        return sprintf('<label for="%s"><input type="checkbox" name="%s" id="%s" value="1" %s>%s</label><br>',
-            $id, $id, $id, checked((bool) fvcn_get_form_option($id), true, false), __($label, 'fvcn')
-        );
     }
 }
