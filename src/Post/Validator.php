@@ -169,7 +169,7 @@ class Validator
         $enabled = true;
         $key = '_' . $field . '_enabled';
 
-        if (isset($this->config[$key]) && false === $this->config[$key]) {
+        if (isset($this->config[$key]) && false === (bool) $this->config[$key]) {
             $enabled = false;
         }
 
