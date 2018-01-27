@@ -1091,7 +1091,7 @@ function fvcn_post_tag_list(int $postId = 0, $args = '')
         $before = $sep = $after = '';
         extract($args);
 
-        $tag_list = get_the_term_list($id, fvcn_get_post_tag_id(), $before, $sep, $after);
+        $tag_list = get_the_term_list($id, PostType::TAG_TYPE_KEY, $before, $sep, $after);
 
         return apply_filters('fvcn_get_post_tag_list', $tag_list, $id);
     }

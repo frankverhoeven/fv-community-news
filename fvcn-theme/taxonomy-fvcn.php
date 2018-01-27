@@ -49,7 +49,7 @@ get_header(); ?>
                 <?php fvcn_get_template_part('fvcn/content', 'archive-post'); ?>
 
                 <div class="entry-meta">
-                    <?php edit_post_link(__('Edit', 'twentyeleven'), '<span class="edit-link">', '</span>'); ?>
+                    <?php edit_post_link(__('Edit', 'fvcn'), '<span class="edit-link">', '</span>'); ?>
                 </div>
             </article>
 

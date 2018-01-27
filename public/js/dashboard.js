@@ -19,28 +19,28 @@
     {
         var o = this;
 
-        $('#fvcn-dashboard-recent-posts-list .fvcn-row-actions a').click(function(e) {
+        $('#fvcn-dashboard-recent-posts-list').find('.fvcn-row-actions a').click(function(e) {
             o.action = $(this).parent().attr('class');
             o.post = $(this).parents('.fvcn-post');
             o.params = o.parseQueryString($(this).attr('href'));
 
-            if ('edit' != o.action) {
+            if ('edit' !== o.action) {
                 e.preventDefault();
             }
 
-            if ('trash' == o.action) {
+            if ('trash' === o.action) {
                 $.ajax($(this).attr('href'));
             } else {
                 o.submitAction();
             }
 
-            if ('publish' == o.action) {
+            if ('publish' === o.action) {
                 o.setPostPublished();
             }
-            else if ('unpublish' == o.action) {
+            else if ('unpublish' === o.action) {
                 o.setPostPending();
             }
-            else if ('spam' == o.action || 'trash' == o.action) {
+            else if ('spam' === o.action || 'trash' === o.action) {
                 o.removePost();
             }
         });
