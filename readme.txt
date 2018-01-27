@@ -5,7 +5,7 @@ Donate link:        https://www.paypal.me/FrankVerhoeven
 Tags:               Community News, Community, News, Widget, Custom Post, Custom Posting, Post, Form, Akismet, Ajax
 Requires at least:  4.8
 Tested up to:       4.9
-Stable tag:         3.1.2
+Stable tag:         3.2
 
 Give the visitors of your site the ability to submit their news to you, and list it in a nice news feed.
 
@@ -137,6 +137,7 @@ For more details on changes, please visit the [WordPress Trac](http://plugins.tr
 
 * New: The link and tags field can now be disabled.
 * New: Advanced form options right in your wp-admin.
+* Improvement: Theme compat improvements.
 * Improvement: General code improvements & cleanup.
 
 
