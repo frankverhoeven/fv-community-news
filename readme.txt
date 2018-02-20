@@ -5,7 +5,7 @@ Donate link:        https://www.paypal.me/FrankVerhoeven
 Tags:               Community News, Community, News, Widget, Custom Post, Custom Posting, Post, Form, Akismet, Ajax
 Requires at least:  4.8
 Tested up to:       4.9
-Stable tag:         3.2
+Stable tag:         3.2.1
 
 Give the visitors of your site the ability to submit their news to you, and list it in a nice news feed.
 
@@ -131,6 +131,11 @@ Open a new issue at [https://github.com/frankverhoeven/fv-community-news/issues]
 == Changelog ==
 
 For more details on changes, please visit the [WordPress Trac](http://plugins.trac.wordpress.org/log/fv-community-news/).
+
+
+= 3.2.1 =
+
+* Fix: PHP 7.0 Compatiblity
 
 
 = 3.2 =
