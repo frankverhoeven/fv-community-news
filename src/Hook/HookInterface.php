@@ -14,5 +14,5 @@ interface HookInterface
      *
      * @return void
      */
-    public function doHook(): void;
+    public function doHook();
 }

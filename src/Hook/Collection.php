@@ -158,7 +158,7 @@ class Collection
      *
      * @return void
      */
-    public function register(): void
+    public function register()
     {
         $this->registerHooks($this->actions);
         $this->registerHooks($this->filters);
@@ -171,7 +171,7 @@ class Collection
      * @param array $hooks The hooks to register.
      * @return void
      */
-    protected function registerHooks(array $hooks): void
+    protected function registerHooks(array $hooks)
     {
         foreach ($hooks as $tag => $filters) {
             foreach ($filters as $filter) {

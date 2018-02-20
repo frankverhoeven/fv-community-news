@@ -55,7 +55,7 @@ final class FvCommunityNews
      *
      * @return void
      */
-    public function start(): void
+    public function start()
     {
         $this->loadFiles();
 
@@ -72,7 +72,7 @@ final class FvCommunityNews
      *
      * @return void
      */
-    private function loadFiles(): void
+    private function loadFiles()
     {
         include_once __DIR__ . '/src/Autoloader.php';
 
@@ -98,7 +98,7 @@ final class FvCommunityNews
      *
      * @return void
      */
-    public static function activation(): void
+    public static function activation()
     {
         do_action('fvcn_activation');
         register_uninstall_hook(__FILE__, [static::class, 'uninstall']);
@@ -109,7 +109,7 @@ final class FvCommunityNews
      *
      * @return void
      */
-    public static function deactivation(): void
+    public static function deactivation()
     {
         do_action('fvcn_deactivation');
     }
@@ -119,7 +119,7 @@ final class FvCommunityNews
      *
      * @return void
      */
-    public static function uninstall(): void
+    public static function uninstall()
     {
         do_action('fvcn_uninstall');
     }

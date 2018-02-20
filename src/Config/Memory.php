@@ -72,7 +72,7 @@ class Memory extends AbstractConfig
      *
      * @param string $key
      */
-    public function delete(string $key): void
+    public function delete(string $key)
     {
         if (isset($this->config[$key])) {
             unset($this->config[$key]);

@@ -139,9 +139,7 @@ class Form extends AbstractSettings
                 <?php do_settings_sections('fvcn-form'); ?>
 
                 <?php if ($this->advanced) echo '<input type="hidden" name="mode" value="advanced">'; ?>
-                <p class="submit">
-                    <input type="submit" name="submit" class="button-primary" value="<?php _e('Save Changes', 'fvcn'); ?>">
-                </p>
+                <?php \submit_button(); ?>
             </form>
         </div>
         <?php

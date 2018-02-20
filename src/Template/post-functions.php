@@ -6,7 +6,7 @@ use FvCommunityNews\Post\PostType;
  * fvcn_post_slug()
  *
  */
-function fvcn_post_slug(): void
+function fvcn_post_slug()
 {
     echo fvcn_get_post_slug();
 }
@@ -71,7 +71,7 @@ function fvcn_posts(): bool
  *
  * @return void
  */
-function fvcn_the_post(): void
+function fvcn_the_post()
 {
     /* @var WP_Query $wpQuery */
     $wpQuery = fvcn_container_get('Registry')['wpQuery'];
@@ -84,7 +84,7 @@ function fvcn_the_post(): void
  *
  * @param int $postId
  */
-function fvcn_post_id(int $postId = 0): void
+function fvcn_post_id(int $postId = 0)
 {
     echo fvcn_get_post_id($postId);
 }
@@ -146,7 +146,7 @@ function fvcn_get_post(int $postId = 0)
  *
  * @param int $postId
  */
-function fvcn_post_permalink(int $postId = 0): void
+function fvcn_post_permalink(int $postId = 0)
 {
     echo fvcn_get_post_permalink($postId);
 }
@@ -190,7 +190,7 @@ function fvcn_has_post_link(int $postId = 0): bool
  *
  * @param int $postId
  */
-function fvcn_post_link(int $postId = 0): void
+function fvcn_post_link(int $postId = 0)
 {
     echo fvcn_get_post_link($postId);
 }
@@ -215,7 +215,7 @@ function fvcn_post_link(int $postId = 0): void
  *
  * @param int $postId
  */
-function fvcn_post_title(int $postId = 0): void
+function fvcn_post_title(int $postId = 0)
 {
     echo fvcn_get_post_title($postId);
 }
@@ -238,7 +238,7 @@ function fvcn_post_title(int $postId = 0): void
  *
  * @param int $postId
  */
-function fvcn_post_content(int $postId = 0): void
+function fvcn_post_content(int $postId = 0)
 {
     echo fvcn_get_post_content($postId);
 }

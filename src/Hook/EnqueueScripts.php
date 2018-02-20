@@ -31,7 +31,7 @@ class EnqueueScripts implements HookInterface
      *
      * @return void
      */
-    public function doHook(): void
+    public function doHook()
     {
         $this->enqueueScripts();
         $this->enqueueStyles();
@@ -42,7 +42,7 @@ class EnqueueScripts implements HookInterface
      *
      * @return void
      */
-    protected function enqueueScripts(): void
+    protected function enqueueScripts()
     {
         $ajaxForm = $this->container->get(AjaxForm::class);
         $ajaxForm->enqueueScripts();
@@ -55,7 +55,7 @@ class EnqueueScripts implements HookInterface
      *
      * @return void
      */
-    protected function enqueueStyles(): void
+    protected function enqueueStyles()
     {
         if (!fvcn_theme_is_compat_active() && file_exists(get_stylesheet_directory() . '/fvcn/css/fvcn-theme.css')) {
             $src = get_stylesheet_directory_uri() . '/fvcn/css/fvcn-theme.css';

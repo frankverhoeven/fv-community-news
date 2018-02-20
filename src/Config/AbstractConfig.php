@@ -72,7 +72,7 @@ abstract class AbstractConfig implements ArrayAccess, Countable, Iterator
      *
      * @param string $key
      */
-    abstract public function delete(string $key): void;
+    abstract public function delete(string $key);
 
     /**
      * Whether a offset exists

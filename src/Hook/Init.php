@@ -42,7 +42,7 @@ class Init implements HookInterface
      *
      * @return void
      */
-    public function doHook(): void
+    public function doHook()
     {
         $this->setupVariables();
 
@@ -66,7 +66,7 @@ class Init implements HookInterface
      * 
      * @return void
      */
-    protected function setupVariables(): void
+    protected function setupVariables()
     {
         $pluginDir = plugin_dir_path(FvCommunityNews::FILE);
         $pluginUrl = plugin_dir_url(FvCommunityNews::FILE);
@@ -90,7 +90,7 @@ class Init implements HookInterface
      *
      * @return void
      */
-    protected function install(): void
+    protected function install()
     {
         $installer = new Installer($this->config);
 
@@ -112,7 +112,7 @@ class Init implements HookInterface
      *
      * @return void
      */
-    protected function loadTextDomain(): void
+    protected function loadTextDomain()
     {
         $locale = apply_filters('fvcn_locale', get_locale());
         $mofile = sprintf('fvcn-%s.mo', $locale);
@@ -137,7 +137,7 @@ class Init implements HookInterface
      *
      * @return void
      */
-    protected function registerPostType(): void
+    protected function registerPostType()
     {
         $postType = new PostType();
         $postType->registerPostType(
@@ -155,7 +155,7 @@ class Init implements HookInterface
      *
      * @return void
      */
-    protected function registerShortCodes(): void
+    protected function registerShortCodes()
     {
         add_shortcode(PostFormShortcode::SHORTCODE_TAG, function() {
             return (new PostFormShortcode())();
@@ -175,7 +175,7 @@ class Init implements HookInterface
      *
      * @return void
      */
-    protected function setupAjaxForm(): void
+    protected function setupAjaxForm()
     {
         $this->container->get(FvCommunityNews\View\AjaxForm::class);
     }
@@ -185,7 +185,7 @@ class Init implements HookInterface
      *
      * @return void
      */
-    protected function setupAdmin(): void
+    protected function setupAdmin()
     {
         $this->container->get(FvCommunityNews\Admin\Admin::class);
     }

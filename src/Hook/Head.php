@@ -14,7 +14,7 @@ class Head implements HookInterface
      *
      * @return void
      */
-    public function doHook(): void
+    public function doHook()
     {
         echo '<meta name="generator" content="FV Community News">' . "\n";
         do_action('fvcn_head');

@@ -50,7 +50,7 @@ function fvcn_get_current_author_ua(): string
  *
  * @param int $userId
  */
-function fvcn_user_id(int $userId = 0): void
+function fvcn_user_id(int $userId = 0)
 {
     echo fvcn_get_user_id($userId);
 }
@@ -79,7 +79,7 @@ function fvcn_user_id(int $userId = 0): void
  * fvcn_current_user_id()
  *
  */
-function fvcn_current_user_id(): void
+function fvcn_current_user_id()
 {
     echo fvcn_get_current_user_id();
 }
@@ -100,7 +100,7 @@ function fvcn_current_user_id(): void
  * fvcn_current_user_name()
  *
  */
-function fvcn_current_user_name(): void
+function fvcn_current_user_name()
 {
     echo fvcn_get_current_user_name();
 }

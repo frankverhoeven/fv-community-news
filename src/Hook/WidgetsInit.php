@@ -18,7 +18,7 @@ class WidgetsInit implements HookInterface
      *
      * @return void
      */
-    public function doHook(): void
+    public function doHook()
     {
         FormWidget::register();
         ListPostsWidget::register();

@@ -113,7 +113,7 @@ class Controller
      *
      * @return void
      */
-    public function adjustPostRating(): void
+    public function adjustPostRating()
     {
         $actions = [
             'increase',

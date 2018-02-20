@@ -29,7 +29,7 @@ class Controller implements HookInterface
      *
      * @return void
      */
-    public function doHook(): void
+    public function doHook()
     {
         if ('post' == strtolower($_SERVER['REQUEST_METHOD'])) {
             if (isset($_POST['fvcn_post_form_action']) && 'fvcn-new-post' == $_POST['fvcn_post_form_action']) {

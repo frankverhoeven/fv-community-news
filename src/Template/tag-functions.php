@@ -8,7 +8,7 @@ use FvCommunityNews\Post\PostType;
  * @param array|string $args
  * @return void
  */
-function fvcn_tag_cloud($args = ''): void
+function fvcn_tag_cloud($args = '')
 {
     $default = ['taxonomy' => PostType::TAG_TYPE_KEY];
     $args = wp_parse_args($args, $default);
