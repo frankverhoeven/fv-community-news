@@ -3,6 +3,9 @@
 namespace FvCommunityNews;
 
 use FvCommunityNews;
+use FvCommunityNews\Syncer\Api\Api;
+use FvCommunityNews\Syncer\Api\Exception as ApiException;
+use FvCommunityNews\Syncer\Api\Request as ApiRequest;
 
 /**
  * Version
@@ -14,15 +17,7 @@ final class Version
     /**
      * @var string
      */
-    const CURRENT_VERSION = FvCommunityNews::VERSION;
-    /**
-     * @var string
-     */
-    const API_VERSION_CURRENT = 'https://api.frankverhoeven.me/fvcn/1.0/versions/current';
-    /**
-     * @var string
-     */
-    private static $latestVersion = null;
+    private static $latestVersion;
 
     /**
      * Get the current plugin version.
@@ -31,7 +26,7 @@ final class Version
      */
     public static function getCurrentVersion()
     {
-        return self::CURRENT_VERSION;
+        return FvCommunityNews::VERSION;
     }
 
     /**
@@ -41,20 +36,22 @@ final class Version
      */
     public static function getLatestVersion()
     {
-        global $wp_version;
-
         if (null === self::$latestVersion) {
-            $response = wp_remote_get(self::API_VERSION_CURRENT, [
-                'body' => [
-                    'blog_name'         => get_bloginfo('name'),
-                    'blog_description'  => get_bloginfo('description'),
-                    'blog_url'          => get_bloginfo('url'),
-                    'wordpress_url'     => get_bloginfo('wpurl'),
-                    'wordpress_version' => $wp_version,
+            $apiRequest = new ApiRequest(Api::latestVersion());
+            
+            try {
+                $response = $apiRequest->execute([
+                    'blog_name'         => \get_bloginfo('name'),
+                    'blog_description'  => \get_bloginfo('description'),
+                    'blog_url'          => \get_bloginfo('url'),
+                    'wordpress_url'     => \get_bloginfo('wpurl'),
+                    'wordpress_version' => \get_bloginfo('version'),
                     'plugin_version'    => self::getCurrentVersion(),
-                    'php_version'       => phpversion(),
-                ],
-            ]);
+                    'php_version'       => \phpversion(),
+                ]);
+            } catch (ApiException $e) {
+                $response = null;
+            }
 
             if (is_array($response) && 200 == $response['response']['code']) {
                 $data = json_decode($response['body'], true);
