@@ -19,18 +19,22 @@ use FvCommunityNews\Factory\Hook\Akismet as AkismetHookFactory;
 use FvCommunityNews\Factory\Hook\Controller as PostControllerHookFactory;
 use FvCommunityNews\Factory\Hook\EnqueueScripts as EnqueueScriptsHookFactory;
 use FvCommunityNews\Factory\Hook\Init as InitHookFactory;
+use FvCommunityNews\Factory\Hook\Syncer as SyncerHookFactory;
 use FvCommunityNews\Factory\Post\Controller as PostControllerFactory;
 use FvCommunityNews\Factory\Post\Form as PostFormFactory;
+use FvCommunityNews\Factory\Syncer\Syncer as SyncerFactory;
 use FvCommunityNews\Factory\View\AjaxForm as AjaxFormFactory;
 use FvCommunityNews\Hook\Akismet as AkismetHook;
 use FvCommunityNews\Hook\Controller as PostControllerHook;
 use FvCommunityNews\Hook\EnqueueScripts as EnqueueScriptsHook;
 use FvCommunityNews\Hook\Head as HeadHook;
 use FvCommunityNews\Hook\Init as InitHook;
+use FvCommunityNews\Hook\Syncer as SyncerHook;
 use FvCommunityNews\Hook\WidgetsInit as WidgetsInitHook;
 use FvCommunityNews\Post\Controller as PostController;
 use FvCommunityNews\Post\Mapper as PostMapper;
 use FvCommunityNews\Post\Form as PostForm;
+use FvCommunityNews\Syncer\Syncer;
 use FvCommunityNews\View\AjaxForm;
 
 return [
@@ -48,11 +52,14 @@ return [
     Akismet::class              => AkismetFactory::class,
     AkismetHandler::class       => AkismetHandlerFactory::class,
 
+    Syncer::class               => SyncerFactory::class,
+
     AkismetHook::class          => AkismetHookFactory::class,
     EnqueueScriptsHook::class   => EnqueueScriptsHookFactory::class,
     HeadHook::class             => InvokableFactory::class,
     InitHook::class             => InitHookFactory::class,
     PostControllerHook::class   => PostControllerHookFactory::class,
+    SyncerHook::class           => SyncerHookFactory::class,
     WidgetsInitHook::class      => InvokableFactory::class,
 
     AjaxForm::class             => AjaxFormFactory::class,

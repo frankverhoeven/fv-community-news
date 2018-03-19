@@ -7,7 +7,7 @@ namespace FvCommunityNews\Syncer\Api;
  *
  * @author Frank Verhoeven <hi@frankverhoeven.me>
  */
-class Api
+final class Api
 {
     /**
      * @var string
@@ -86,5 +86,38 @@ class Api
     public static function submitPost(): Api
     {
         return new static(static::API_POSTS, 'POST');
+    }
+
+    /**
+     * Make an API request to add a view to a post.
+     *
+     * @param int $id ID of the post that is viewed.
+     * @return Api
+     */
+    public static function viewPost(int $id): Api
+    {
+        return new static(static::API_POSTS . '/' . $id . '/views', 'POST');
+    }
+
+    /**
+     * Make an API request to add a star to a post.
+     *
+     * @param int $id ID of the post to star.
+     * @return Api
+     */
+    public static function starPost(int $id): Api
+    {
+        return new static(static::API_POSTS . '/' . $id . '/stars', 'POST');
+    }
+
+    /**
+     * Make an API request to remove a star from a post.
+     *
+     * @param int $id ID of the post to unstar.
+     * @return Api
+     */
+    public static function unstarPost(int $id): Api
+    {
+        return new static(static::API_POSTS . '/' . $id . '/stars', 'DELETE');
     }
 }

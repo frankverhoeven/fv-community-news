@@ -32,6 +32,11 @@ return [
     '_fvcn_is_anonymous_allowed' => true,
 
     /**
+     * @var bool Whether syncing posts to the API is enabled
+     */
+    '_fvcn_syncer_enabled' => true,
+
+    /**
      * @var string Base slug
      */
     '_fvcn_base_slug' => 'fv-community-news',

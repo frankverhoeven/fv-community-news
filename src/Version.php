@@ -53,8 +53,8 @@ final class Version
                 $response = null;
             }
 
-            if (is_array($response) && 200 == $response['response']['code']) {
-                $data = json_decode($response['body'], true);
+            if (\is_array($response) && 200 == $response['response']['code']) {
+                $data = \json_decode($response['body'], true);
                 self::$latestVersion = $data['version'];
             }
         }

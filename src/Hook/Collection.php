@@ -51,6 +51,7 @@ class Collection
 
         'fvcn_ready' => [
             Akismet::class,
+            Syncer::class,
         ],
     ];
     /**

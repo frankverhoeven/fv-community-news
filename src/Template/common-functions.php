@@ -197,14 +197,9 @@ function fvcn_increase_post_view_count(string $template): string
     }
 
     $id = (int) fvcn_get_post_id();
-    if (isset($_COOKIE['fvcn_post_viewed_' . $id . '_' . COOKIEHASH])) {
-        return $template;
-    }
 
     $postMapper = fvcn_container_get(\FvCommunityNews\Post\Mapper::class);
     $postMapper->increasePostViewCount($id);
-
-    setcookie('fvcn_post_viewed_' . $id . '_' . COOKIEHASH, 'true', 0, COOKIEPATH, COOKIE_DOMAIN);
 
     return $template;
 }
