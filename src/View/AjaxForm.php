@@ -3,7 +3,7 @@
 namespace FvCommunityNews\View;
 
 use FvCommunityNews\Post\Controller;
-use FvCommunityNews\Post\PostType;
+use FvCommunityNews\Post\Status;
 use WP_Error;
 
 /**
@@ -72,7 +72,7 @@ class AjaxForm
 
         $postId = $this->postController->createPost();
 
-        if (fvcn_has_errors()) {
+        if (!empty($this->error->get_error_codes())) {
             $errors = [];
             foreach ($this->error->get_error_codes() as $code) {
                 $errors[ $code ] = $this->error->get_error_message($code);
@@ -83,7 +83,7 @@ class AjaxForm
                 'errors' => $errors
             ];
         } else {
-            if (PostType::STATUS_PUBLISH == fvcn_get_post_status($postId)) {
+            if (Status::publish() == fvcn_get_post_status($postId)) {
                 $permalink = fvcn_get_post_permalink($postId);
                 $message = '';
             } else {

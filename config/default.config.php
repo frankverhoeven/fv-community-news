@@ -1,10 +1,12 @@
 <?php
 
+use FvCommunityNews\Version;
+
 return [
     /**
      * @var int Current plugin version
      */
-    '_fvcn_version' => FvCommunityNews::VERSION,
+    '_fvcn_version' => Version::getCurrentVersion(),
 
     /**
      * @var bool Require admin approval of posts

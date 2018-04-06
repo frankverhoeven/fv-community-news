@@ -2,21 +2,30 @@
   "name": "frankverhoeven/fv-community-news",
   "description": "FV Community News",
   "type": "project",
-  "keywords": [
-    "Frank",
-    "Verhoeven",
-    "Community",
-    "News"
-  ],
+  "keywords": ["Frank", "Verhoeven", "Community", "News"],
   "homepage": "https://frankverhoeven.me/wordpress-plugin-fv-community-news/",
+  "authors": [
+    {
+      "name": "Frank Verhoeven",
+      "email": "hi@frankverhoeven.me"
+    }
+  ],
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
     "php": "^7.0"
   },
+  "require-dev": {
+    "phpunit/phpunit": "^6.5"
+  },
   "autoload": {
     "psr-4": {
       "FvCommunityNews\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "FvCommunityNews\\Test\\": "test/"
     }
   }
 }

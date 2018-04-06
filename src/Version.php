@@ -26,7 +26,10 @@ final class Version
      */
     public static function getCurrentVersion()
     {
-        return FvCommunityNews::VERSION;
+        require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        $reflection = new \ReflectionClass(FvCommunityNews::class);
+        $data = \get_plugin_data($reflection->getFileName());
+        return $data['Version'];
     }
 
     /**

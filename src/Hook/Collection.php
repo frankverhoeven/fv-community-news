@@ -135,9 +135,6 @@ class Collection
         ],
 
         'template_include' => [
-            ['function' => 'fvcn_template_include'],
-        ],
-        'fvcn_template_include' => [
             [
                 'function' => 'fvcn_theme_compat_template_include',
                 'priority' => 4,

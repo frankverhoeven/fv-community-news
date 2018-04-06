@@ -3,7 +3,7 @@
 namespace FvCommunityNews\Akismet;
 
 use FvCommunityNews\Post\Mapper;
-use FvCommunityNews\Post\PostType;
+use FvCommunityNews\Post\Status;
 
 /**
  * Handler
@@ -102,7 +102,7 @@ class Handler
 
             $method = 'submitSpam';
         } elseif ('fvcn_publish_post' == $filter) {
-            if (PostType::STATUS_SPAM != fvcn_get_post_status($postId)) {
+            if (Status::spam() != fvcn_get_post_status($postId)) {
                 return $this;
             }
 

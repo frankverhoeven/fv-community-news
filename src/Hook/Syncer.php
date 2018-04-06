@@ -35,9 +35,9 @@ class Syncer implements HookInterface
 
             add_action('fvcn_insert_post', [$syncer, 'submitPost'], 999	);
             add_action('fvcn_publish_post',	 [$syncer, 'submitPost'], 999);
+            add_action('fvcn_like_post', [$syncer, 'likePost'], 999);
+            add_action('fvcn_unlike_post', [$syncer, 'unlikePost'], 999);
             add_action('fvcn_increase_post_view_count',	 [$syncer, 'increasePostView'], 999);
-            add_action('fvcn_increase_post_rating',	 [$syncer, 'increasePostRating'], 999);
-            add_action('fvcn_decrease_post_rating',	 [$syncer, 'decreasePostRating'], 999);
         }
     }
 }

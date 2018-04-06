@@ -25,6 +25,7 @@ class Controller implements FactoryInterface
     public function create(Container $container, string $requestedName)
     {
         return new PostController(
+            $container->get('Config'),
             $container->get(Mapper::class),
             $container->get(Form::class)
         );

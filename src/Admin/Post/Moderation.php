@@ -3,7 +3,8 @@
 namespace FvCommunityNews\Admin\Post;
 
 use FvCommunityNews\Post\Mapper as PostMapper;
-use FvCommunityNews\Post\PostType;
+use FvCommunityNews\Post\Status;
+use FvCommunityNews\Post\Type as PostType;
 
 /**
  * Moderation
@@ -27,7 +28,7 @@ class Moderation
     public function __construct(PostMapper $postMapper)
     {
         $this->postMapper = $postMapper;
-        $this->postType = PostType::POST_TYPE_KEY;
+        $this->postType = PostType::post();
 
         $this->setupActions()
              ->processBulkActions();
@@ -77,10 +78,10 @@ class Moderation
             [
                 'ps' => [
                     'all' => 'all',
-                    'public'  => PostType::STATUS_PUBLISH,
-                    'pending' => PostType::STATUS_PENDING,
-                    'spam'    => PostType::STATUS_SPAM,
-                    'trash'   => PostType::STATUS_TRASH
+                    'public'  => Status::publish(),
+                    'pending' => Status::pending(),
+                    'spam'    => Status::spam(),
+                    'trash'   => Status::trash(),
                 ],
                 'locale'=> [
                     'publish'   => __('Publish', 'fvcn'),
@@ -113,7 +114,7 @@ class Moderation
         if (isset($_GET['fvcn-remove-all-spam-submit'], $_GET['_fvcn_bulk_action'])) {
             check_admin_referer('fvcn-bulk-action', '_fvcn_bulk_action');
 
-            if (fvcn_has_posts(['post_status'=>PostType::STATUS_SPAM, 'posts_per_page'=>-1])) {
+            if (fvcn_has_posts(['post_status' => Status::spam(), 'posts_per_page' => -1])) {
                 while (fvcn_posts()) {
                     fvcn_the_post();
 
@@ -350,7 +351,7 @@ class Moderation
         <?php
         wp_nonce_field('fvcn-bulk-action', '_fvcn_bulk_action');
 
-        if (isset($_GET['post_status']) && PostType::STATUS_SPAM == $_GET['post_status']) {
+        if (isset($_GET['post_status']) && Status::spam() == $_GET['post_status']) {
             submit_button(__('Remove All Spam', 'fvcn'), 'button-secondary apply', 'fvcn-remove-all-spam-submit', false);
         }
     }

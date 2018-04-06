@@ -28,20 +28,11 @@
     <?php endif; ?>
 </div><!-- .entry-content -->
 
-<div class="fvcn-post-meta">
+<div class="entry-meta fvcn-post-meta">
     <span class="fvcn-post-tags">
-        <?php fvcn_post_tag_list(0, ['before'=>__('Tags: ', 'fvcn'), 'after'=>'']); ?>
+        <?php fvcn_post_tag_list(0, ['before'=>__('Tags: ', 'fvcn'), 'after'=>' | ']); ?>
     </span>
-    |
-    <span class="fvcn-post-rating">
-        <?php if (fvcn_is_post_rated_by_current_user()) : ?>
-            <?php _e('Rating:', 'fvcn'); ?>
-            <strong><?php fvcn_post_rating(); ?></strong>
-        <?php else : ?>
-            <?php _e('Rate this post:', 'fvcn'); ?>
-            <a href="<?php fvcn_post_rating_decrement_link(); ?>" rel="nofollow">-</a>
-            <strong><?php fvcn_post_rating(); ?></strong>
-            <a href="<?php fvcn_post_rating_increment_link(); ?>" rel="nofollow">+</a>
-        <?php endif; ?>
+    <span class="fvcn-post-likes">
+        <?php fvcn_is_post_liked_by_current_user() ? fvcn_post_unlike_button() : fvcn_post_like_button(); ?>
     </span>
 </div><!-- .entry-meta -->

@@ -64,7 +64,7 @@ final class Api
      */
     public static function latestVersion(): Api
     {
-        return new static(static::API_VERSIONS . '/current', 'GET');
+        return new static(static::API_VERSIONS . '/latest', 'GET');
     }
 
     /**
@@ -100,24 +100,24 @@ final class Api
     }
 
     /**
-     * Make an API request to add a star to a post.
+     * Make an API request to add a like to a post.
      *
-     * @param int $id ID of the post to star.
+     * @param int $id ID of the post to like.
      * @return Api
      */
-    public static function starPost(int $id): Api
+    public static function likePost(int $id): Api
     {
-        return new static(static::API_POSTS . '/' . $id . '/stars', 'POST');
+        return new static(static::API_POSTS . '/' . $id . '/likes', 'POST');
     }
 
     /**
-     * Make an API request to remove a star from a post.
+     * Make an API request to remove a like from a post.
      *
-     * @param int $id ID of the post to unstar.
+     * @param int $id ID of the post to unlike.
      * @return Api
      */
-    public static function unstarPost(int $id): Api
+    public static function unlikePost(int $id): Api
     {
-        return new static(static::API_POSTS . '/' . $id . '/stars', 'DELETE');
+        return new static(static::API_POSTS . '/' . $id . '/likes', 'DELETE');
     }
 }

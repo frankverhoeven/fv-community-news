@@ -142,8 +142,6 @@
 
         <?php fvcn_post_form_fields(); ?>
 
-
-
         <?php do_action('fvcn_post_form_extras_bottom'); ?>
     </form>
 </div>

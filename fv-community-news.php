@@ -4,7 +4,7 @@
  * Plugin Name: FV Community News
  * Plugin URI:  https://frankverhoeven.me/wordpress-plugin-fv-community-news/
  * Description: Allow visitors of your site to submit articles.
- * Version:     3.2.2
+ * Version:     3.3
  * Author:      Frank Verhoeven
  * Author URI:  https://frankverhoeven.me/
  */
@@ -14,7 +14,7 @@ use FvCommunityNews\Config\WordPress as Config;
 use FvCommunityNews\Container\Container;
 use FvCommunityNews\Hook\Collection as HookCollection;
 
-if (!defined('ABSPATH')) exit;
+if (!\defined('ABSPATH')) exit;
 
 /**
  * FvCommunityNews
@@ -23,18 +23,6 @@ if (!defined('ABSPATH')) exit;
  */
 final class FvCommunityNews
 {
-    /**
-     * @var string
-     */
-    const VERSION = '3.2.1';
-    /**
-     * @var string
-     */
-    const DIR = __DIR__;
-    /**
-     * @var string
-     */
-    const FILE = __FILE__;
     /**
      * @var Container
      */
@@ -46,8 +34,8 @@ final class FvCommunityNews
      */
     public function __construct()
     {
-        register_activation_hook(__FILE__, [static::class, 'activation']);
-        register_deactivation_hook(__FILE__, [static::class, 'deactivation']);
+        \register_activation_hook(__FILE__, [static::class, 'activation']);
+        \register_deactivation_hook(__FILE__, [static::class, 'deactivation']);
     }
 
     /**
@@ -79,18 +67,7 @@ final class FvCommunityNews
         $autoloader = new AutoLoader(['FvCommunityNews' => __DIR__ . '/src/']);
         $autoloader->register();
 
-        $files = [
-            '/src/Template/fvcn-core-theme.php',
-            '/src/Template/common-functions.php',
-            '/src/Template/options-functions.php',
-            '/src/Template/post-functions.php',
-            '/src/Template/tag-functions.php',
-            '/src/Template/user-functions.php',
-        ];
-
-        foreach ($files as $file) {
-            $autoloader->loadFile(__DIR__ . $file);
-        }
+        $autoloader->loadFile(__DIR__ . '/src/template-functions.php');
     }
 
     /**
@@ -100,8 +77,8 @@ final class FvCommunityNews
      */
     public static function activation()
     {
-        do_action('fvcn_activation');
-        register_uninstall_hook(__FILE__, [static::class, 'uninstall']);
+        \do_action('fvcn_activation');
+        \register_uninstall_hook(__FILE__, [static::class, 'uninstall']);
     }
 
     /**
@@ -111,7 +88,7 @@ final class FvCommunityNews
      */
     public static function deactivation()
     {
-        do_action('fvcn_deactivation');
+        \do_action('fvcn_deactivation');
     }
 
     /**
@@ -121,7 +98,7 @@ final class FvCommunityNews
      */
     public static function uninstall()
     {
-        do_action('fvcn_uninstall');
+        \do_action('fvcn_uninstall');
     }
 }
 
@@ -134,11 +111,11 @@ try {
     $fvcn = new FvCommunityNews();
     $fvcn->start();
 } catch (Exception $e) {
-    if (defined('WP_DEBUG') && true === WP_DEBUG) {
+    if (\defined('WP_DEBUG') && true === WP_DEBUG) {
         echo '<h3>' . $e->getMessage() . '</h3><pre>' . $e->getTraceAsString() . '</pre>';
     }
 
-    error_log('fvcn: ' . $e->getMessage() . PHP_EOL . $e->getTraceAsString());
+    \error_log('fvcn: ' . $e->getMessage() . PHP_EOL . $e->getTraceAsString());
 }
 
 

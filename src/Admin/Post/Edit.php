@@ -2,7 +2,7 @@
 
 namespace FvCommunityNews\Admin\Post;
 
-use FvCommunityNews\Post\PostType;
+use FvCommunityNews\Post\Type as PostType;
 
 /**
  * Edit
@@ -22,7 +22,7 @@ class Edit
      */
     public function __construct()
     {
-        $this->postType = PostType::POST_TYPE_KEY;
+        $this->postType = PostType::post();
 
         add_action('add_meta_boxes', [$this, 'registerMetaboxPostInfo']);
         add_action('save_post', [$this, 'saveMetaboxPostInfo']);
@@ -116,8 +116,8 @@ class Edit
         </p>
         -->
         <p>
-            <label for="fvcn_post_rating"><?php _e('Rating', 'fvcn'); ?></label>
-            <input type="text" name="fvcn_post_rating" id="fvcn_post_rating" value="<?= get_post_meta($id, '_fvcn_post_rating', true); ?>" style="width: 100%;" disabled>
+            <label for="fvcn_post_likes"><?php _e('Likes', 'fvcn'); ?></label>
+            <input type="text" name="fvcn_post_likes" id="fvcn_post_likes" value="<?= get_post_meta($id, '_fvcn_post_likes', true); ?>" style="width: 100%;" disabled>
         </p>
 
         <?php

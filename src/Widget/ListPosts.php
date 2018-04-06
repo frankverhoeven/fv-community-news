@@ -77,9 +77,9 @@ class ListPosts extends WP_Widget
     public function update($new_instance, $old_instance)
     {
         $instance = $old_instance;
-        $instance['title'] = strip_tags($new_instance['title']);
-        $instance['thumbnail'] = strip_tags($new_instance['thumbnail']);
-        $instance['view_all'] = strip_tags($new_instance['view_all']);
+        $instance['title'] = \strip_tags($new_instance['title']);
+        $instance['thumbnail'] = \strip_tags($new_instance['thumbnail']);
+        $instance['view_all'] = \strip_tags($new_instance['view_all']);
         $instance['num_posts'] = $new_instance['num_posts'];
 
         if (empty($instance['num_posts']) || !is_numeric($instance['num_posts'])) {
@@ -99,10 +99,10 @@ class ListPosts extends WP_Widget
      */
     public function form($instance)
     {
-        $title = !empty($instance['title'])    ? esc_attr($instance['title'])        : 'FV Community News';
-        $num_posts = !empty($instance['num_posts'])? esc_attr($instance['num_posts'])    : '5';
-        $thumbnail = !empty($instance['thumbnail'])? esc_attr($instance['thumbnail'])    : '';
-        $view_all = !empty($instance['view_all'])    ? esc_attr($instance['view_all'])    : '';
+        $title = !empty($instance['title']) ? esc_attr($instance['title']) : 'FV Community News';
+        $num_posts = !empty($instance['num_posts']) ? esc_attr($instance['num_posts']) : 5;
+        $thumbnail = !empty($instance['thumbnail']) ? esc_attr($instance['thumbnail']) : '';
+        $view_all = !empty($instance['view_all']) ? esc_attr($instance['view_all']) : '';
         ?>
 
         <p>

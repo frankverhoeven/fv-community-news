@@ -6,7 +6,7 @@ use FvCommunityNews;
 use FvCommunityNews\Config\AbstractConfig as Config;
 use FvCommunityNews\Container\Container;
 use FvCommunityNews\Installer;
-use FvCommunityNews\Post\PostType;
+use FvCommunityNews\Post\TypeRegistrar as PostTypeRegistrar;
 use FvCommunityNews\Shortcode\PostForm as PostFormShortcode;
 use FvCommunityNews\Shortcode\RecentPosts as RecentPostsShortcode;
 use FvCommunityNews\Shortcode\TagCloud as TagCloudShortcode;
@@ -68,8 +68,10 @@ class Init implements HookInterface
      */
     protected function setupVariables()
     {
-        $pluginDir = plugin_dir_path(FvCommunityNews::FILE);
-        $pluginUrl = plugin_dir_url(FvCommunityNews::FILE);
+        $reflection = new \ReflectionClass(FvCommunityNews::class);
+
+        $pluginDir = plugin_dir_path($reflection->getFileName());
+        $pluginUrl = plugin_dir_url($reflection->getFileName());
         $baseSlug = $this->config['_fvcn_base_slug'];
 
         // @todo: deprecate Registry
@@ -117,7 +119,9 @@ class Init implements HookInterface
         $locale = apply_filters('fvcn_locale', get_locale());
         $mofile = sprintf('fvcn-%s.mo', $locale);
 
-        $mofile_local = FvCommunityNews::DIR . '/languages/' . $mofile;
+        $reflection = new \ReflectionClass(FvCommunityNews::class);
+
+        $mofile_local = \dirname($reflection->getFileName()) . '/languages/' . $mofile;
         $mofile_global = WP_LANG_DIR . '/fv-community-news/' . $mofile;
 
         // /wp-content/plugins/fv-community-news/languages/
@@ -139,13 +143,14 @@ class Init implements HookInterface
      */
     protected function registerPostType()
     {
-        $postType = new PostType();
-        $postType->registerPostType(
+        PostTypeRegistrar::registerPostType(
             $this->config['_fvcn_base_slug'] . '/' . $this->config['_fvcn_post_slug'],
             $this->config['_fvcn_base_slug'] . '/' . $this->config['_fvcn_post_archive_slug']
         );
-        $postType->registerPostStatuses();
-        $postType->registerTaxonomy($this->config['_fvcn_base_slug'] . '/' . $this->config['_fvcn_post_tag_slug']);
+        PostTypeRegistrar::registerPostStatuses();
+        PostTypeRegistrar::registerTaxonomy(
+            $this->config['_fvcn_base_slug'] . '/' . $this->config['_fvcn_post_tag_slug']
+        );
 
         do_action('fvcn_register_post_type');
     }

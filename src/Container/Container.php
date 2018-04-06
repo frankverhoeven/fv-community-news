@@ -21,8 +21,6 @@ class Container
     private $factories;
 
     /**
-     * __construct()
-     *
      * @param array $factories
      */
     public function __construct(array $factories)
@@ -37,7 +35,7 @@ class Container
      * @param string $id Identifier of the entry to look for.
      * @return mixed Entry.
      */
-    public function get($id)
+    public function get(string $id)
     {
         if (!$this->has($id)) {
             throw new InvalidArgumentException('Entry "' . $id . '" not found.');

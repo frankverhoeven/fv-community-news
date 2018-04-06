@@ -8,7 +8,7 @@ use FvCommunityNews\Admin\Post\Moderation;
 use FvCommunityNews\Admin\Settings\Form;
 use FvCommunityNews\Admin\Settings\Settings;
 use FvCommunityNews\Container\Container;
-use FvCommunityNews\Post\PostType;
+use FvCommunityNews\Post\Type as PostType;
 
 /**
  * Admin
@@ -69,7 +69,7 @@ class Admin
             $pageId = 'dashboard';
         }
 
-        $postType = PostType::POST_TYPE_KEY;
+        $postType = PostType::post();
 
         switch ($pageId) {
             case 'dashboard' :
@@ -123,7 +123,7 @@ class Admin
         $registry = fvcn_container_get('Registry');
         $menuIconUrl = $registry['pluginUrl'] . 'public/images/menu.png';
         $menuIconUrl2x = $registry['pluginUrl'] . 'public/images/menu@2x.png';
-        $postClass = sanitize_html_class(PostType::POST_TYPE_KEY);
+        $postClass = sanitize_html_class(PostType::post());
 
         ?>
         <style type="text/css">
@@ -183,7 +183,7 @@ class Admin
     public function adminMenu()
     {
         $adminFormPage = add_submenu_page(
-            'edit.php?post_type=' . PostType::POST_TYPE_KEY,
+            'edit.php?post_type=' . PostType::post(),
             __('FV Community News Form', 'fvcn'),
             __('Form', 'fvcn'),
             'manage_options',
@@ -193,7 +193,7 @@ class Admin
         add_action('load-' . $adminFormPage, [$this->container->get(Form::class), 'fvcn_admin_form_help']);
 
         add_submenu_page(
-            'edit.php?post_type=' . PostType::POST_TYPE_KEY,
+            'edit.php?post_type=' . PostType::post(),
             __('FV Community News Settings', 'fvcn'),
             __('Settings', 'fvcn'),
             'manage_options',

@@ -2,6 +2,8 @@
 
 namespace FvCommunityNews\Post;
 
+use FvCommunityNews\Config\AbstractConfig as Config;
+
 /**
  * Controller
  *
@@ -9,6 +11,10 @@ namespace FvCommunityNews\Post;
  */
 class Controller
 {
+    /**
+     * @var Config
+     */
+    private $config;
     /**
      * @var Mapper
      */
@@ -19,11 +25,13 @@ class Controller
     private $postForm;
 
     /**
+     * @param Config $config
      * @param Mapper $postMapper
      * @param Form $postForm
      */
-    public function __construct(Mapper $postMapper, Form $postForm)
+    public function __construct(Config $config, Mapper $postMapper, Form $postForm)
     {
+        $this->config = $config;
         $this->postMapper = $postMapper;
         $this->postForm = $postForm;
     }
@@ -41,7 +49,7 @@ class Controller
         if (!isset($_POST['fvcn_post_form_action']) || 'fvcn-new-post' != $_POST['fvcn_post_form_action']) {
             return null;
         }
-        if (fvcn_is_anonymous() && !fvcn_is_anonymous_allowed()) {
+        if (fvcn_is_anonymous() && !$this->config['_fvcn_is_anonymous_allowed']) {
             return null;
         }
         if (!wp_verify_nonce($_POST['fvcn_post_form_nonce'], 'fvcn-new-post')) {
@@ -55,14 +63,14 @@ class Controller
         if ($this->postForm->isValid($data)) {
             $data = $this->postForm->getData();
 
-            $status = PostType::STATUS_PENDING;
-            if (!fvcn_admin_moderation()) {
-                if (fvcn_user_moderation()) {
+            $status = Status::pending();
+            if (!$this->config['_fvcn_admin_moderation']) {
+                if ($this->config['_fvcn_user_moderation']) {
                     if (fvcn_has_user_posts()) {
-                        $status = PostType::STATUS_PUBLISH;
+                        $status = Status::publish();
                     }
                 } else {
-                    $status = PostType::STATUS_PUBLISH;
+                    $status = Status::publish();
                 }
             }
 
@@ -70,7 +78,7 @@ class Controller
                 if (false !== strpos($data['fvcn_post_form_tags'], ',')) {
                     $data['fvcn_post_form_tags'] = explode(',', $data['fvcn_post_form_tags']);
                 }
-                $data['fvcn_post_form_tags'] = [fvcn_get_post_tag_id() => $data['fvcn_post_form_tags']];
+                $data['fvcn_post_form_tags'] = [Type::tag()->getType() => $data['fvcn_post_form_tags']];
             }
 
             $postData = apply_filters('fvcn_new_post_data_pre_insert', [
@@ -79,7 +87,7 @@ class Controller
                 'post_content' => $data['fvcn_post_form_content'],
                 'tax_input' => $data['fvcn_post_form_tags'],
                 'post_status' => $status,
-                'post_type' => PostType::POST_TYPE_KEY
+                'post_type' => Type::post()
             ]);
             $postMeta = apply_filters('fvcn_new_post_meta_pre_insert', [
                 '_fvcn_anonymous_author_name' => fvcn_is_anonymous() ? $data['fvcn_post_form_author_name'] : '',
@@ -95,7 +103,7 @@ class Controller
             }
 
             if ('template_redirect' == current_filter()) {
-                if (PostType::STATUS_PUBLISH == fvcn_get_post_status($postId)) {
+                if (Status::publish() == fvcn_get_post_status($postId)) {
                     wp_redirect(add_query_arg(['fvcn_added' => $postId], fvcn_get_post_permalink($postId)));
                 } else {
                     wp_redirect(add_query_arg(['fvcn_added' => $postId], home_url('/')));
@@ -113,32 +121,35 @@ class Controller
      *
      * @return void
      */
-    public function adjustPostRating()
+    public function likeUnlikePost()
     {
         $actions = [
-            'increase',
-            'decrease'
+            'like',
+            'unlike'
         ];
 
-        if (!isset($_REQUEST['fvcn_post_rating_action'], $_REQUEST['post_id']) || !in_array($_REQUEST['fvcn_post_rating_action'], $actions)) {
+        if (!isset($_REQUEST['fvcn-post-like-action'], $_REQUEST['fvcn-post-id']) || !in_array($_REQUEST['fvcn-post-like-action'], $actions)) {
             return;
         }
-        if (0 === ($id = fvcn_get_post_id($_REQUEST['post_id']))) {
-            return;
-        }
-        if (fvcn_is_post_rated_by_current_user($id)) {
+        if (0 === ($id = fvcn_get_post_id($_REQUEST['fvcn-post-id']))) {
             return;
         }
 
-        check_admin_referer('fvcn-post-rating');
+        check_admin_referer('fvcn-post-like');
 
-        if ('increase' == $_REQUEST['fvcn_post_rating_action']) {
-            $this->postMapper->increasePostRating($id);
+        if ('like' == $_REQUEST['fvcn-post-like-action']) {
+            if (\fvcn_is_post_liked_by_current_user($id)) {
+                return;
+            }
+            $this->postMapper->likePost($id);
+            setcookie('fvcn_post_liked_' . $id . '_' . COOKIEHASH, 'true', time() + 30000000, COOKIEPATH, COOKIE_DOMAIN);
         } else {
-            $this->postMapper->decreasePostRating($id);
+            if (!\fvcn_is_post_liked_by_current_user($id)) {
+                return;
+            }
+            $this->postMapper->unlikePost($id);
+            setcookie('fvcn_post_liked_' . $id . '_' . COOKIEHASH, 'true', time() - 30000000, COOKIEPATH, COOKIE_DOMAIN);
         }
-
-        setcookie('fvcn_post_rated_' . $id . '_' . COOKIEHASH, 'true', time() + 30000000, COOKIEPATH, COOKIE_DOMAIN);
 
         wp_redirect(fvcn_get_post_permalink($id));
     }

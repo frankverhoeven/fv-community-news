@@ -4,6 +4,11 @@
  * @author Frank Verhoeven <hi@frankverhoeven.me>
  */
 
+.fvcn-post-form-new-post label {
+    display: block;
+    margin: 5px 0 3px;
+}
+
 .fvcn-post-thumbnail {
     float: left;
     padding: 0;
@@ -31,6 +36,28 @@
 }
 
 .fvcn-post-link {}
+
+.fvcn-like-form {
+    display: inline-block;
+}
+
+.fvcn-like-button,
+.fvcn-unlike-button {
+    border: none;
+    background: transparent !important;
+    cursor: pointer;
+    padding: 0;
+    color: #000;
+}
+
+.fvcn-like-button svg {
+    color: #000;
+}
+
+.fvcn-unlike-button svg,
+.fvcn-like-button:hover svg {
+    color: #c55;
+}
 
 
 /**

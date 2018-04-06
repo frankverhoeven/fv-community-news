@@ -35,7 +35,7 @@ class Syncer
                 'content' => \strip_tags(\fvcn_get_post_content($postId)),
                 'url' => \fvcn_get_post_link($postId),
                 'tags' => \explode(';', \strip_tags(\fvcn_get_post_tag_list($postId, ['before'=>'', 'sep'=>';', 'after'=>'']))),
-                'rating' => \fvcn_get_post_rating($postId),
+                'likes' => \fvcn_get_post_likes($postId),
                 'views' => \fvcn_get_post_views($postId),
                 'thumbnail' => $thumbnail,
                 'author'	=> [
@@ -51,7 +51,7 @@ class Syncer
 
             if (!empty($response)) {
                 \update_post_meta($postId, '_fvcn_post_synced', $response['post']['id']);
-                return \absint($response['post']['id']);
+                return $response['post']['id'];
             }
 
             return null;
@@ -78,12 +78,12 @@ class Syncer
     }
 
     /**
-     * Submit a star increase to the API.
+     * Submit a like to the API.
      *
      * @param int $postId
      * @return void
      */
-    public function increasePostRating(int $postId)
+    public function likePost(int $postId)
     {
         $apiId = $this->submitPost($postId);
 
@@ -91,16 +91,16 @@ class Syncer
             return;
         }
 
-        $this->executeRequest(Api::starPost($apiId), [], ['blocking' => false]);
+        $this->executeRequest(Api::likePost($apiId), [], ['blocking' => false]);
     }
 
     /**
-     * Submit a star decrease to the API.
+     * Submit an unlike to the API.
      *
      * @param int $postId
      * @return void
      */
-    public function decreasePostRating(int $postId)
+    public function unlikePost(int $postId)
     {
         $apiId = $this->submitPost($postId);
 
@@ -108,7 +108,7 @@ class Syncer
             return;
         }
 
-        $this->executeRequest(Api::unstarPost($apiId), [], ['blocking' => false]);
+        $this->executeRequest(Api::unlikePost($apiId), [], ['blocking' => false]);
     }
 
     /**

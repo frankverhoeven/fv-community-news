@@ -22,8 +22,8 @@ class Mapper
             'post_author' => 0,
             'post_title' => '',
             'post_content' => '',
-            'post_status' => PostType::STATUS_PENDING,
-            'post_type' => PostType::POST_TYPE_KEY,
+            'post_status' => Status::pending(),
+            'post_type' => Type::post(),
             'post_password' => '',
             'tax_input' => ''
         ];
@@ -32,21 +32,24 @@ class Mapper
         $postId = wp_insert_post($data);
 
         // Anonymous tags fix
-        if (!empty($data['tax_input']) && is_array($data['tax_input']) && !empty($data['tax_input'][PostType::TAG_TYPE_KEY])) {
-            wp_set_post_terms($postId, $data['tax_input'][PostType::TAG_TYPE_KEY], PostType::TAG_TYPE_KEY);
+        $tagType = Type::tag()->getType();
+        if (!empty($data['tax_input']) && is_array($data['tax_input'])
+            && !empty($data['tax_input'][$tagType]))
+        {
+            wp_set_post_terms($postId, $data['tax_input'][$tagType], $tagType);
         }
 
         $defaultMeta = [
             '_fvcn_anonymous_author_name' => '',
             '_fvcn_anonymous_author_email' => '',
             '_fvcn_post_url' => '',
-            '_fvcn_post_rating' => 0,
+            '_fvcn_post_likes' => 0,
             '_fvcn_author_ip' => fvcn_get_current_author_ip(),
             '_fvcn_author_au' => fvcn_get_current_author_ua()
         ];
         $meta = wp_parse_args($meta, $defaultMeta);
 
-        foreach ($meta as $meta_key=>$meta_value) {
+        foreach ($meta as $meta_key => $meta_value) {
             update_post_meta($postId, $meta_key, $meta_value);
         }
 
@@ -79,10 +82,10 @@ class Mapper
      * @param int $postId
      * @return int
      */
-    public function publishPost(int $postId)
+    public function publishPost(int $postId): int
     {
         do_action('fvcn_publish_post', $postId);
-        return $this->changePostStatus($postId, PostType::STATUS_PUBLISH);
+        return $this->changePostStatus($postId, Status::publish());
     }
 
     /**
@@ -91,10 +94,10 @@ class Mapper
      * @param int $postId
      * @return int
      */
-    public function unpublishPost(int $postId)
+    public function unpublishPost(int $postId): int
     {
         do_action('fvcn_unpublish_post', $postId);
-        return $this->changePostStatus($postId, PostType::STATUS_PENDING);
+        return $this->changePostStatus($postId, Status::pending());
     }
 
     /**
@@ -103,48 +106,49 @@ class Mapper
      * @param int $postId
      * @return int
      */
-    public function spamPost(int $postId)
+    public function spamPost(int $postId): int
     {
         do_action('fvcn_spam_post', $postId);
-        return $this->changePostStatus($postId, PostType::STATUS_SPAM);
+        return $this->changePostStatus($postId, Status::spam());
     }
 
     /**
      * changePostStatus()
      *
      * @param int $postId
-     * @param string $status
+     * @param Status $status
      * @return int
      */
-    protected function changePostStatus(int $postId, string $status)
+    protected function changePostStatus(int $postId, Status $status): int
     {
-        $post = [];
-        $post['ID'] = $postId;
-        $post['post_status'] = $status;
+        $post = [
+            'ID' => $postId,
+            'post_status' => $status->getStatus(),
+        ];
 
         return wp_update_post($post);
     }
 
     /**
-     * increasePostRating()
+     * likePost()
      *
      * @param int $postId
      */
-    public function increasePostRating(int $postId)
+    public function likePost(int $postId)
     {
-        do_action('fvcn_increase_post_rating', $postId);
-        update_post_meta($postId, '_fvcn_post_rating', fvcn_get_post_rating($postId) + 1);
+        do_action('fvcn_like_post', $postId);
+        update_post_meta($postId, '_fvcn_post_likes', fvcn_get_post_likes($postId) + 1);
     }
 
     /**
-     * decreasePostRating()
+     * unlikePost()
      *
      * @param int $postId
      */
-    public function decreasePostRating(int $postId)
+    public function unlikePost(int $postId)
     {
-        do_action('fvcn_decrease_post_rating', $postId);
-        update_post_meta($postId, '_fvcn_post_rating', fvcn_get_post_rating($postId) - 1);
+        do_action('fvcn_unlike_post', $postId);
+        update_post_meta($postId, '_fvcn_post_likes', max(0, fvcn_get_post_likes($postId) - 1));
     }
 
     /**

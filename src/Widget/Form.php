@@ -51,7 +51,7 @@ class Form extends WP_Widget
         echo $before_title . $title . $after_title;
         ?>
 
-        <?php if (fvcn_is_anonymous_allowed() || !fvcn_is_anonymous()) : ?>
+        <?php if (fvcn_container_get('Config')['_fvcn_is_anonymous_allowed'] || !fvcn_is_anonymous()) : ?>
 
             <?php fvcn_get_template_part('fvcn/form', 'post'); ?>
 

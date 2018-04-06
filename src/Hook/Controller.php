@@ -35,12 +35,9 @@ class Controller implements HookInterface
             if (isset($_POST['fvcn_post_form_action']) && 'fvcn-new-post' == $_POST['fvcn_post_form_action']) {
                 $this->postController->createPost();
             }
-        }
-
-        if (isset($_REQUEST['fvcn_post_rating_action'], $_REQUEST['post_id']) &&
-            in_array($_REQUEST['fvcn_post_rating_action'], ['increase', 'decrease']))
-        {
-            $this->postController->adjustPostRating();
+            if (isset($_POST['fvcn-post-like-action'], $_POST['fvcn-post-id'])) {
+                $this->postController->likeUnlikePost();
+            }
         }
     }
 }

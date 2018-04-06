@@ -4,7 +4,8 @@ namespace FvCommunityNews\Admin\Dashboard\Widget;
 
 use FvCommunityNews\Config\AbstractConfig as Config;
 use FvCommunityNews\Post\Mapper as PostMapper;
-use FvCommunityNews\Post\PostType;
+use FvCommunityNews\Post\Status;
+use FvCommunityNews\Post\Type as PostType;
 
 /**
  * RecentPosts
@@ -255,7 +256,7 @@ class RecentPosts
     {
         $options = [
             'posts_per_page' => $this->config['_fvcn_dashboard_rp_num'],
-            'post_status' => PostType::STATUS_PUBLISH . ',' . PostType::STATUS_PENDING
+            'post_status' => Status::publish() . ',' . Status::pending()
         ];
 
         if (fvcn_has_posts($options)) :
@@ -267,7 +268,7 @@ class RecentPosts
                     <?php
                     $class = 'fvcn-post ';
 
-                    if (PostType::STATUS_PENDING == fvcn_get_post_status()) {
+                    if (Status::pending() == fvcn_get_post_status()) {
                         $class .= 'pending ';
                     } else {
                         $class .= 'approved ';
@@ -319,7 +320,7 @@ class RecentPosts
                                 $trash_uri = esc_url(wp_nonce_url(add_query_arg([
                                     'post' => fvcn_get_post_id(),
                                     'action' => 'trash'
-                                ], 'post.php'), 'trash-' . PostType::POST_TYPE_KEY . '_' . fvcn_get_post_id()));
+                                ], 'post.php'), 'trash-' . PostType::post() . '_' . fvcn_get_post_id()));
                                 ?>
                                 <span class="publish"><a href="<?= $publish_uri; ?>"><?php _e('Publish', 'fvcn'); ?></a></span>
                                 <span class="unpublish"><a href="<?= $publish_uri; ?>"><?php _e('Unpublish', 'fvcn'); ?></a></span>
@@ -336,7 +337,7 @@ class RecentPosts
             </div>
 
             <p id="fvcn-dashboard-view-links">
-                <a href="edit.php?post_type=<?= PostType::POST_TYPE_KEY ?>"><?php _e('View All', 'fvcn'); ?></a>
+                <a href="edit.php?post_type=<?= PostType::post() ?>"><?php _e('View All', 'fvcn'); ?></a>
             </p>
 
         <?php else : ?>

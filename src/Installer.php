@@ -43,7 +43,7 @@ class Installer
      */
     public function isUpdate()
     {
-        return (1 == version_compare(Version::getCurrentVersion(), $this->config['_fvcn_version']));
+        return (1 == \version_compare(Version::getCurrentVersion(), $this->config['_fvcn_version']));
     }
 
     /**
@@ -93,12 +93,12 @@ class Installer
     public function hasUpdate()
     {
         $lastCheck = $this->config->get('_fvcn_previous_has_update', false);
-        if (!$lastCheck || (time() - $lastCheck) > 86400) { // Only check once every 24 hours
+        if (!$lastCheck || (\time() - $lastCheck) > 86400) { // Only check once every 24 hours
             $latest = Version::getLatestVersion();
-            $this->config->set('_fvcn_previous_has_update', time());
+            $this->config->set('_fvcn_previous_has_update', \time());
 
             if (null !== $latest) {
-                return (1 == version_compare($latest, $this->config['_fvcn_version']));
+                return (1 == \version_compare($latest, $this->config['_fvcn_version']));
             }
         }
 
