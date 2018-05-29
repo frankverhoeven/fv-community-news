@@ -70,10 +70,10 @@ final class Api
     /**
      * Make an API request to retreive a post.
      *
-     * @param int $id ID of the post to retreive.
+     * @param string $id ID of the post to retreive.
      * @return Api
      */
-    public static function retreivePost(int $id): Api
+    public static function retreivePost(string $id): Api
     {
         return new static(static::API_POSTS . '/' . $id, 'GET');
     }
@@ -91,10 +91,10 @@ final class Api
     /**
      * Make an API request to add a view to a post.
      *
-     * @param int $id ID of the post that is viewed.
+     * @param string $id ID of the post that is viewed.
      * @return Api
      */
-    public static function viewPost(int $id): Api
+    public static function viewPost(string $id): Api
     {
         return new static(static::API_POSTS . '/' . $id . '/views', 'POST');
     }
@@ -102,10 +102,10 @@ final class Api
     /**
      * Make an API request to add a like to a post.
      *
-     * @param int $id ID of the post to like.
+     * @param string $id ID of the post to like.
      * @return Api
      */
-    public static function likePost(int $id): Api
+    public static function likePost(string $id): Api
     {
         return new static(static::API_POSTS . '/' . $id . '/likes', 'POST');
     }
@@ -113,10 +113,10 @@ final class Api
     /**
      * Make an API request to remove a like from a post.
      *
-     * @param int $id ID of the post to unlike.
+     * @param string $id ID of the post to unlike.
      * @return Api
      */
-    public static function unlikePost(int $id): Api
+    public static function unlikePost(string $id): Api
     {
         return new static(static::API_POSTS . '/' . $id . '/likes', 'DELETE');
     }

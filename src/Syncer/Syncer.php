@@ -23,7 +23,8 @@ class Syncer
     {
         $apiId = \get_post_meta($postId, '_fvcn_post_synced', true);
 
-        if (!\ctype_digit($apiId)) {
+        // API ID's are upgraded to UUID's
+        if (empty($apiId) || \ctype_digit($apiId)) {
             if (\fvcn_has_post_thumbnail($postId)) {
                 $thumbnail = \explode('"', \explode('src="', \fvcn_get_post_thumbnail())[1])[0];
             } else {
