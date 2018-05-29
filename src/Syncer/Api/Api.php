@@ -13,10 +13,12 @@ final class Api
      * @var string
      */
     const API_BASE = 'https://api.frankverhoeven.me/fvcn/1.0';
+
     /**
      * @var string
      */
     const API_POSTS = self::API_BASE . '/posts';
+
     /**
      * @var string
      */
@@ -26,6 +28,7 @@ final class Api
      * @var string
      */
     private $url;
+
     /**
      * @var string
      */

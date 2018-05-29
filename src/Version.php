@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FvCommunityNews;
 
 use FvCommunityNews;
@@ -17,6 +19,11 @@ final class Version
     /**
      * @var string
      */
+    private static $currentVersion;
+
+    /**
+     * @var string
+     */
     private static $latestVersion;
 
     /**
@@ -24,12 +31,16 @@ final class Version
      *
      * @return string
      */
-    public static function getCurrentVersion()
+    public static function getCurrentVersion(): string
     {
-        require_once ABSPATH . 'wp-admin/includes/plugin.php';
-        $reflection = new \ReflectionClass(FvCommunityNews::class);
-        $data = \get_plugin_data($reflection->getFileName());
-        return $data['Version'];
+        if (null === self::$currentVersion) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+            $reflection = new \ReflectionClass(FvCommunityNews::class);
+            $data = \get_plugin_data($reflection->getFileName());
+            self::$currentVersion = $data['Version'];
+        }
+
+        return self::$currentVersion;
     }
 
     /**
@@ -37,7 +48,7 @@ final class Version
      *
      * @return string
      */
-    public static function getLatestVersion()
+    public static function getLatestVersion(): string
     {
         if (null === self::$latestVersion) {
             $apiRequest = new ApiRequest(Api::latestVersion());

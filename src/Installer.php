@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FvCommunityNews;
 
 use FvCommunityNews\Config\AbstractConfig as Config;
@@ -9,7 +11,7 @@ use FvCommunityNews\Config\AbstractConfig as Config;
  *
  * @author Frank Verhoeven <hi@frankverhoeven.me>
  */
-class Installer
+final class Installer
 {
     /**
      * @var Config
@@ -31,7 +33,7 @@ class Installer
      *
      * @return bool
      */
-    public function isInstall()
+    public function isInstall(): bool
     {
         return (false === $this->config->get('_fvcn_version', false));
     }
@@ -41,7 +43,7 @@ class Installer
      *
      * @return bool
      */
-    public function isUpdate()
+    public function isUpdate(): bool
     {
         return (1 == \version_compare(Version::getCurrentVersion(), $this->config['_fvcn_version']));
     }
@@ -51,7 +53,7 @@ class Installer
      *
      * @return Installer
      */
-    public function install()
+    public function install(): self
     {
         $this->addOptions();
 
@@ -63,7 +65,7 @@ class Installer
      *
      * @return Installer
      */
-    public function update()
+    public function update(): self
     {
         $this->addOptions();
         $this->config->set('_fvcn_version', Version::getCurrentVersion());
@@ -76,7 +78,7 @@ class Installer
      *
      * @return Installer
      */
-    public function addOptions()
+    public function addOptions(): self
     {
         foreach ($this->config as $key => $value) {
             $this->config->add($key, $value);
@@ -90,7 +92,7 @@ class Installer
      *
      * @return bool
      */
-    public function hasUpdate()
+    public function hasUpdate(): bool
     {
         $lastCheck = $this->config->get('_fvcn_previous_has_update', false);
         if (!$lastCheck || (\time() - $lastCheck) > 86400) { // Only check once every 24 hours
