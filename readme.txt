@@ -5,7 +5,7 @@ Donate link:        https://www.paypal.me/FrankVerhoeven
 Tags:               Community News, Community, News, Widget, Custom Post, Custom Posting, Post, Form, Akismet, Ajax
 Requires at least:  4.8
 Tested up to:       4.9
-Stable tag:         3.3
+Stable tag:         3.3.1
 
 Give the visitors of your site the ability to submit their news to you, and list it in a nice news feed.
 
@@ -116,6 +116,10 @@ If you're still using version 1.x, you will have to update to version 2 first.
 Below is a list of frequently asked questions.
 
 
+Q: When I try to view a post it returns a 404 error.
+A: Navigate to the Options > Permalinks page in your WP Admin and press save, this will fix the issue.
+
+
 Q: I have a great idea for this plugin, could I make a suggestion?
 A: Sure you can! [Let me know about it](https://frankverhoeven.me/wordpress-plugin-fv-community-news/).
 
@@ -131,6 +135,11 @@ Open a new issue at [https://github.com/frankverhoeven/fv-community-news/issues]
 == Changelog ==
 
 For more details on changes, please visit the [WordPress Trac](http://plugins.trac.wordpress.org/log/fv-community-news/).
+
+
+= 3.3.1 =
+
+* Improvement: Various small fixes and code improvements.
 
 
 = 3.3 =
