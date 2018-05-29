@@ -11,6 +11,7 @@
 
 use FvCommunityNews\AutoLoader;
 use FvCommunityNews\Config\WordPress as Config;
+use FvCommunityNews\ConfigProvider;
 use FvCommunityNews\Container\Container;
 use FvCommunityNews\Hook\Collection as HookCollection;
 
@@ -47,8 +48,10 @@ final class FvCommunityNews
     {
         $this->loadFiles();
 
-        $services = include __DIR__ . '/config/services.config.php';
-        $services['Config'] = new Config(include __DIR__ . '/config/default.config.php');
+        $configProvider = new ConfigProvider();
+
+        $services = $configProvider()['services'];
+        $services['Config'] = new Config($configProvider()['defaults']);
         static::$container = new Container($services);
 
         $hooks = new HookCollection(static::$container);
