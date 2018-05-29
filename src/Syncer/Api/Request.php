@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FvCommunityNews\Syncer\Api;
 
+use FvCommunityNews\Version;
 use WP_Error;
 
 /**
@@ -9,12 +12,13 @@ use WP_Error;
  *
  * @author Frank Verhoeven <hi@frankverhoeven.me>
  */
-class Request
+final class Request
 {
     /**
      * @var string
      */
     private $url;
+
     /**
      * @var array
      */
@@ -43,6 +47,7 @@ class Request
      */
     public function execute(array $data = [], array $options = []): array
     {
+        $this->attachBlogInfoToData($data);
         $options = \array_merge($this->options, $options, ['body' => $data]);
         $response = \wp_remote_request($this->url, $options);
 
@@ -51,5 +56,29 @@ class Request
         }
 
         return $response;
+    }
+
+    /**
+     * @param array $data
+     * @return void
+     */
+    private function attachBlogInfoToData(array &$data)
+    {
+        $blogInfo = [
+            'blog_name'         => \get_bloginfo('name'),
+            'blog_description'  => \get_bloginfo('description'),
+            'blog_url'          => \get_bloginfo('url'),
+            'wordpress_url'     => \get_bloginfo('wpurl'),
+            'wordpress_version' => \get_bloginfo('version'),
+            'plugin_version'    => Version::getCurrentVersion(),
+            'php_version'       => \phpversion(),
+        ];
+
+        foreach ($blogInfo as $key => $value) {
+            // Make sure we do not overwrite data
+            if (!isset($data[$key])) {
+                $data[$key] = $value;
+            }
+        }
     }
 }

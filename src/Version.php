@@ -54,15 +54,7 @@ final class Version
             $apiRequest = new ApiRequest(Api::latestVersion());
             
             try {
-                $response = $apiRequest->execute([
-                    'blog_name'         => \get_bloginfo('name'),
-                    'blog_description'  => \get_bloginfo('description'),
-                    'blog_url'          => \get_bloginfo('url'),
-                    'wordpress_url'     => \get_bloginfo('wpurl'),
-                    'wordpress_version' => \get_bloginfo('version'),
-                    'plugin_version'    => self::getCurrentVersion(),
-                    'php_version'       => \phpversion(),
-                ]);
+                $response = $apiRequest->execute();
             } catch (ApiException $e) {
                 $response = null;
             }
